@@ -300,16 +300,6 @@ define Device/comfast_cf-e5
 endef
 TARGET_DEVICES += comfast_cf-e5
 
-define Device/comfast_cf-e560ac
-  SOC := qca9531
-  DEVICE_VENDOR := COMFAST
-  DEVICE_MODEL := CF-E560AC
-  DEVICE_PACKAGES := kmod-leds-gpio kmod-usb2 kmod-ath10k-ct \
-	ath10k-firmware-qca9888-ct
-  IMAGE_SIZE := 16128k
-endef
-TARGET_DEVICES += comfast_cf-e560ac
-
 define Device/comfast_cf-wr650ac-v1
   SOC := qca9558
   DEVICE_VENDOR := COMFAST
@@ -577,32 +567,6 @@ define Device/etactica_eg200
 endef
 TARGET_DEVICES += etactica_eg200
 
-define Device/glinet_6408
-  $(Device/tplink-8mlzma)
-  SOC := ar9331
-  DEVICE_VENDOR := GL.iNet
-  DEVICE_MODEL := 6408
-  DEVICE_PACKAGES := kmod-usb2
-  IMAGE_SIZE := 8000k
-  TPLINK_HWID := 0x08000001
-  IMAGES := sysupgrade.bin
-  SUPPORTED_DEVICES += gl-inet
-endef
-TARGET_DEVICES += glinet_6408
-
-define Device/glinet_6416
-  $(Device/tplink-16mlzma)
-  SOC := ar9331
-  DEVICE_VENDOR := GL.iNet
-  DEVICE_MODEL := 6416
-  DEVICE_PACKAGES := kmod-usb2
-  IMAGE_SIZE := 16192k
-  TPLINK_HWID := 0x08000001
-  IMAGES := sysupgrade.bin
-  SUPPORTED_DEVICES += gl-inet
-endef
-TARGET_DEVICES += glinet_6416
-
 define Device/glinet_gl-ar150
   SOC := ar9330
   DEVICE_VENDOR := GL.iNet
@@ -829,7 +793,7 @@ define Device/netgear_wndr3700
 endef
 TARGET_DEVICES += netgear_wndr3700
 
-define Device/netgear_wndr3700-v2
+define Device/netgear_wndr3700v2
   $(Device/netgear_wndr3x00)
   DEVICE_MODEL := WNDR3700
   DEVICE_VARIANT := v2
@@ -837,9 +801,9 @@ define Device/netgear_wndr3700-v2
   NETGEAR_BOARD_ID := WNDR3700v2
   NETGEAR_HW_ID := 29763654+16+64
   IMAGE_SIZE := 15872k
-  SUPPORTED_DEVICES += wndr3700 netgear,wndr3700v2
+  SUPPORTED_DEVICES += wndr3700
 endef
-TARGET_DEVICES += netgear_wndr3700-v2
+TARGET_DEVICES += netgear_wndr3700v2
 
 define Device/netgear_wndr3800
   $(Device/netgear_wndr3x00)
@@ -1158,3 +1122,44 @@ define Device/zbtlink_zbt-wd323
 	kmod-usb-serial kmod-usb-serial-cp210x uqmi
 endef
 TARGET_DEVICES += zbtlink_zbt-wd323
+
+define Device/zyxel_nbg6616
+  SOC := qca9557
+  DEVICE_VENDOR := ZyXEL
+  DEVICE_MODEL := NBG6616
+  DEVICE_PACKAGES := kmod-usb2 kmod-usb-ledtrig-usbport kmod-ath10k-ct \
+	ath10k-firmware-qca988x-ct
+  RAS_BOARD := NBG6616
+  RAS_ROOTFS_SIZE := 14464k
+  RAS_VERSION := "OpenWrt Linux-$(LINUX_VERSION)"
+  IMAGE_SIZE := 15323k
+  KERNEL_SIZE := 2048k
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+IMAGES := factory.bin sysupgrade.bin
+ KERNEL := kernel-bin | patch-cmdline | lzma | uImage lzma | jffs2 boot/vmlinux.lzma.uImage
+  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | pad-to 64k | check-size $$$$(IMAGE_SIZE) | zyxel-ras-image
+  IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
+  # We cannot currently build a factory image. It is the sysupgrade image
+  # prefixed with a header (which is actually written into the MTD device).
+  # The header is 2kiB and is filled with 0xff. The format seems to be:
+  #   2 bytes:  0x0000
+  #   2 bytes:  checksum of the data partition (big endian)
+  #   4 bytes:  length of the contained image file (big endian)
+  #  32 bytes:  Firmware Version string (NUL terminated, 0xff padded)
+  #   2 bytes:  0x0000
+  #   2 bytes:  checksum over the header partition (big endian)
+  #  32 bytes:  Model (e.g. "NBG6616", NUL termiated, 0xff padded)
+  #      rest: 0xff padding
+  #
+  # The checksums are calculated by adding up all bytes and if a 16bit
+  # overflow occurs, one is added and the sum is masked to 16 bit:
+  #   csum = csum + databyte; if (csum > 0xffff) { csum += 1; csum &= 0xffff };
+  # Should the file have an odd number of bytes then the byte len-0x800 is
+  # used additionally.
+  # The checksum for the header is calcualted over the first 2048 bytes with
+  # the firmware checksum as the placeholder during calculation.
+  #
+  # The header is padded with 0xff to the erase block size of the device.
+endef
+ TARGET_DEVICES += zyxel_nbg6616
