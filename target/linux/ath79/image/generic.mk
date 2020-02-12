@@ -1189,6 +1189,5 @@ IMAGES := factory.bin sysupgrade.bin
   # the firmware checksum as the placeholder during calculation.
   #
   # The header is padded with 0xff to the erase block size of the device.
- UBINIZE_OPTS := -E 5
 endef
  TARGET_DEVICES += zyxel_nbg6616
