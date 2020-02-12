@@ -967,6 +967,8 @@ $(eval $(call SingleProfile,WZRHP64K,64kraw,WZR450HP2,wzr-450hp2,WZR-450HP2,ttyS
 $(eval $(call SingleProfile,Zcomax,64k,ZCN1523H28,zcn-1523h-2-8,ZCN-1523H-2,ttyS0,115200,$$(zcn1523h_mtdlayout)))
 $(eval $(call SingleProfile,Zcomax,64k,ZCN1523H516,zcn-1523h-5-16,ZCN-1523H-5,ttyS0,115200,$$(zcn1523h_mtdlayout)))
 
+$(eval $(call SingleProfile,ZyXEL,64k,NBG6616,nbg6616,NBG6616,ttyS0,115200,NBG6616,$$(zyx_nbg6616_mtdlayout),mem=128M)))
+
 endif # ifeq ($(SUBTARGET),generic)
 
 
