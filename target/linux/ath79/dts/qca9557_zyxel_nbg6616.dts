@@ -30,18 +30,18 @@
 		};
 
 		wan {
-			label = "nbg6616:white:internet";
+			label = "nbg6616:green:internet";
 			gpios = <&gpio 18 GPIO_ACTIVE_LOW>;
 		};
 
-		usb0 {
+		usb1 {
 			label = "nbg6616:green:usb1";
 			gpios = <&gpio 14 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "usbport";
 			trigger-sources = <&hub_port0>;
 		};
 
-		usb1 {
+		usb2 {
 			label = "nbg6616:green:usb2";
 			gpios = <&gpio 21 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "usbport";
@@ -93,14 +93,7 @@
 	};
 };
 
-&gpio {
-	usb_power {
-		gpio-hog;
-		gpios = <16 0>;
-		output-high;
-		line-name = "nbg6616:power:usb";
-	};
-};
+
 
 &uart {
 	status = "okay";
@@ -121,27 +114,25 @@
 			#address-cells = <1>;
 			#size-cells = <1>;
 
-			uboot: partition@0 {
+			u-boot: partition@0 {
 				label = "u-boot";
-				reg = <0x000000 0x040000>;
+				reg = <0x000000 0x030000>;
 				read-only;
 			};
 
-			uboot_env: partition@40000 {
-				label = "u-boot-env";
-				reg = <0x040000 0x010000>;
+			env: partition@30000 {
+				label = "env";
+				reg = <0x030000 0x010000>;
 			};
 
-			art: partition@50000 {
+			art: partition@40000 {
 				label = "art";
-				reg = <0x050000 0x010000>;
+				reg = <0x040000 0x010000>;
 				read-only;
-			};
 
-			partition@60000 {
-				label = "nbu";
-				reg = <0x060000 0xfa0000>;
+		
 			};
+	
 		};
 	};
 };
