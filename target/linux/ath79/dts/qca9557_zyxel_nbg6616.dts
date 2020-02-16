@@ -4,7 +4,7 @@
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
 
-#include "qca9557.dtsi"
+/include/ "qca9557.dtsi"
 
 / {
 	compatible = "zyxel,nbg6616", "qca,qca9557";
@@ -61,7 +61,7 @@
 		};
 
 		wps {
-			label = "nbg6616:white:wps";
+			label = "nbg6616:green:wps";
 			gpios = <&gpio 0 GPIO_ACTIVE_LOW>;
 		};
 	};
@@ -148,9 +148,9 @@
 	};
 
 	switch0@1f {
-		compatible = "qca,ar8327";
+		compatible = "qca,ar8337";
 		reg = <0x1f>;
-		qca,ar8327-initvals = <
+		qca,ar8337-initvals = <
 			0x04 0x87600000 /* PORT0 PAD MODE CTRL */
 			0x0c 0x00080080 /* PORT6 PAD MODE CTRL */
 			0x10 0x81000080 /* POWER_ON_STRIP */
@@ -234,7 +234,7 @@
 
 };
 
-&usb1 {
+&usb1{
 	status = "okay";
 
 	hub_port1: port@1 {
