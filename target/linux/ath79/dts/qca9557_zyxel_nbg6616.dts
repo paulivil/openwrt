@@ -114,19 +114,16 @@
 			#address-cells = <1>;
 			#size-cells = <1>;
 
-			u-boot: partition@0 {
-				label = "u-boot";
+			uboot: partition@0 {
 				reg = <0x000000 0x030000>;
 				read-only;
 			};
 
-			u-boot-env: partition@30000 {
-				label = "u-boot-env";
+			uboot_env: partition@30000 {
 				reg = <0x030000 0x010000>;
 			};
 
 			art: partition@40000 {
-				label = "art";
 				reg = <0x040000 0x010000>;
 				read-only;
 

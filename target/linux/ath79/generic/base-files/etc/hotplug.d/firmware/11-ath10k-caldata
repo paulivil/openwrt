@@ -121,7 +121,7 @@ case "$FIRMWARE" in
 		;;
 	zyxel,nbg6616)
 		caldata_extract "art" 0x5000 0x844
-		ath10k_patch_mac $(macaddr_add $(mtd_get_mac_ascii u-boot-env ethaddr) +1)
+		ath10k_patch_mac $(macaddr_add $(mtd_get_mac_ascii uboot_env ethaddr) +1)
 		;;
 	esac
 	;;
