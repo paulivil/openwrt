@@ -4,7 +4,14 @@ include ./common-netgear.mk
 include ./common-tp-link.mk
 include ./common-yuncore.mk
 
+
+
+
+DEVICE_VARS += ADDPATTERN_ID ADDPATTERN_VERSION
+DEVICE_VARS += SEAMA_SIGNATURE SEAMA_MTDBLOCK
+DEVICE_VARS += KERNEL_INITRAMFS_PREFIX
 DEVICE_VARS += RAS_ROOTFS_SIZE RAS_BOARD RAS_VERSION
+
 # attention: only zlib compression is allowed for the boot fs
 define Build/zyxel-buildkerneljffs
 	rm -rf  $(KDIR_TMP)/zyxelnbg6616
@@ -32,10 +39,6 @@ define Build/zyxel-factory
 			&& mv $@.new $@ ; \
 		fi
 endef
-
-DEVICE_VARS += ADDPATTERN_ID ADDPATTERN_VERSION
-DEVICE_VARS += SEAMA_SIGNATURE SEAMA_MTDBLOCK
-DEVICE_VARS += KERNEL_INITRAMFS_PREFIX
 
 define Build/add-elecom-factory-initramfs
   $(eval edimax_model=$(word 1,$(1)))
@@ -822,17 +825,17 @@ define Device/netgear_wndr3700
 endef
 TARGET_DEVICES += netgear_wndr3700
 
-define Device/netgear_wndr3700v2
+define Device/netgear_wndr3700-v2
   $(Device/netgear_wndr3x00)
   DEVICE_MODEL := WNDR3700
   DEVICE_VARIANT := v2
   NETGEAR_KERNEL_MAGIC := 0x33373031
-  NETGEAR_BOARD_ID := WNDR3700v2
+  NETGEAR_BOARD_ID := WNDR3700-v2
   NETGEAR_HW_ID := 29763654+16+64
   IMAGE_SIZE := 15872k
   SUPPORTED_DEVICES += wndr3700
 endef
-TARGET_DEVICES += netgear_wndr3700v2
+TARGET_DEVICES += netgear_wndr3700-v2
 
 define Device/netgear_wndr3800
   $(Device/netgear_wndr3x00)
@@ -1192,3 +1195,4 @@ IMAGES := factory.bin sysupgrade.bin
   # The header is padded with 0xff to the erase block size of the device.
 endef
  TARGET_DEVICES += zyxel_nbg6616
+
