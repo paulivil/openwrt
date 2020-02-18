@@ -10,35 +10,7 @@ include ./common-yuncore.mk
 DEVICE_VARS += ADDPATTERN_ID ADDPATTERN_VERSION
 DEVICE_VARS += SEAMA_SIGNATURE SEAMA_MTDBLOCK
 DEVICE_VARS += KERNEL_INITRAMFS_PREFIX
-DEVICE_VARS += RAS_ROOTFS_SIZE RAS_BOARD RAS_VERSION
 
-# attention: only zlib compression is allowed for the boot fs
-define Build/zyxel-buildkerneljffs
-	rm -rf  $(KDIR_TMP)/zyxelnbg6616
-	mkdir -p $(KDIR_TMP)/zyxelnbg6616/image/boot
-	cp $@ $(KDIR_TMP)/zyxelnbg6616/image/boot/vmlinux.lzma.uImage
-	$(STAGING_DIR_HOST)/bin/mkfs.jffs2 \
-		--big-endian --squash-uids -v -e 128KiB -q -f -n -x lzma -x rtime \
-		-o $@ \
-		-d $(KDIR_TMP)/zyxelnbg6616/image
-	rm -rf $(KDIR_TMP)/zyxelnbg6616
-endef
-
-define Build/zyxel-factory
-	let \
-		maxsize="$(subst k,* 1024,$(RAS_ROOTFS_SIZE))"; \
-		let size="$$(stat -c%s $@)"; \
-		if [ $$size -lt $$maxsize ]; then \
-			$(STAGING_DIR_HOST)/bin/mkrasimage \
-				-b $(RAS_BOARD) \
-				-v $(RAS_VERSION) \
-				-r $@ \
-				-s $$maxsize \
-				-o $@.new \
-				-l 131072 \
-			&& mv $@.new $@ ; \
-		fi
-endef
 
 define Build/add-elecom-factory-initramfs
   $(eval edimax_model=$(word 1,$(1)))
@@ -1169,7 +1141,7 @@ define Device/zyxel_nbg6616
   BLOCKSIZE := 128k
   PAGESIZE := 2048
 IMAGES := factory.bin sysupgrade.bin
- KERNEL := kernel-bin | append-dtb |  uImage none | zyxel-buildkerneljffs | check-size 2048k
+ KERNEL := kernel-bin | patch-cmdline | uImage |  uImage lzma | jffs2 boot/vmlinux.lzma.uImage
   IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | pad-to 64k | check-size $$$$(IMAGE_SIZE) | zyxel-ras-image
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
   # We cannot currently build a factory image. It is the sysupgrade image

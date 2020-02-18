@@ -11,7 +11,7 @@
 	model = "ZyXEL NBG6616";
 
 	chosen {
-		bootargs = "console=ttyS0,115200n8";
+		bootargs = "mem=128M console=ttyS0,115200n8";
 	};
 
 	aliases {
