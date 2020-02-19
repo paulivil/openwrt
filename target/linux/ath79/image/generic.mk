@@ -1138,11 +1138,11 @@ define Device/zyxel_nbg6616
   RAS_VERSION := "OpenWrt Linux-$(LINUX_VERSION)"
   IMAGE_SIZE := 15323k
   KERNEL_SIZE := 2048k
-  BLOCKSIZE := 128k
+  BLOCKSIZE := 64k
   PAGESIZE := 2048
 IMAGES := factory.bin sysupgrade.bin
  KERNEL := kernel-bin | patch-cmdline | uImage |  uImage lzma | jffs2 boot/vmlinux.lzma.uImage
-  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | pad-to 64k | check-size $$$$(IMAGE_SIZE) | zyxel-ras-image
+  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | pad-to $$$$(BLOCKSIZE) | check-size $$$$(IMAGE_SIZE) | zyxel-ras-image
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
   # We cannot currently build a factory image. It is the sysupgrade image
   # prefixed with a header (which is actually written into the MTD device).
