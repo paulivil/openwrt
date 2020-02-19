@@ -115,48 +115,48 @@
 			#size-cells = <1>;
 
 			uboot: partition@0 {
-				reg = <0x000000 0x030000>;
+				reg = <0x0000000 0x0030000>;
 				read-only;
 			};
 
 			env: partition@30000 {
-				reg = <0x030000 0x010000>;
+				reg = <0x0030000 0x0010000>;
 			};
 
 			RFdata: partition@40000 {
-				reg = <0x040000 0x010000>;
+				reg = <0x0040000 0x0010000>;
 				read-only;
 		
 			};
 			zyxel_rfsd: partition@50000 {
-				reg = <0x050000 0x060000>;
+				reg = <0x0050000 0x0060000>;
 						
 			};
 
-			romd: partition@110000 {
-				reg = <0x110000 0x060000>;
+			romd: partition@b0000 {
+				reg = <0x00b0000 0x0060000>;
 						
 			};
 
-			header: partition@170000 {
-				reg = <0x170000 0x010000>;
+			header: partition@110000 {
+				reg = <0x0110000 0x0010000>;
 			
 			};
 
-			kernel: partition@180000 {
-				reg = <0x180000 0x200000>;
+			kernel: partition@120000 {
+				reg = <0x0120000 0x0200000>;
 						
 			};
-			rootfs: partition@380000 {
-				reg = <0x380000 0xce0000>;
+			rootfs: partition@320000 {
+				reg = <0x0320000 0x0ce0000>;
 						
 			};
-			rootfs_data: partition@1060000 {
-				reg = <0x1060000 0xa10000>;
+			rootfs_data: partition@1000000 {
+				reg = <0x1000000 0x0a10000>;
 			
 			};
-			firmware: partition@1a70000 {
-				reg = <0x1a70000 0xee0000>;
+			firmware: partition@1a10000 {
+				reg = <0x1a10000 0x0ee0000>;
 				compatible = "denx,uimage";
 				read-only;
 						

@@ -1141,7 +1141,7 @@ define Device/zyxel_nbg6616
   BLOCKSIZE := 64k
   PAGESIZE := 2048
 IMAGES := factory.bin sysupgrade.bin
- KERNEL := kernel-bin | patch-cmdline | uImage |  uImage lzma | jffs2 boot/vmlinux.lzma.uImage
+ KERNEL := kernel-bin |  uImage |  uImage lzma | jffs2 boot/vmlinux.lzma.uImage
   IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | pad-to $$$$(BLOCKSIZE) | check-size $$$$(IMAGE_SIZE) | zyxel-ras-image
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
   # We cannot currently build a factory image. It is the sysupgrade image
