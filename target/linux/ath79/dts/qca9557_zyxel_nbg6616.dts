@@ -114,53 +114,53 @@
 			#address-cells = <1>;
 			#size-cells = <1>;
 
-			uboot: partition@0 {
+			partition@0 {
+				label = "u-boot";
 				reg = <0x0000000 0x0030000>;
 				read-only;
 			};
 
-			env: partition@30000 {
+			partition@30000 {
+				label = "env";
 				reg = <0x0030000 0x0010000>;
 			};
 
-			RFdata: partition@40000 {
+			partition@40000 {
+				label = "RFdata";
 				reg = <0x0040000 0x0010000>;
 				read-only;
 		
 			};
-			zyxel_rfsd: partition@50000 {
+			partition@50000 {
+				label = "zyxel_rfsd";
 				reg = <0x0050000 0x0060000>;
 						
 			};
 
-			romd: partition@b0000 {
+			partition@b0000 {
+				label = "romd";
 				reg = <0x00b0000 0x0060000>;
 						
 			};
 
-			header: partition@110000 {
+			partition@110000 {
+				label = "header";
 				reg = <0x0110000 0x0010000>;
 			
 			};
 
-			kernel: partition@120000 {
+			partition@120000 {
+				label = "kernel";
 				reg = <0x0120000 0x0200000>;
 						
 			};
-			rootfs: partition@320000 {
+			partition@320000 {
+				label = "rootfs";
 				reg = <0x0320000 0x0ce0000>;
+				
 						
 			};
-			rootfs_data: partition@1000000 {
-				reg = <0x1000000 0x0a10000>;
 			
-			};
-			firmware: partition@1a10000 {
-				reg = <0x1a10000 0x0ee0000>;
-				compatible = "denx,uimage";
-				read-only;
-						
-			};
 	
 		};
 	};
