@@ -213,13 +213,7 @@
 	};
 };
 
-&usb-phy0 {
-	status = "okay";
-};
 
-&usb-phy1 {
-	status = "okay";
-};
 
 &usb0 {
 	status = "okay";
