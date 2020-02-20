@@ -11,7 +11,7 @@
 	model = "ZyXEL NBG6616";
 
 	chosen {
-		bootargs = "mem=128M console=ttyS0,115200n8";
+		bootargs = "board=NBG6616 mem=128M console=ttyS0,115200n8 rootfstype=squashfs,jffs2 noinitrd";
 	};
 
 	aliases {
@@ -118,48 +118,61 @@
 				label = "u-boot";
 				reg = <0x0000000 0x0030000>;
 				read-only;
-			};
+				    };
 
 			partition@30000 {
 				label = "env";
 				reg = <0x0030000 0x0010000>;
-			};
+			                };
 
 			partition@40000 {
 				label = "RFdata";
 				reg = <0x0040000 0x0010000>;
 				read-only;
-		
-			};
+		                        };
 			partition@50000 {
 				label = "zyxel_rfsd";
 				reg = <0x0050000 0x0060000>;
-						
-			};
+				        };
 
 			partition@b0000 {
 				label = "romd";
 				reg = <0x00b0000 0x0060000>;
 						
-			};
+			                 };
 
 			partition@110000 {
 				label = "header";
 				reg = <0x0110000 0x0010000>;
 			
-			};
+			                   };
 
 			partition@120000 {
 				label = "kernel";
 				reg = <0x0120000 0x0200000>;
 						
-			};
+			                 };
 			partition@320000 {
 				label = "rootfs";
 				reg = <0x0320000 0x0ce0000>;
-				
+				compatible = "fixed-partitions";
+				ranges = <0x0320000 0x0ce0000>;
+				#address-cells = <1>;
+				#size-cells = <1>;
+
+					  partition@0 {
+					  label = "rootfs_data";
+					  reg = <0x0000000 0x0a10000>;
+					  						
+					                   };
+					  partition@ee0000 {
+					  label = "firmware";
+					  reg = <0x0a10000 0x0ee0000>;
+					  read-only;
+					                   };
+				        };
 						
-			};
+		         };
 			
 	
 		};

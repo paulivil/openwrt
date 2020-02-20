@@ -296,9 +296,11 @@ export HOSTCC_NOCACHE
 ifneq ($(CONFIG_CCACHE),)
   TARGET_CC:= ccache_cc
   TARGET_CXX:= ccache_cxx
-  HOSTCC:= ccache $(HOSTCC)
-  HOSTCXX:= ccache $(HOSTCXX)
-endif
+  HOSTCC:= ccache  $(HOSTCC)
+  HOSTCXX:= ccache  $(HOSTCXX)
+ endif
+
+
 
 TARGET_CONFIGURE_OPTS = \
   AR="$(TARGET_AR)" \
