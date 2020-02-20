@@ -129,11 +129,11 @@
 				label = "RFdata";
 				reg = <0x0040000 0x0010000>;
 				read-only;
-		                        };
+		                     };
 			partition@50000 {
 				label = "zyxel_rfsd";
 				reg = <0x0050000 0x0060000>;
-				        };
+				            };
 
 			partition@b0000 {
 				label = "romd";
@@ -147,8 +147,8 @@
 			
 			                   };
 		
-						
-			                 };
+				
+			                 
 			partition@120000 {
 				label = "rootfs";
 				reg = <0x0120000 0x0ce0000>;
@@ -159,7 +159,7 @@
 					partition@0 {
 					label = "kernel";
 					reg = <0x0000000 0x0200000>;
-						    };	
+						        };	
 
 					  partition@200000 {
 					  label = "rootfs_data";
@@ -171,14 +171,15 @@
 					  reg = <0x0c10000 0x0ee0000>;
 					  read-only;
 					                   };
-				        };
+				              };
+
 						
-		         };
-			
+		         
+			};
 	
 		};
 	};
-};
+
 
 
 
