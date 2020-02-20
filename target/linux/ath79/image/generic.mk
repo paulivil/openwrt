@@ -12,6 +12,21 @@ DEVICE_VARS += SEAMA_SIGNATURE SEAMA_MTDBLOCK
 DEVICE_VARS += KERNEL_INITRAMFS_PREFIX
 
 
+# attention: only zlib compression is allowed for the boot fs
+define Build/zyxel-buildkerneljffs
+	rm -rf  $(KDIR_TMP)/zyxelnbg6616
+	mkdir -p $(KDIR_TMP)/zyxelnbg6616/image/boot
+	cp $@ $(KDIR_TMP)/zyxelnbg6616/image/boot/vmlinux.lzma.uImage
+	$(STAGING_DIR_HOST)/bin/mkfs.jffs2 \
+		--big-endian --squash-uids -v -e 64kiB -q -f -n -x lzma -x rtime \
+		-o $@ \
+		-d $(KDIR_TMP)/zyxelnbg6616/image
+	rm -rf $(KDIR_TMP)/zyxelnbg6616
+endef
+
+
+
+
 define Build/add-elecom-factory-initramfs
   $(eval edimax_model=$(word 1,$(1)))
   $(eval product=$(word 2,$(1)))
@@ -1135,13 +1150,14 @@ define Device/zyxel_nbg6616
 	ath10k-firmware-qca988x-ct
   RAS_BOARD := NBG6616
   RAS_ROOTFS_SIZE := 14464k
-  RAS_VERSION := "OpenWrt Linux-$(LINUX_VERSION)"
+  RAS_VERSION := "$(VERSION_DIST) $(REVISION)"
   IMAGE_SIZE := 15323k
   KERNEL_SIZE := 2048k
-  BLOCKSIZE := 64k
+  BLOCKSIZE := 64kiB
   PAGESIZE := 2048
-IMAGES := factory.bin sysupgrade.bin
- KERNEL := kernel-bin |  uImage |  uImage lzma | jffs2 boot/vmlinux.lzma.uImage
+  IMAGES := factory.bin sysupgrade.bin
+  KERNEL := kernel-bin |  append-dtb |  uImage none | zyxel-buildkerneljffs| \
+	check-size 2048k
   IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | pad-to $$$$(BLOCKSIZE) | check-size $$$$(IMAGE_SIZE) | zyxel-ras-image
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
   # We cannot currently build a factory image. It is the sysupgrade image
