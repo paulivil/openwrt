@@ -1156,7 +1156,7 @@ define Device/zyxel_nbg6616
   BLOCKSIZE := 64kiB
   PAGESIZE := 2048
   IMAGES := factory.bin sysupgrade.bin
-  KERNEL := kernel-bin |  append-dtb |  uImage none | zyxel-buildkerneljffs| \
+  KERNEL := kernel-bin |  append-dtb |  uImage none | zyxel-buildkerneljffs | \
 	check-size 2048k
   IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | pad-to $$$$(BLOCKSIZE) | check-size $$$$(IMAGE_SIZE) | zyxel-ras-image
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
