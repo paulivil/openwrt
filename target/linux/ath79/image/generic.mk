@@ -18,7 +18,7 @@ define Build/zyxel-buildkerneljffs
 	mkdir -p $(KDIR_TMP)/zyxelnbg6616/image/boot
 	cp $@ $(KDIR_TMP)/zyxelnbg6616/image/boot/vmlinux.lzma.uImage
 	$(STAGING_DIR_HOST)/bin/mkfs.jffs2 \
-		--big-endian --squash-uids -v -e 64kiB -q -f -n -x lzma -x rtime \
+		--big-endian --squash-uids -v -e 64 -q -f -n -x lzma -x rtime \
 		-o $@ \
 		-d $(KDIR_TMP)/zyxelnbg6616/image
 	rm -rf $(KDIR_TMP)/zyxelnbg6616
@@ -1153,7 +1153,7 @@ define Device/zyxel_nbg6616
   RAS_VERSION := "$(VERSION_DIST) $(REVISION)"
   IMAGE_SIZE := 15323k
   KERNEL_SIZE := 2048k
-  BLOCKSIZE := 64kiB
+  BLOCKSIZE := 64
   PAGESIZE := 2048
   IMAGES := factory.bin sysupgrade.bin
   KERNEL := kernel-bin |  append-dtb |  uImage none | zyxel-buildkerneljffs | \
