@@ -1,5 +1,6 @@
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/image.mk
+include $(INCLUDE_DIR)/zyxel-private.mk
 
 KERNEL_LOADADDR = 0x80060000
 
@@ -13,6 +14,7 @@ define Build/loader-common
 		$(1) compile loader.$(LOADER_TYPE)
 	mv "$@.$(LOADER_TYPE)" "$@"
 	rm -rf $@.src
+
 endef
 
 define Build/loader-kernel
@@ -67,6 +69,15 @@ define Device/Default
   IMAGE/sysupgrade.bin = append-kernel | pad-to $$$$(BLOCKSIZE) | \
 	append-rootfs | pad-rootfs | append-metadata | check-size $$$$(IMAGE_SIZE)
 endef
+
+define Build/hdr-writer
+       mkdir -p $(STAGING_DIR_HOST)/bin/
+	$(CP) ./bin/genImgHdr $(STAGING_DIR_HOST)/bin/
+endef
+
+ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
+       $(call Build/hdr-writer)
+endif
 
 ifeq ($(SUBTARGET),generic)
 include ./generic.mk

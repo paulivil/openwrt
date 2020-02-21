@@ -6,7 +6,7 @@
 #
 #
 
-ifneq ($(CONFIG_USE_ZYXEL_WIFI_IMAGE_HEADER),)
+ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
 ifeq "$(PROFILE)" ""
 export ZY_IMG_PREFIX=$(shell echo $(SUBTARGET)|tr '[:upper:]' '[:lower:]')
 FW_INFO_FILE=$(PLATFORM_SUBDIR)/FWHdr_Info

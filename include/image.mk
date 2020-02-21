@@ -292,7 +292,7 @@ define Image/mkfs/ext4
 		$@ $(call mkfs_target_dir,$(1))/
 endef
 
-ifneq ($(CONFIG_USE_ZYXEL_WIFI_IMAGE_HEADER),)
+ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
   define Image/Checksum
 	$(call zyxel_tools/genImageHeader)
 	( cd ${BIN_DIR} ; \
