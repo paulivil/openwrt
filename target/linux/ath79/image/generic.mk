@@ -1139,7 +1139,7 @@ define Device/zyxel_nbg6616
   RAS_VERSION := "$(VERSION_DIST) $(REVISION)"
   IMAGE_SIZE := 15323k
   KERNEL_SIZE := 2048k
-  BLOCKSIZE := 64
+  BLOCKSIZE := 64k
   PAGESIZE := 2048
   IMAGES := factory.bin sysupgrade.bin
   KERNEL := kernel-bin |  append-dtb |  uImage lzma | jffs2 boot/vmlinux.lzma.uImage
