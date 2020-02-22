@@ -1142,7 +1142,7 @@ define Device/zyxel_nbg6616
   BLOCKSIZE := 64k
   IMAGES := factory.bin sysupgrade.bin
   KERNEL := kernel-bin |  append-dtb | lzma | uImage lzma | jffs2 boot/vmlinux.lzma.uImage
-  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | pad-to $$$$(BLOCKSIZE) | check-size $$$$(IMAGE_SIZE) | zyxel-ras-image
+  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | pad-to $$$$(BLOCKSIZE) | check-size $$$$(IMAGE_SIZE) | zyxel-ras-image | checksum
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
   # We cannot currently build a factory image. It is the sysupgrade image
   # prefixed with a header (which is actually written into the MTD device).
