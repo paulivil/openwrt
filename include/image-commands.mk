@@ -67,14 +67,14 @@ define Build/seama-seal
 	mv $@.seama $@
 endef
 
-ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
+ifeq "$(PROFILE)" "DEVICE_zyxel_nbg6616"
   define Image/Checksum
 	$(call zyxel_tools/genImageHeader)
 	( cd ${BIN_DIR} ; \
 		$(FIND) -maxdepth 1 -type f \! -name 'md5sums'  -printf "%P\n" | sort | xargs \
 		md5sum --binary > md5sums \
 	)
-  endef
+  endif
 else
   define Image/Checksum
 	( cd ${BIN_DIR} ; \
@@ -82,7 +82,7 @@ else
 		md5sum --binary > md5sums \
 	)
   endef
-endif
+fi
 
 define Build/zyxel-ras-image
 	let \
@@ -95,7 +95,7 @@ define Build/zyxel-ras-image
 			-o $@.new \
 			$(if $(findstring separate-kernel,$(word 1,$(1))),-k $(IMAGE_KERNEL)) \
 		&& mv $@.new $@
-	ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
+	ifeq "$(PROFILE)" "DEVICE_zyxel_nbg6616"
 	$(call Image/Checksum)
 	endif
 endef
