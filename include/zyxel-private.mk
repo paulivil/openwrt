@@ -5,7 +5,7 @@
 # See /LICENSE for more information.
 #
 #
-
+include $(TOPDIR)/rules.mk
 HDR-WRITER:=$(TOPDIR)/target/linux/ath79/generic/image/bin/genImgHdr
 
 ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
