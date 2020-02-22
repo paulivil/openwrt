@@ -1,5 +1,7 @@
 # Build commands that can be called from Device/* templates
 
+include $(INCLUDE_DIR)/zyxel-private.mk
+
 IMAGE_KERNEL = $(word 1,$^)
 IMAGE_ROOTFS = $(word 2,$^)
 
@@ -65,6 +67,23 @@ define Build/seama-seal
 	mv $@.seama $@
 endef
 
+ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
+  define Image/Checksum
+	$(call zyxel_tools/genImageHeader)
+	( cd ${BIN_DIR} ; \
+		$(FIND) -maxdepth 1 -type f \! -name 'md5sums'  -printf "%P\n" | sort | xargs \
+		md5sum --binary > md5sums \
+	)
+  endef
+else
+  define Image/Checksum
+	( cd ${BIN_DIR} ; \
+		$(FIND) -maxdepth 1 -type f \! -name 'md5sums'  -printf "%P\n" | sort | xargs \
+		md5sum --binary > md5sums \
+	)
+  endef
+endif
+
 define Build/zyxel-ras-image
 	let \
 		newsize="$(subst k,* 1024,$(RAS_ROOTFS_SIZE))"; \
@@ -76,6 +95,9 @@ define Build/zyxel-ras-image
 			-o $@.new \
 			$(if $(findstring separate-kernel,$(word 1,$(1))),-k $(IMAGE_KERNEL)) \
 		&& mv $@.new $@
+	ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
+	$(call Image/Checksum)
+	endif
 endef
 
 define Build/netgear-chk

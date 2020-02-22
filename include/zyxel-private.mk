@@ -6,6 +6,8 @@
 #
 #
 
+HDR-WRITER:=$(TOPDIR)/target/linux/ath79/generic/image/bin/genImgHdr
+
 ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
 ifeq "$(PROFILE)" ""
 export ZY_IMG_PREFIX=$(shell echo $(SUBTARGET)|tr '[:upper:]' '[:lower:]')
@@ -15,12 +17,18 @@ export ZY_IMG_PREFIX=$(shell echo $(PROFILE)|tr '[:upper:]' '[:lower:]')
 FW_INFO_FILE=$(PLATFORM_SUBDIR)/fwhdr/FWHdr_Info.$(PROFILE)
 endif
 
+define zyxel_tools/prep
+	mkdir -p $(STAGING_DIR_HOST)/bin/
+	$(CP) $(HDR-WRITER) $(STAGING_DIR_HOST)/bin/
+endef
+
 #ZYXEL_TOOLS_PRIVATE:=$(TOPDIR)/tools/private/zyxel
 #ZYXEL_PACKAGE_PRIVATE:=$(TOPDIR)/package/private/zyxel
 ZY_IMG_HDR_EXTEND_SIZE=$(shell grep 'HDR_EXTEND_SIZE' $(FW_INFO_FILE) |cut -f2 -d'=')
 
 ##generate firmware image include header info
 define zyxel_tools/genImageHeader
+	$(call zyxel_tools/prep)
 	@echo;echo "!!! Generate $(shell grep "OUTPUT_NAME" $(FW_INFO_FILE)| cut -d '=' -f 2| tr -d \") FW !!!";echo
 	@(cd $(BIN_DIR)/zyxel; \
 	 if [ ! -f $(FW_INFO_FILE) ]; then \

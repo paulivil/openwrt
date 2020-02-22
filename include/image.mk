@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/prereq.mk
 include $(INCLUDE_DIR)/kernel.mk
 include $(INCLUDE_DIR)/version.mk
 include $(INCLUDE_DIR)/image-commands.mk
-include $(INCLUDE_DIR)/zyxel-private.mk
+
 
 ifndef IB
   ifdef CONFIG_TARGET_PER_DEVICE_ROOTFS
@@ -292,22 +292,7 @@ define Image/mkfs/ext4
 		$@ $(call mkfs_target_dir,$(1))/
 endef
 
-ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
-  define Image/Checksum
-	$(call zyxel_tools/genImageHeader)
-	( cd ${BIN_DIR} ; \
-		$(FIND) -maxdepth 1 -type f \! -name 'md5sums'  -printf "%P\n" | sort | xargs \
-		md5sum --binary > md5sums \
-	)
-  endef
-else
-  define Image/Checksum
-	( cd ${BIN_DIR} ; \
-		$(FIND) -maxdepth 1 -type f \! -name 'md5sums'  -printf "%P\n" | sort | xargs \
-		md5sum --binary > md5sums \
-	)
-  endef
-endif
+
 
 
 define Image/Manifest

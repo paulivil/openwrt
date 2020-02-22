@@ -1,6 +1,5 @@
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/image.mk
-include $(INCLUDE_DIR)/zyxel-private.mk
 
 KERNEL_LOADADDR = 0x80060000
 
@@ -70,14 +69,7 @@ define Device/Default
 	append-rootfs | pad-rootfs | append-metadata | check-size $$$$(IMAGE_SIZE)
 endef
 
-define Build/hdr-writer
-       mkdir -p $(STAGING_DIR_HOST)/bin/
-	$(CP) ./bin/genImgHdr $(STAGING_DIR_HOST)/bin/
-endef
 
-ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
-       $(call Build/hdr-writer)
-endif
 
 ifeq ($(SUBTARGET),generic)
 include ./generic.mk
