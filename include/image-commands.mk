@@ -74,7 +74,8 @@ ifeq "$(PROFILE)" "DEVICE_zyxel_nbg6616"
 		$(FIND) -maxdepth 1 -type f \! -name 'md5sums'  -printf "%P\n" | sort | xargs \
 		md5sum --binary > md5sums \
 	)
-  endif
+   endef
+endif
 else
   define Image/Checksum
 	( cd ${BIN_DIR} ; \
