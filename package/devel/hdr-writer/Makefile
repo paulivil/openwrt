@@ -9,7 +9,7 @@ PKG_RELEASE:=1
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=hdr-writer-$(PKG_VERSION).tar.gz
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=@GITHUB/paulivil/openwrt/tree/master/package/devel/hdr-writer
+PKG_SOURCE_URL:=@GITHUB/paulivil/openwrt/tree/master/package/devel/hdr-writer.git
 PKG_HASH:=skip
 PKG_SOURCE_VERSION:=skip
 
