@@ -19,7 +19,7 @@ PKG_CAT:=zcat
 include $(INCLUDE_DIR)/package.mk
 
 define Package/hdr-writer/Default
-  SECTION:=utils
+  SECTION:=devel
   CATEGORY:=Zyxel Packages
   #URL:=
 endef
@@ -32,11 +32,14 @@ $(call Package/hdr-writer/Default)
 endef
 
 define Package/hdr-writer/description
-  ELF32 program to prefix the factory image with a Zyxel compatible header
+  ELF32 binary to prefix the factory image with a Zyxel compatible header
 endef
 
+define Build/hdr-writer/InstallDev
+ $(call Build/hdr-writer/InstallDev/Default,installdev)
+endef
 
-define Package/hdr-writer/InstallDev
+define Build/hdr-writer/InstallDev
 	$(INSTALL_DIR) $(STAGING_DIR)/bin/
 	$(CP) $(PKG_INSTALL_DIR) $(STAGING_DIR_HOST)/bin/
 endef
