@@ -9,16 +9,16 @@ PKG_RELEASE:=1
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=hdr-writer-$(PKG_VERSION).tar.gz
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=@GITHUB/paulivil/openwrt/tree/master/package/devel/hdr-writer.git
-PKG_HASH:=skip
-PKG_SOURCE_VERSION:=skip
+PKG_SOURCE_URL:=https://github.com/paulivil/hdr-writer.git
+PKG_MIRROR_HASH:=c61d0860dcf7177cf492472f54d8fdee73ccf656d575239a47c73815cf0a889f
+PKG_SOURCE_VERSION:=c7e3950
 
 
 PKG_CAT:=zcat
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/hdr-writer/Default
+define Package/hdr-writer
   SECTION:=devel
   CATEGORY:=Zyxel Packages
   #URL:=
@@ -28,7 +28,7 @@ endef
 
 define Package/hdr-writer
 TITLE:=Utility for writing a ZyXEL firmware header
-$(call Package/hdr-writer/Default)
+$(call Package/hdr-writer)
 endef
 
 define Package/hdr-writer/description
@@ -36,7 +36,7 @@ define Package/hdr-writer/description
 endef
 
 define Build/hdr-writer/InstallDev
- $(call Build/hdr-writer/InstallDev/Default,installdev)
+ $(call Build/hdr-writer/InstallDev,installdev install)
 endef
 
 define Build/hdr-writer/InstallDev
