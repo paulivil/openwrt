@@ -46,6 +46,6 @@ endef
 
 
 
-$(eval $(call BuildPackage,hdr-writer))
+$(eval $(call BuildPackage/hdr-writer))
 
 
