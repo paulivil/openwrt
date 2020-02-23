@@ -68,7 +68,7 @@ define Build/seama-seal
 endef
 
 ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
-  define Image/checksum
+  define Build/checksum
 	$(call zyxel_tools/genImageHeader)
 	( cd ${BIN_DIR} ; \
 		$(FIND) -maxdepth 1 -type f \! -name 'md5sums'  -printf "%P\n" | sort | xargs \
@@ -76,7 +76,7 @@ ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
 	)
    endef
 else
-  define Image/checksum
+  define Build/checksum
 	( cd ${BIN_DIR} ; \
 		$(FIND) -maxdepth 1 -type f \! -name 'md5sums'  -printf "%P\n" | sort | xargs \
 		md5sum --binary > md5sums \

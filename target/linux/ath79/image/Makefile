@@ -5,6 +5,7 @@ KERNEL_LOADADDR = 0x80060000
 
 DEVICE_VARS += IMAGE_SIZE LOADER_FLASH_OFFS LOADER_TYPE
 
+
 define Build/loader-common
 	rm -rf $@.src
 	$(MAKE) -C lzma-loader \
@@ -84,4 +85,5 @@ include ./tiny.mk
 include ./tiny-netgear.mk
 include ./tiny-tp-link.mk
 endif
+
 $(eval $(call BuildImage))
