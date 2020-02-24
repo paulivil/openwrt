@@ -36,16 +36,22 @@ define Package/hdr-writer/description
 endef
 
 define Build/hdr-writer/InstallDev
- $(call Build/hdr-writer/InstallDev,installdev install)
+ ,installdev install)
 endef
 
-define Build/hdr-writer/InstallDev
+define Build/InstallDev
+	$(call Build/InstallDev/$(1))
 	$(INSTALL_DIR) $(STAGING_DIR)/bin/
 	$(CP) $(PKG_INSTALL_DIR) $(STAGING_DIR_HOST)/bin/
 endef
 
+define Package/hdr-writer/install
+	$(INSTALL_DIR)					$(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/genImgHdr	$(1)/usr/bin/
+endef
 
 
-$(eval $(call BuildPackage/hdr-writer))
+
+$(eval $(call BuildPackage,hdr-writer))
 
 

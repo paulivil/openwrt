@@ -20,22 +20,26 @@ endif
 
 #ZYXEL_TOOLS_PRIVATE:=$(TOPDIR)/tools/private/zyxel
 #ZYXEL_PACKAGE_PRIVATE:=$(TOPDIR)/package/private/zyxel
-ZY_IMG_HDR_EXTEND_SIZE=$(shell grep 'HDR_EXTEND_SIZE' $(FW_INFO_FILE) |cut -f2 -d'=')
+ZY_IMG_HDR_EXTEND_SIZE=$(shell grep 'HDR_EXTEND_SIZE' $(FW_INFO_FILE) | cut -f 2 -d '=')
 
 ##generate firmware image include header info
 define zyxel_tools/genImageHeader	 
-	@echo;echo "!!! Generate $(shell grep "OUTPUT_NAME" $(FW_INFO_FILE) | cut -d '=' -f 2| tr -d \") FW !!!";echo
-	@(cd $(BIN_DIR)/zyxel; \
+	@echo;echo "!!! Generate $(shell grep "OUTPUT_NAME" $(FW_INFO_FILE) | cut -d '=' -f 2 | tr -d \") FW !!!";echo
+ifeq "$(PROFILE)" ""
+	@(cd $(PLATFORM_SUBDIR); \
+else
+	@(cd $(PLATFORM_SUBDIR)/fwhdr; \
+fi; \
 	 if [ ! -f $(FW_INFO_FILE) ]; then \
 		echo "Not found file '$(FW_INFO_FILE)'"; \
 		echo "*** [genImgHdr] Error"; \
 		exit 1; \
 	 fi; \
-	 if [ -f $(BIN_DIR)/zyxel/$(ZY_IMG_PREFIX)-rootfs.jffs2 ]; then \
-		$(STAGING_DIR_HOST)/bin/genImgHdr -i $(BIN_DIR)/zyxel/$(ZY_IMG_PREFIX)-rootfs.jffs2 -v $(shell grep "FW_VERSION" $(FW_INFO_FILE)| cut -d '=' -f 2) -p $(shell grep "PROJECT_NAME" $(FW_INFO_FILE)| cut -d '=' -f 2) -s $(if $(ZY_IMG_HDR_EXTEND_SIZE),$(ZY_IMG_HDR_EXTEND_SIZE),0x10000) -o ras.bin.jffs2.header&&cp ras.bin.jffs2.header ras.bin.jffs2&&cat $(BIN_DIR)/zyxel/$(ZY_IMG_PREFIX)-rootfs.jffs2>>ras.bin.jffs2;\
+	 if [ -f $(BIN_DIR)/$(ZY_IMG_PREFIX)-rootfs.jffs2 ]; then \
+		$(STAGING_DIR_HOST)/bin/genImgHdr -i $(BIN_DIR)/$(ZY_IMG_PREFIX)-rootfs.jffs2 -v $(shell grep "FW_VERSION" $(FW_INFO_FILE)| cut -d '=' -f 2) -p $(shell grep "PROJECT_NAME" $(FW_INFO_FILE)| cut -d '=' -f 2) -s $(if $(ZY_IMG_HDR_EXTEND_SIZE),$(ZY_IMG_HDR_EXTEND_SIZE),0x10000) -o ras.bin.jffs2.header&&cp ras.bin.jffs2.header ras.bin.jffs2&&cat $(BIN_DIR)/zyxel/$(ZY_IMG_PREFIX)-rootfs.jffs2>>ras.bin.jffs2;\
 	 fi; \
-	 if [ -f $(BIN_DIR)/zyxel/$(ZY_IMG_PREFIX)-rootfs.squashfs ]; then \
-		$(STAGING_DIR_HOST)/bin/genImgHdr -i $(BIN_DIR)/zyxel/$(ZY_IMG_PREFIX)-rootfs.squashfs -v $(shell grep "FW_VERSION" $(FW_INFO_FILE)| cut -d '=' -f 2) -p $(shell grep "PROJECT_NAME" $(FW_INFO_FILE)| cut -d '=' -f 2) -s $(if $(ZY_IMG_HDR_EXTEND_SIZE),$(ZY_IMG_HDR_EXTEND_SIZE),0x10000) -o ras.bin.squashfs.header&&cp ras.bin.squashfs.header ras.bin.squashfs&&cat $(BIN_DIR)/zyxel/$(ZY_IMG_PREFIX)-rootfs.squashfs>>ras.bin.squashfs; \
+	 if [ -f $(BIN_DIR)/$(ZY_IMG_PREFIX)-rootfs.squashfs ]; then \
+		$(STAGING_DIR_HOST)/bin/genImgHdr -i $(BIN_DIR)/$(ZY_IMG_PREFIX)-rootfs.squashfs -v $(shell grep "FW_VERSION" $(FW_INFO_FILE)| cut -d '=' -f 2) -p $(shell grep "PROJECT_NAME" $(FW_INFO_FILE)| cut -d '=' -f 2) -s $(if $(ZY_IMG_HDR_EXTEND_SIZE),$(ZY_IMG_HDR_EXTEND_SIZE),0x10000) -o ras.bin.squashfs.header&&cp ras.bin.squashfs.header ras.bin.squashfs&&cat $(BIN_DIR)/$(ZY_IMG_PREFIX)-rootfs.squashfs>>ras.bin.squashfs; \
 	 fi)
 endef
 endif
