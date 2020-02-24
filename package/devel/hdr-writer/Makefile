@@ -11,7 +11,7 @@ PKG_SOURCE:=hdr-writer-$(PKG_VERSION).tar.gz
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/paulivil/hdr-writer.git
 PKG_MIRROR_HASH:=c61d0860dcf7177cf492472f54d8fdee73ccf656d575239a47c73815cf0a889f
-PKG_SOURCE_VERSION:=9f25102
+PKG_SOURCE_VERSION:=02abd4a
 
 
 PKG_CAT:=zcat
@@ -20,28 +20,27 @@ include $(INCLUDE_DIR)/package.mk
 
 define Package/hdr-writer
   SECTION:=devel
-  CATEGORY:=Zyxel Packages
+  CATEGORY:=Development
   #URL:=
 endef
 
 
 
-define Package/hdr-writer
-TITLE:=Utility for writing a ZyXEL firmware header
-$(call Package/hdr-writer)
+define Package/hdr-writer/default
+	$(Package/hdr-writer)
 endef
 
 define Package/hdr-writer/description
   ELF32 binary to prefix the factory image with a Zyxel compatible header
 endef
 
-define Build/hdr-writer/InstallDev
- ,installdev install)
+define Build/hdr-writer/InstallDev,installdev install)
 endef
 
 define Build/InstallDev
-	$(call Build/InstallDev/$(1))
-	$(INSTALL_DIR) $(STAGING_DIR)/bin/
+	
+	$(INSTALL_DIR) $(STAGING_DIR_HOST)/bin/
+	mkdir -p $(STAGING_DIR_HOST)/bin/
 	$(CP) $(PKG_INSTALL_DIR) $(STAGING_DIR_HOST)/bin/
 endef
 
