@@ -11,7 +11,7 @@ PKG_SOURCE:=hdr-writer-$(PKG_VERSION).tar.gz
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/paulivil/hdr-writer.git
 PKG_MIRROR_HASH:=c61d0860dcf7177cf492472f54d8fdee73ccf656d575239a47c73815cf0a889f
-PKG_SOURCE_VERSION:=93e8668
+PKG_SOURCE_VERSION:=a01cbfe
 PKG_CAT:=zcat
 
 include $(INCLUDE_DIR)/package.mk
