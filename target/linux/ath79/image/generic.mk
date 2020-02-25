@@ -1142,9 +1142,9 @@ define Device/zyxel_nbg6616
   BLOCKSIZE := 64k
   IMAGES := factory.bin sysupgrade.bin
   KERNEL := kernel-bin |  append-dtb | lzma | uImage lzma | jffs2 boot/vmlinux.lzma.uImage
-  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | pad-to $$$$(BLOCKSIZE) | check-size $$$$(IMAGE_SIZE) | zyxel-ras-image | checksum
+  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | pad-to $$$$(BLOCKSIZE) | check-size $$$$(IMAGE_SIZE) | checksum 
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
-  # We cannot currently build a factory image. It is the sysupgrade image
+ # We cannot currently build a factory image. It is the sysupgrade image
   # prefixed with a header (which is actually written into the MTD device).
   # The header is 2kiB and is filled with 0xff. The format seems to be:
   #   2 bytes:  0x0000
@@ -1165,7 +1165,9 @@ define Device/zyxel_nbg6616
   # the firmware checksum as the placeholder during calculation.
   #
   # The header is padded with 0xff to the erase block size of the device.
+  #
+  # This is the purpose of zyxel-ras-image, making any additional header unnecessary. 
 
-endef
+ endef
  TARGET_DEVICES += zyxel_nbg6616
 
