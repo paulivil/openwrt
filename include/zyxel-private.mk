@@ -29,7 +29,7 @@
 
 include $(TOPDIR)/rules.mk
 
-ifneq ($(CONFIG_TARGET_ath79_generic_DEVICE_zyxel_nbg6616),)
+
 ifeq "$(PROFILE)" ""
 export ZY_IMG_PREFIX=$(shell echo $(SUBTARGET)|tr '[:upper:]' '[:lower:]')
 FW_INFO_FILE=$(PLATFORM_SUBDIR)/FWHdr_Info
@@ -46,7 +46,7 @@ ZY_IMG_HDR_EXTEND_SIZE=$(shell grep 'HDR_EXTEND_SIZE' $(FW_INFO_FILE) | cut -f 2
 ##generate firmware image include header info
 define zyxel_tools/genImageHeader	 
 
-	@( if [ -f $(BIN_DIR)/$(ZY_IMG_PREFIX)-rootfs.jffs2 ]; then \
+	@(if [ -f $(BIN_DIR)/$(ZY_IMG_PREFIX)-rootfs.jffs2 ]; then \
 		$(STAGING_DIR_HOST)/bin/genImgHdr -i $(BIN_DIR)/$(ZY_IMG_PREFIX)-rootfs.jffs2 -v $(shell grep "FW_VERSION" $(FW_INFO_FILE) | cut -d '=' -f 2) -p $(shell grep "PROJECT_NAME" $(FW_INFO_FILE) | cut -d '=' -f 2) -s $(if $(ZY_IMG_HDR_EXTEND_SIZE),$(ZY_IMG_HDR_EXTEND_SIZE),0x10000) -o ras.bin.jffs2.header&&cp ras.bin.jffs2.header ras.bin.jffs2&&cat $(BIN_DIR)/zyxel/$(ZY_IMG_PREFIX)-rootfs.jffs2>>ras.bin.jffs2; \
 	 fi; \
 	 if [ -f $(BIN_DIR)/$(ZY_IMG_PREFIX)-rootfs.squashfs ]; then \
