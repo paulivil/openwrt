@@ -152,25 +152,25 @@
 			partition@120000 {
 				label = "rootfs";
 				reg = <0x0120000 0x0ce0000>;
-				compatible = "fixed-partitions";
-				ranges = <0x0120000 0x0ce0000>;
-				#address-cells = <1>;
-				#size-cells = <1>;
-					partition@0 {
-					label = "kernel";
-					reg = <0x0000000 0x0200000>;
-						        };	
-
-					  partition@200000 {
-					  label = "rootfs_data";
-					  reg = <0x0200000 0x0a10000>;
-					  						
-					                   };
-					  partition@c10000 {
-					  label = "firmware";
-					  reg = <0x0c10000 0x0ee0000>;
-					  read-only;
-					                   };
+			//*	compatible = "fixed-partitions";
+			//*	ranges = <0x0120000 0x0ce0000>;
+			//*	#address-cells = <1>;
+			//*	#size-cells = <1>;
+			//*		partition@0 {
+			//*		label = "kernel";
+			//*	reg = <0x0000000 0x0200000>;
+			//*		        };	
+            //*
+			//*	      partition@200000 {
+			//*		  label = "rootfs_data";
+			//*	  reg = <0x0200000 0x0a10000>;
+			//*	  						
+			//*	                   };
+			//*	  partition@c10000 {
+			//*	  label = "firmware";
+			//*	  reg = <0x0c10000 0x0ee0000>;
+			//*	  read-only;
+			//*                   };
 				              };
 
 						
