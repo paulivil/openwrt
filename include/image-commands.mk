@@ -1,6 +1,6 @@
 # Build commands that can be called from Device/* templates
 
-include $(INCLUDE_DIR)/zyxel-private.mk
+
 
 IMAGE_KERNEL = $(word 1,$^)
 IMAGE_ROOTFS = $(word 2,$^)
