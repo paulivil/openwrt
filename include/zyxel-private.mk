@@ -25,16 +25,16 @@ ZY_IMG_HDR_EXTEND_SIZE=$(shell grep 'HDR_EXTEND_SIZE' $(FW_INFO_FILE) | cut -f 2
 ##generate firmware image include header info
 define zyxel_tools/genImageHeader	 
 	@echo;echo "!!! Generate $(shell grep "OUTPUT_NAME" $(FW_INFO_FILE) | cut -d '=' -f 2 | tr -d \") FW !!!";echo
-ifeq "$(PROFILE)" ""
-	@(cd $(PLATFORM_SUBDIR); \
-else
-	@(cd $(PLATFORM_SUBDIR)/fwhdr; \
-fi; \
-	 if [ ! -f $(FW_INFO_FILE) ]; then \
-		echo "Not found file '$(FW_INFO_FILE)'"; \
-		echo "*** [genImgHdr] Error"; \
-		exit 1; \
-	 fi; \
+/*ifeq "$(PROFILE)" ""
+*	@(cd $(PLATFORM_SUBDIR); \
+*else
+*	@(cd $(PLATFORM_SUBDIR)/fwhdr; \
+*fi; \
+*	 if [ ! -f $(FW_INFO_FILE) ]; then \
+*		echo "Not found file '$(FW_INFO_FILE)'"; \
+*		echo "*** [genImgHdr] Error"; \
+*		exit 1; \
+*/	 fi; \
 	 if [ -f $(BIN_DIR)/$(ZY_IMG_PREFIX)-rootfs.jffs2 ]; then \
 		$(STAGING_DIR_HOST)/bin/genImgHdr -i $(BIN_DIR)/$(ZY_IMG_PREFIX)-rootfs.jffs2 -v $(shell grep "FW_VERSION" $(FW_INFO_FILE)| cut -d '=' -f 2) -p $(shell grep "PROJECT_NAME" $(FW_INFO_FILE)| cut -d '=' -f 2) -s $(if $(ZY_IMG_HDR_EXTEND_SIZE),$(ZY_IMG_HDR_EXTEND_SIZE),0x10000) -o ras.bin.jffs2.header&&cp ras.bin.jffs2.header ras.bin.jffs2&&cat $(BIN_DIR)/zyxel/$(ZY_IMG_PREFIX)-rootfs.jffs2>>ras.bin.jffs2;\
 	 fi; \

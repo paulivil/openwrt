@@ -1165,6 +1165,7 @@ define Device/zyxel_nbg6616
   # the firmware checksum as the placeholder during calculation.
   #
   # The header is padded with 0xff to the erase block size of the device.
+
 endef
  TARGET_DEVICES += zyxel_nbg6616
 
