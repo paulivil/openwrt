@@ -11,7 +11,7 @@ PKG_SOURCE:=hdr-writer-$(PKG_VERSION).tar.gz
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/paulivil/hdr-writer.git
 PKG_MIRROR_HASH:=fb6dfc645bb447ec9e95bd2f5102946092673cf2f2cafde2a4c9b309687bddbb
-PKG_SOURCE_VERSION:=5897f8f
+PKG_SOURCE_VERSION:=1772cf4
 PKG_CAT:=zcat
 
 include $(INCLUDE_DIR)/package.mk
@@ -31,17 +31,14 @@ endef
 
 define Build/InstallDev
 	
-	$(INSTALL_DIR) $(STAGING_DIR_HOST)/bin
-	$(CP) ./files/genImgHdr $(STAGING_DIR_HOST)/bin/genImgHdr
-endef
-
-define Package/hdr-writer/install
-	$(INSTALL_DIR)					$(1)/usr/bin
-	$(INSTALL_BIN) ./files/genImgHdr	$(1)/usr/bin/genImgHdr
+	$(INSTALL_BIN) ./files/genImgHdr $(STAGING_DIR_HOST)/bin/
+	
 endef
 
 
 
-$(eval $(call BuildPackage,hdr-writer))
+
+
+$(eval $(call BuildPackage))
 
 
