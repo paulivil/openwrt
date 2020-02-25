@@ -1142,31 +1142,12 @@ define Device/zyxel_nbg6616
   BLOCKSIZE := 64k
   IMAGES := factory.bin sysupgrade.bin
   KERNEL := kernel-bin |  append-dtb | lzma | uImage lzma | jffs2 boot/vmlinux.lzma.uImage
-  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | pad-to $$$$(BLOCKSIZE) | check-size $$$$(IMAGE_SIZE) | checksum 
-  IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
- # We cannot currently build a factory image. It is the sysupgrade image
-  # prefixed with a header (which is actually written into the MTD device).
-  # The header is 2kiB and is filled with 0xff. The format seems to be:
-  #   2 bytes:  0x0000
-  #   2 bytes:  checksum of the data partition (big endian)
-  #   4 bytes:  length of the contained image file (big endian)
-  #  32 bytes:  Firmware Version string (NUL terminated, 0xff padded)
-  #   2 bytes:  0x0000
-  #   2 bytes:  checksum over the header partition (big endian)
-  #  32 bytes:  Model (e.g. "NBG6616", NUL termiated, 0xff padded)
-  #      rest: 0xff padding
-  #
-  # The checksums are calculated by adding up all bytes and if a 16bit
-  # overflow occurs, one is added and the sum is masked to 16 bit:
-  #   csum = csum + databyte; if (csum > 0xffff) { csum += 1; csum &= 0xffff };
-  # Should the file have an odd number of bytes then the byte len-0x800 is
-  # used additionally.
-  # The checksum for the header is calcualted over the first 2048 bytes with
-  # the firmware checksum as the placeholder during calculation.
-  #
-  # The header is padded with 0xff to the erase block size of the device.
-  #
-  # This is the purpose of zyxel-ras-image, making any additional header unnecessary. 
+  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs |\
+ 	pad-to $$$$(BLOCKSIZE) | check-size $$$$(IMAGE_SIZE) | zyxel-ras-image 
+  IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-rootfs | pad-rootfs |\
+ 	check-size $$$$(IMAGE_SIZE)
+ 
+  #zyxel-ras-image replaces any outdated scripts or binaries. Further information on the ZyXEL header format  	#can be found in firmware-utils/mkrasimage source code
 
  endef
  TARGET_DEVICES += zyxel_nbg6616
