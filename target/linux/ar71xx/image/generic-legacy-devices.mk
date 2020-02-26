@@ -424,6 +424,7 @@ LEGACY_DEVICES += ZCN1523H516
 
 define LegacyDevice/NBG6616
   DEVICE_TITLE := ZyXEL NBG6616
-DEVICE_PACKAGES := kmod-rtc-pcf2123
+DEVICE_PACKAGES := kmod-usb2 kmod-usb-ledtrig-usbport  kmod-ath10k-ct \
+	ath10k-firmware-qca988x-ct kmod-rtc-pcf2123
  endef
 LEGACY_DEVICES += NBG6616
