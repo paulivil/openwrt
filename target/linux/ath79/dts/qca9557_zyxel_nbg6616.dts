@@ -11,7 +11,8 @@
 	model = "ZyXEL NBG6616";
 
 	chosen {
-		bootargs = "board=NBG6616 mem=128M console=ttyS0,115200n8 rootfstype=squashfs,jffs2 noinitrd";
+		bootargs = "rootfstype=squashfs,jffs2 noinitrd";
+		stdout-path = "serial0:115200n8";
 	};
 
 	aliases {
