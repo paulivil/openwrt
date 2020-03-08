@@ -55,7 +55,7 @@ case "$FIRMWARE" in
 		;;
 	zyxel,nbg6616)
 		caldata_extract "RFdata" 0x1000 0x440
-		ath9k_patch_mac $(mtd_get_mac_ascii env ethaddr)
+		ath9k_patch_mac $(mtd_get_mac_ascii u-boot-env ethaddr)
 		;;
 	*)
 		caldata_die "board $board is not supported yet"
