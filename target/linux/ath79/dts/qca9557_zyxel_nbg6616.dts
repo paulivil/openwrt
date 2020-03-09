@@ -121,13 +121,13 @@
 				read-only;
 			};
 
-			partition@30000 {
-				label = "u-boot-env";
+			uboot_env: partition@30000 {
+				label = "env";
 				reg = <0x0030000 0x0010000>;
 				read-only;
 			};
 
-			partition@40000 {
+			rfdata: partition@40000 {
 				label = "RFdata";
 				reg = <0x0040000 0x0010000>;
 				read-only;
@@ -151,10 +151,10 @@
 		
 							                 
 			partition@120000 {
+				compatible =  "denx,uimage";
 				label = "firmware";
 				reg = <0x0120000 0x0ee0000>;
-				compatible =  "denx,uimage";
-				
+								
 			};
 
 						
@@ -173,6 +173,7 @@
 		phy17: ethernet-phy@11 {
 			reg = <0x11>;
 			phy-mode = "rgmii-id";
+			
 		};
 
 		switch0@1f {
@@ -235,6 +236,8 @@
 
 &wmac {
 	status = "okay";
+	mtd-cal-data = <&rfdata 0x1000>;
+	
 };
 
 &pcie1 {
@@ -244,6 +247,7 @@
 		compatible = "qcom,ath10k";
 		reg = <0 0 0 0 0>;
 		qcom,ath10k-calibration-variant = "ZyXEL-NBG6616";
+		mtd-cal-data = <&rfdata 0x5000>;
 	};
 };
 

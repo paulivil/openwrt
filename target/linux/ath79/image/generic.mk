@@ -1132,7 +1132,7 @@ define Device/zyxel_nbg6616
   SOC := qca9557
   DEVICE_VENDOR := ZyXEL
   DEVICE_MODEL := NBG6616
-  DEVICE_PACKAGES := kmod-usb2 kmod-usb-ledtrig-usbport  kmod-ath10k-ct \
+  DEVICE_PACKAGES := kmod-usb-core kmod-usb-ohci kmod-usb2 kmod-usb-ledtrig-usbport  kmod-ath10k-ct \
 	ath10k-firmware-qca988x-ct
   RAS_BOARD := NBG6616
   RAS_ROOTFS_SIZE := 14464k
