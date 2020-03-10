@@ -62,7 +62,8 @@ wnr1000-v2|\
 wnr2000-v3|\
 wnr2200|\
 wnr612-v2|\
-xd3200)
+xd3200|\)
+nbg6616)
 	ubootenv_add_uci_config "/dev/mtd1" "0x0" "0x10000" "0x10000"
 	;;
 alfa-ap96|\
