@@ -20,7 +20,6 @@
 		led-running = &led_power;
 		led-upgrade = &led_power;
 		label-mac-device = &wmac;
-
 	};
 
 	leds {
@@ -132,7 +131,8 @@
 				reg = <0x0040000 0x0010000>;
 				read-only;
 		    };
-			rfdata: partition@50000 {
+
+			rfsdata: partition@50000 {
 				label = "rootfs_data";
 				reg = <0x0050000 0x0060000>;
 			};
@@ -199,7 +199,7 @@
 &mdio1 {
 	status = "okay";
 
-	phy1: ethernet-phy@1 {90 ef 68
+	phy1: ethernet-phy@1 {
 		reg = <1>;
 		phy-mode = "sgmii";
 	};
@@ -230,8 +230,8 @@
 	};
 };
 
-&gpio {pcie
-	status = "okay";90 ef 68
+&gpio {
+	status = "okay";
 };
 
 &wmac {
@@ -247,7 +247,7 @@
 		compatible = "qcom,ath10k";
 		reg = <0 0 0 0 0>;
 		qcom,ath10k-calibration-variant = "ZyXEL-NBG6616";
-		mtd-mac-address = <&rfdata 0xb2d0>;
+		mtd-mac-address = <&rfsdata 0xb2d0>;
 	};
 };
 
