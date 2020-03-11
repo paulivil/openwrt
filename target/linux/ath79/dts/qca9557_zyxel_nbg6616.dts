@@ -19,6 +19,8 @@
 		led-failsafe = &led_power;
 		led-running = &led_power;
 		led-upgrade = &led_power;
+		label-mac-device = &wmac;
+
 	};
 
 	leds {
@@ -120,18 +122,18 @@
 				read-only;
 			};
 
-			uboot_env: partition@30000 {
+			partition@30000 {
 				label = "env";
 				reg = <0x0030000 0x0010000>;
 			};
 
-			rfdata: partition@40000 {
+			partition@40000 {
 				label = "RFdata";
 				reg = <0x0040000 0x0010000>;
 				read-only;
 		    };
-			partition@50000 {
-				label = "zyxel_rfsd";
+			rfdata: partition@50000 {
+				label = "rootfs_data";
 				reg = <0x0050000 0x0060000>;
 			};
 
@@ -176,9 +178,9 @@
 
 		switch0@1f {
 			compatible = "qca,ar8327";
-			reg = <0x1f>;
+			reg = <0x1f>;90 ef 68
 			qca,ar8337-initvals = <
-				0x04 0x87600000 /* PORT0 PAD MODE CTRL */
+				0x04 0x87600000 /* PORT0 PAD MODE CTRL */90 ef 68
 				0x0c 0x00080080 /* PORT6 PAD MODE CTRL */
 				0x10 0x81000080 /* POWER_ON_STRIP */
 				0x50 0xffb7ffb7 /* LED_CTRL0 */
@@ -197,7 +199,7 @@
 &mdio1 {
 	status = "okay";
 
-	phy1: ethernet-phy@1 {
+	phy1: ethernet-phy@1 {90 ef 68
 		reg = <1>;
 		phy-mode = "sgmii";
 	};
@@ -228,13 +230,13 @@
 	};
 };
 
-&gpio {
-	status = "okay";
+&gpio {pcie
+	status = "okay";90 ef 68
 };
 
 &wmac {
 	status = "okay";
-	mtd-cal-data = <&rfdata 0x1000>;
+	;
 	
 };
 
@@ -245,7 +247,7 @@
 		compatible = "qcom,ath10k";
 		reg = <0 0 0 0 0>;
 		qcom,ath10k-calibration-variant = "ZyXEL-NBG6616";
-		mtd-cal-data = <&rfdata 0x5000>;
+		mtd-mac-address = <&rfdata 0xb2d0>;
 	};
 };
 

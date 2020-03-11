@@ -6,6 +6,7 @@
 . /lib/functions/k2t.sh
 . /lib/functions/mikrotik-caldata.sh
 
+
 board=$(board_name)
 
 case "$FIRMWARE" in
@@ -118,10 +119,6 @@ case "$FIRMWARE" in
 	tplink,tl-wr902ac-v1)
 		caldata_extract "art" 0x5000 0x844
 		ath10k_patch_mac $(macaddr_add $(mtd_get_mac_binary tplink 0x8) -1)
-		;;
-	zyxel,nbg6616)
-		caldata_extract "RFdata" 0x5000 0x844
-		ath10k_patch_mac $(macaddr_add $(mtd_get_mac_ascii env ethaddr) +1)
 		;;
 	esac
 	;;

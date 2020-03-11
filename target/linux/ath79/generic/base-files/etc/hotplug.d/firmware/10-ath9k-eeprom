@@ -53,10 +53,6 @@ case "$FIRMWARE" in
 		caldata_extract "radiocfg" 0x1000 0x440
 		ath9k_patch_mac $(mtd_get_mac_ascii devdata "wlan24mac")
 		;;
-	zyxel,nbg6616)
-		caldata_extract "RFdata" 0x1000 0x440
-		ath9k_patch_mac $(macaddr_add $(cat /sys/class/net/eth0/address) -2)
-		;;
 	*)
 		caldata_die "board $board is not supported yet"
 		;;
