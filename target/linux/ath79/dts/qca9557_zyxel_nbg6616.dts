@@ -19,7 +19,7 @@
 		led-failsafe = &led_power;
 		led-running = &led_power;
 		led-upgrade = &led_power;
-		label-mac-device = &wmac;
+		//label-mac-device = &wmac;
 	};
 
 	leds {
@@ -132,8 +132,8 @@
 				read-only;
 		    };
 
-			rfsdata: partition@50000 {
-				label = "rootfs_data";
+			partition@50000 {
+				label = "zyxel_rfsd";
 				reg = <0x0050000 0x0060000>;
 			};
 
@@ -246,7 +246,7 @@
 		compatible = "qcom,ath10k";
 		reg = <0 0 0 0 0>;
 		qcom,ath10k-calibration-variant = "ZyXEL-NBG6616";
-		mtd-mac-address = <&rfsdata 0xb2d0>;
+		//mtd-mac-address = <&rfsdata 0xb2d0>;
 	};
 };
 
