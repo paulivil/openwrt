@@ -11,7 +11,7 @@
 	model = "ZyXEL NBG6616";
 
 	chosen {
-		bootargs = "console=ttyS0,115200";
+		bootargs-append = "mtdparts=root=31:7";
 	};
 
 	aliases {
@@ -121,8 +121,8 @@
 				read-only;
 			};
 
-			partition@30000 {
-				label = "env";
+			ubootenv: partition@30000 {
+				label = "u-boot-env";
 				reg = <0x0030000 0x0010000>;
 			};
 
