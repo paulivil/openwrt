@@ -13,6 +13,8 @@ DEVICE_VARS += KERNEL_INITRAMFS_PREFIX
 
 
 
+
+
 define Build/add-elecom-factory-initramfs
   $(eval edimax_model=$(word 1,$(1)))
   $(eval product=$(word 2,$(1)))
@@ -1141,17 +1143,21 @@ define Device/zyxel_nbg6616
   KERNEL_SIZE := 2048k
   BLOCKSIZE := 64k
   PAGESIZE := 1024
-  UBINIZE_OPTS := -E 5
+  UBINIZE_OPTS := -e 5 
+  KERNEL_IN_UBI := 1
   IMAGES := factory.bin sysupgrade.bin
   KERNEL := kernel-bin |  append-dtb | lzma | uImage lzma | jffs2 boot/vmlinux.lzma.uImage
-  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) |  append-ubi  |\
+  IMAGE/factory.bin :=   append-ubi  |\
  	 check-size $$$$(IMAGE_SIZE) | zyxel-ras-image 
-  IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi |\
+  IMAGE/sysupgrade.bin :=  append-ubi |\
  	 check-size $$$$(IMAGE_SIZE)
  
   #zyxel-ras-image replaces any outdated scripts or binaries. Further information on the ZyXEL header format
   #can be found in firmware-utils/mkrasimage source code
   #append-rootfs | pad-rootfs | pad-to $$$$(BLOCKSIZE) |
+  #pad-to 4788224
+  #append-kernel | pad-to $$$$(KERNEL_SIZE) |
+  #append-kernel | pad-to $$$$(KERNEL_SIZE) |
 
  endef
  TARGET_DEVICES += zyxel_nbg6616
