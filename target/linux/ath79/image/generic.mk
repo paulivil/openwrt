@@ -1142,7 +1142,7 @@ define Device/zyxel_nbg6616
   IMAGE_SIZE := 15323k
   KERNEL_SIZE := 2048k
   BLOCKSIZE := 64k
-  PAGESIZE := 1024
+  PAGESIZE := 256
   UBINIZE_OPTS := -e 5 
   KERNEL_IN_UBI := 1
   IMAGES := factory.bin sysupgrade.bin
