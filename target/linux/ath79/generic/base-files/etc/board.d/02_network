@@ -256,7 +256,7 @@ ath79_setup_interfaces()
 	tplink,tl-wr1043nd-v2|\
 	tplink,tl-wr1043nd-v3|\
 	tplink,tl-wr1045nd-v2)
-		ucidef_add_switch "switch0" \
+			ucidef_add_switch "switch0" \
 			"0@eth1" "1:lan:4" "2:lan:3" "3:lan:2" "4:lan:1" "5:wan" "6@eth0"
 		;;
 	tplink,tl-wr2543-v1)
@@ -295,7 +295,7 @@ ath79_setup_interfaces()
 		;;
 	zyxel,nbg6616)
 		ucidef_add_switch "switch0" \
-			"0@eth0" "1:lan" "2:lan" "3:lan" "4:lan" "5:wan" "6@eth1"
+			"0@eth0" "1:lan" "2:lan" "3:lan" "4:lan" "5:wan" "6@eth1"	
 		;;
 	*)
 		ucidef_set_interfaces_lan_wan "eth0" "eth1"
@@ -449,6 +449,7 @@ ath79_setup_macs()
 		lan_mac=$(macaddr_add $(mtd_get_mac_ascii u-boot-env ethaddr) +2)
 		wan_mac=$(macaddr_add $(mtd_get_mac_ascii u-boot-env ethaddr) +3)
 		label_mac=$wan_mac
+		;;
 	esac
 
 	[ -n "$lan_mac" ] && ucidef_set_interface_macaddr "lan" $lan_mac

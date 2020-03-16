@@ -120,6 +120,10 @@ case "$FIRMWARE" in
 		caldata_extract "art" 0x5000 0x844
 		ath10k_patch_mac $(macaddr_add $(mtd_get_mac_binary tplink 0x8) -1)
 		;;
+	zyxel,nbg6616)
+		caldata_extract "art" 0x5000 0x844
+		ath10k_patch_mac $(macaddr_add $(mtd_get_mac_ascii u-boot-env ethaddr) +1)
+		;;
 	esac
 	;;
 "ath10k/pre-cal-pci-0000:00:00.0.bin")
