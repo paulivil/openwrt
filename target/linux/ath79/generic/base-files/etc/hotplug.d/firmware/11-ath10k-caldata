@@ -121,8 +121,8 @@ case "$FIRMWARE" in
 		ath10k_patch_mac $(macaddr_add $(mtd_get_mac_binary tplink 0x8) -1)
 		;;
 	zyxel,nbg6616)
-		caldata_extract "art" 0x5000 0x844
-		ath10k_patch_mac $(macaddr_add $(mtd_get_mac_ascii u-boot-env ethaddr) +1)
+		caldata_extract "RFdata" 0x5000 0x844
+		ath10k_patch_mac $(macaddr_add $(mtd_get_mac_ascii env ethaddr) +1)
 		;;
 	esac
 	;;
