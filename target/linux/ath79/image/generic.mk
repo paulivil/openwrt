@@ -1142,16 +1142,17 @@ define Device/zyxel_nbg6616
   IMAGE_SIZE := 15323k
   KERNEL_SIZE := 2048k
   BLOCKSIZE := 64k
-   IMAGES := factory.bin sysupgrade.bin
+  #UBOOT_PATH := $(STAGING_DIR_IMAGE)/uboot-nbg6616.bin
+     IMAGES := factory.bin sysupgrade.bin
   KERNEL := kernel-bin |  append-dtb | lzma | uImage lzma | jffs2 boot/vmlinux.lzma.uImage
-  IMAGE/factory.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs | pad-rootfs  | \
- 	  zyxel-ras-image 
+  IMAGE/factory.bin := append-uboot | append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs | pad-rootfs  | \
+ 	   zyxel-ras-image 
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs | pad-rootfs |  \
  	 	append-metadata | check-size $$$$(IMAGE_SIZE)
  
   #zyxel-ras-image replaces any outdated scripts or binaries. Further information on the ZyXEL header format
   #can be found in firmware-utils/mkrasimage source code
-  
+  #
 
  endef
  TARGET_DEVICES += zyxel_nbg6616
