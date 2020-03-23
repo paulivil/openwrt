@@ -13,9 +13,9 @@ PKG_VERSION:=2009.11
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=https://github.com/paulivil/uboot-zyxel.git
-PKG_HASH:=c02284312750ce90fcde6c701e7731f7a4b456d2b33a94b24a530c68b92fcf5b
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=https://github.com/paulivil/uboot-zyxel/src/
+PKG_HASH:=skip
 
 
 PKG_TARGETS:=bin
