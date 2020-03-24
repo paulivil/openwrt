@@ -217,7 +217,7 @@ do { \
 
 
 #define CFG_LOADER_PART_ADDR		CONFIG_SYS_FLASH_BASE
-#ifdef CONFIG_EMBEDDED_KERNEL_IN_ROOTFS
+#ifdef CONFIG_EMBEDDED
   #define CFG_LOADER_PART_SIZE		0x40000
   #define CFG_ENV_PART_ADDR		0x9f040000
   #define CFG_ENV_PART_SIZE		0x10000
@@ -270,7 +270,7 @@ do { \
   #define BOOT_FLASH_CMD        "boot_flash=run setmtdparts flashargs addtty addmtd;fsload ${loadaddr} /boot/vmlinux.lzma.uImage;bootm ${loadaddr}\0"
   #define BOOTARG_DEFAULT	"board=" CONFIG_BOARD_NAME " root=/dev/" ROOTFS_MTD_NO " rootfstype=jffs2 noinitrd ${bootmode} ${zld_ver}"
 #else
-  #error "This configuration must be enable option 'CONFIG_EMBEDDED_KERNEL_IN_ROOTFS'"
+  #error "This configuration must be enable option 'CONFIG_EMBEDDED'"
 #endif
 
 /* ROOTFS_MTD_NO, MTDPARTS_DEFAULT, BOOT_FLASH_CMD, IMG_ENV_VAL, UPGRADE_IMG_CMD */

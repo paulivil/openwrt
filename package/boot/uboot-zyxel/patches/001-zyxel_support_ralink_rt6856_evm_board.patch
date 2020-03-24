@@ -1,18 +1,6 @@
-diff -ruN a/drivers/mtd/spi/Makefile b/drivers/mtd/spi/Makefile
---- a/drivers/mtd/spi/Makefile	2009-12-16 06:20:54.000000000 +0800
-+++ b/drivers/mtd/spi/Makefile	2012-05-16 13:55:05.000000000 +0800
-@@ -33,6 +33,7 @@
- COBJS-$(CONFIG_SPI_FLASH_STMICRO)	+= stmicro.o
- COBJS-$(CONFIG_SPI_FLASH_WINBOND)	+= winbond.o
- COBJS-$(CONFIG_SPI_M95XXX) += eeprom_m95xxx.o
-+COBJS-$(CONFIG_SPI_FLASH_RT6855A) += rt6855a_spiflash.o
- 
- COBJS	:= $(COBJS-y)
- SRCS	:= $(COBJS:.o=.c)
-diff -ruN a/drivers/net/Makefile b/drivers/net/Makefile
---- a/drivers/net/Makefile	2009-12-16 06:20:54.000000000 +0800
-+++ b/drivers/net/Makefile	2012-05-18 10:57:33.000000000 +0800
-@@ -73,6 +73,7 @@
+--- a/drivers/net/Makefile
++++ b/drivers/net/Makefile
+@@ -73,6 +73,7 @@ COBJS-$(CONFIG_TSI108_ETH) += tsi108_eth
  COBJS-$(CONFIG_ULI526X) += uli526x.o
  COBJS-$(CONFIG_VSC7385_ENET) += vsc7385.o
  COBJS-$(CONFIG_XILINX_EMACLITE) += xilinx_emaclite.o
@@ -20,20 +8,18 @@ diff -ruN a/drivers/net/Makefile b/drivers/net/Makefile
  
  COBJS	:= $(COBJS-y)
  SRCS	:= $(COBJS:.o=.c)
-diff -ruN a/include/common.h b/include/common.h
---- a/include/common.h	2009-12-16 06:20:54.000000000 +0800
-+++ b/include/common.h	2012-05-20 11:32:13.000000000 +0800
-@@ -719,4 +719,6 @@
+--- a/include/common.h
++++ b/include/common.h
+@@ -719,4 +719,6 @@ int cpu_release(int nr, int argc, char *
  #define ALIGN(x,a)		__ALIGN_MASK((x),(typeof(x))(a)-1)
  #define __ALIGN_MASK(x,mask)	(((x)+(mask))&~(mask))
  
 +#define __maybe_unused                  __attribute__((unused))
 +
  #endif	/* __COMMON_H_ */
-diff -ruN a/include/net.h b/include/net.h
---- a/include/net.h	2009-12-16 06:20:54.000000000 +0800
-+++ b/include/net.h	2012-05-18 10:13:28.000000000 +0800
-@@ -381,6 +381,29 @@
+--- a/include/net.h
++++ b/include/net.h
+@@ -381,6 +381,29 @@ extern IPaddr_t	NetNtpServerIP;			/* the
  extern int NetTimeOffset;			/* offset time from UTC		*/
  #endif
  
@@ -63,10 +49,9 @@ diff -ruN a/include/net.h b/include/net.h
  /* Initialize the network adapter */
  extern int	NetLoop(proto_t);
  
-diff -ruN a/lib_mips/board.c b/lib_mips/board.c
---- a/lib_mips/board.c	2009-12-16 06:20:54.000000000 +0800
-+++ b/lib_mips/board.c	2012-05-21 18:45:26.000000000 +0800
-@@ -78,6 +78,14 @@
+--- a/lib_mips/board.c
++++ b/lib_mips/board.c
+@@ -78,6 +78,14 @@ int __board_early_init_f(void)
  }
  int board_early_init_f(void) __attribute__((weak, alias("__board_early_init_f")));
  
@@ -81,7 +66,7 @@ diff -ruN a/lib_mips/board.c b/lib_mips/board.c
  
  static int init_func_ram (void)
  {
-@@ -159,6 +167,7 @@
+@@ -159,6 +167,7 @@ init_fnc_t *init_sequence[] = {
  	display_banner,		/* say that we are here */
  	checkboard,
  	init_func_ram,
@@ -89,7 +74,7 @@ diff -ruN a/lib_mips/board.c b/lib_mips/board.c
  	NULL,
  };
  
-@@ -268,6 +277,12 @@
+@@ -268,6 +277,12 @@ void board_init_f(ulong bootflag)
  	copy_code(addr);
  #endif
  
@@ -102,7 +87,7 @@ diff -ruN a/lib_mips/board.c b/lib_mips/board.c
  	relocate_code (addr_sp, id, addr);
  
  	/* NOTREACHED - relocate_code() does not return */
-@@ -298,12 +313,22 @@
+@@ -298,12 +313,22 @@ void board_init_r (gd_t *id, ulong dest_
  	gd = id;
  	gd->flags |= GD_FLG_RELOC;	/* tell others: relocation done */
  
@@ -125,9 +110,8 @@ diff -ruN a/lib_mips/board.c b/lib_mips/board.c
  	/*
  	 * We have to relocate the command table manually
  	 */
-diff -ruN a/lib_mips/config.mk b/lib_mips/config.mk
---- a/lib_mips/config.mk	2009-12-16 06:20:54.000000000 +0800
-+++ b/lib_mips/config.mk	2012-05-17 19:23:23.000000000 +0800
+--- a/lib_mips/config.mk
++++ b/lib_mips/config.mk
 @@ -23,7 +23,7 @@
  
  CROSS_COMPILE ?= mips_4KC-
@@ -137,9 +121,8 @@ diff -ruN a/lib_mips/config.mk b/lib_mips/config.mk
  
  PLATFORM_CPPFLAGS += -DCONFIG_MIPS -D__MIPS__
  
-diff -ruN a/lib_mips/time.c b/lib_mips/time.c
---- a/lib_mips/time.c	2009-12-16 06:20:54.000000000 +0800
-+++ b/lib_mips/time.c	2012-05-19 23:06:18.000000000 +0800
+--- a/lib_mips/time.c
++++ b/lib_mips/time.c
 @@ -24,6 +24,10 @@
  #include <common.h>
  #include <asm/mipsregs.h>
@@ -151,9 +134,8 @@ diff -ruN a/lib_mips/time.c b/lib_mips/time.c
  static unsigned long timestamp;
  
  /* how many counter cycles in a jiffy */
-diff -ruN a/net/net.c b/net/net.c
---- a/net/net.c	2009-12-16 06:20:54.000000000 +0800
-+++ b/net/net.c	2012-05-20 00:27:22.000000000 +0800
+--- a/net/net.c
++++ b/net/net.c
 @@ -96,6 +96,7 @@
  #include "dns.h"
  #endif
@@ -162,7 +144,7 @@ diff -ruN a/net/net.c b/net/net.c
  #if defined(CONFIG_CMD_NET)
  
  DECLARE_GLOBAL_DATA_PTR;
-@@ -185,7 +186,16 @@
+@@ -185,7 +186,16 @@ void NcStart(void);
  int nc_input_packet(uchar *pkt, unsigned dest, unsigned src, unsigned len);
  #endif
  
@@ -179,7 +161,7 @@ diff -ruN a/net/net.c b/net/net.c
  
  volatile uchar *NetRxPackets[PKTBUFSRX]; /* Receive packets			*/
  
-@@ -321,9 +331,33 @@
+@@ -321,9 +331,33 @@ NetLoop(proto_t protocol)
  	NetArpWaitPacketIP = 0;
  	NetArpWaitReplyIP = 0;
  	NetArpWaitTxPacket = NULL;
@@ -214,7 +196,7 @@ diff -ruN a/net/net.c b/net/net.c
  	if (!NetTxPacket) {
  		int	i;
  		/*
-@@ -335,6 +369,7 @@
+@@ -335,6 +369,7 @@ NetLoop(proto_t protocol)
  			NetRxPackets[i] = NetTxPacket + (i+1)*PKTSIZE_ALIGN;
  		}
  	}
@@ -222,7 +204,7 @@ diff -ruN a/net/net.c b/net/net.c
  
  	if (!NetArpWaitTxPacket) {
  		NetArpWaitTxPacket = &NetArpWaitPacketBuf[0] + (PKTALIGN - 1);
-@@ -1485,6 +1520,15 @@
+@@ -1485,6 +1520,15 @@ NetReceive(volatile uchar * inpkt, int l
  				NetArpWaitTxPacketSize = 0;
  				NetArpWaitPacketMAC = NULL;
  
@@ -238,9 +220,8 @@ diff -ruN a/net/net.c b/net/net.c
  			}
  			return;
  		default:
-diff -ruN a/net/tftp.c b/net/tftp.c
---- a/net/tftp.c	2009-12-16 06:20:54.000000000 +0800
-+++ b/net/tftp.c	2012-05-20 00:14:43.000000000 +0800
+--- a/net/tftp.c
++++ b/net/tftp.c
 @@ -32,6 +32,8 @@
  #define TFTP_ERROR	5
  #define TFTP_OACK	6
@@ -250,7 +231,7 @@ diff -ruN a/net/tftp.c b/net/tftp.c
  static ulong TftpTimeoutMSecs = TIMEOUT;
  static int TftpTimeoutCountMax = TIMEOUT_COUNT;
  
-@@ -164,12 +166,12 @@
+@@ -164,12 +166,12 @@ store_block (unsigned block, uchar * src
  		NetBootFileXferSize = newsize;
  }
  
@@ -265,7 +246,7 @@ diff -ruN a/net/tftp.c b/net/tftp.c
  TftpSend (void)
  {
  	volatile uchar *	pkt;
-@@ -504,6 +506,8 @@
+@@ -504,6 +506,8 @@ TftpStart (void)
  {
  	char *ep;             /* Environment pointer */
  
@@ -274,9 +255,8 @@ diff -ruN a/net/tftp.c b/net/tftp.c
  	/* Allow the user to choose tftpblocksize */
  	if ((ep = getenv("tftpblocksize")) != NULL)
  		TftpBlkSizeOption = simple_strtol(ep, NULL, 10);
-diff -ruN a/net/tftp.h b/net/tftp.h
---- a/net/tftp.h	2009-12-16 06:20:54.000000000 +0800
-+++ b/net/tftp.h	2012-05-20 11:14:01.000000000 +0800
+--- a/net/tftp.h
++++ b/net/tftp.h
 @@ -15,6 +15,7 @@
  
  /* tftp.c */

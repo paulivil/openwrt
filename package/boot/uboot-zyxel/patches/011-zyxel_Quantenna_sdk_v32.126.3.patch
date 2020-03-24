@@ -1,8 +1,6 @@
-Index: u-boot-2009.11/common/cmd_bootm.c
-===================================================================
---- u-boot-2009.11.orig/common/cmd_bootm.c	2012-11-03 21:14:18.730066702 +0800
-+++ u-boot-2009.11/common/cmd_bootm.c	2012-11-03 21:14:18.794067321 +0800
-@@ -197,6 +197,8 @@
+--- a/common/cmd_bootm.c
++++ b/common/cmd_bootm.c
+@@ -197,6 +197,8 @@ void arch_preboot_os(void) __attribute__
    #define IH_INITRD_ARCH IH_ARCH_SH
  #elif defined(__sparc__)
    #define IH_INITRD_ARCH IH_ARCH_SPARC
@@ -11,7 +9,7 @@ Index: u-boot-2009.11/common/cmd_bootm.c
  #else
  # error Unknown CPU type
  #endif
-@@ -971,7 +973,9 @@
+@@ -971,7 +973,9 @@ static void *boot_get_kernel (cmd_tbl_t
  
  	debug ("   kernel data at 0x%08lx, len = 0x%08lx (%ld)\n",
  			*os_data, *os_len, *os_len);
@@ -22,11 +20,9 @@ Index: u-boot-2009.11/common/cmd_bootm.c
  	return (void *)img_addr;
  }
  
-Index: u-boot-2009.11/common/cmd_elf.c
-===================================================================
---- u-boot-2009.11.orig/common/cmd_elf.c	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/common/cmd_elf.c	2012-11-03 21:14:18.794067321 +0800
-@@ -41,6 +41,9 @@
+--- a/common/cmd_elf.c
++++ b/common/cmd_elf.c
+@@ -41,6 +41,9 @@ unsigned long do_bootelf_exec (ulong (*e
  	if (dcache)
  		dcache_disable ();
  
@@ -36,11 +32,9 @@ Index: u-boot-2009.11/common/cmd_elf.c
  	/*
  	 * pass address parameter as argv[0] (aka command name),
  	 * and all remaining args
-Index: u-boot-2009.11/common/env_common.c
-===================================================================
---- u-boot-2009.11.orig/common/env_common.c	2012-11-03 21:14:18.786063227 +0800
-+++ u-boot-2009.11/common/env_common.c	2012-11-03 21:14:18.794067321 +0800
-@@ -218,11 +218,18 @@
+--- a/common/env_common.c
++++ b/common/env_common.c
+@@ -218,11 +218,18 @@ void set_default_env(void)
  #ifdef CONFIG_SYS_REDUNDAND_ENVIRONMENT
  	env_ptr->flags = 0xFF;
  #endif
@@ -59,7 +53,7 @@ Index: u-boot-2009.11/common/env_common.c
  {
  #ifndef CONFIG_RELOC_FIXUP_WORKS
  	DEBUGF ("%s[%d] offset = 0x%lx\n", __FUNCTION__,__LINE__,
-@@ -246,10 +253,18 @@
+@@ -246,10 +253,18 @@ void env_relocate (void)
  	/*
  	 * We must allocate a buffer for the environment
  	 */
@@ -79,7 +73,7 @@ Index: u-boot-2009.11/common/env_common.c
  	if (gd->env_valid == 0) {
  #if defined(CONFIG_GTH)	|| defined(CONFIG_ENV_IS_NOWHERE)	/* Environment not changable */
  		puts ("Using default environment\n\n");
-@@ -258,7 +273,7 @@
+@@ -258,7 +273,7 @@ void env_relocate (void)
  		show_boot_progress (-60);
  #endif
  		set_default_env();
@@ -88,11 +82,9 @@ Index: u-boot-2009.11/common/env_common.c
  		puts ("Save the default environment\n\n");
  		saveenv();
  #endif
-Index: u-boot-2009.11/common/image.c
-===================================================================
---- u-boot-2009.11.orig/common/image.c	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/common/image.c	2012-11-03 21:14:18.794067321 +0800
-@@ -94,6 +94,7 @@
+--- a/common/image.c
++++ b/common/image.c
+@@ -94,6 +94,7 @@ static table_entry_t uimage_arch[] = {
  	{	IH_ARCH_SPARC64,	"sparc64",	"SPARC 64 Bit",	},
  	{	IH_ARCH_BLACKFIN,	"blackfin",	"Blackfin",	},
  	{	IH_ARCH_AVR32,		"avr32",	"AVR32",	},
@@ -100,11 +92,9 @@ Index: u-boot-2009.11/common/image.c
  	{	-1,			"",		"",		},
  };
  
-Index: u-boot-2009.11/examples/standalone/stubs.c
-===================================================================
---- u-boot-2009.11.orig/examples/standalone/stubs.c	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/examples/standalone/stubs.c	2012-11-03 21:16:03.000000000 +0800
-@@ -184,6 +184,28 @@
+--- a/examples/standalone/stubs.c
++++ b/examples/standalone/stubs.c
+@@ -184,6 +184,28 @@ gd_t *global_data;
  "	jmp %%g1\n"					\
  "	nop\n"						\
  	: : "i"(offsetof(gd_t, jt)), "i"(XF_ ## x * sizeof(void *)) : "g1" );
@@ -133,7 +123,7 @@ Index: u-boot-2009.11/examples/standalone/stubs.c
  
  #else
  #error stubs definition missing for this architecture
-@@ -220,6 +241,10 @@
+@@ -220,6 +242,10 @@ void app_startup(char **argv)
  	global_data = (gd_t *)argv[-1];
  	jt = global_data->jt;
  #endif
@@ -144,10 +134,8 @@ Index: u-boot-2009.11/examples/standalone/stubs.c
  }
  
  #undef EXPORT_FUNC
-Index: u-boot-2009.11/include/image.h
-===================================================================
---- u-boot-2009.11.orig/include/image.h	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/include/image.h	2012-11-03 21:14:18.798054980 +0800
+--- a/include/image.h
++++ b/include/image.h
 @@ -106,6 +106,7 @@
  #define IH_ARCH_BLACKFIN	16	/* Blackfin	*/
  #define IH_ARCH_AVR32		17	/* AVR32	*/
@@ -156,7 +144,7 @@ Index: u-boot-2009.11/include/image.h
  
  /*
   * Image Types
-@@ -501,6 +502,8 @@
+@@ -501,6 +502,8 @@ static inline int image_check_target_arc
  	if (!image_check_arch (hdr, IH_ARCH_SH))
  #elif defined(__sparc__)
  	if (!image_check_arch (hdr, IH_ARCH_SPARC))
@@ -165,11 +153,9 @@ Index: u-boot-2009.11/include/image.h
  #else
  # error Unknown CPU type
  #endif
-Index: u-boot-2009.11/net/bootp.c
-===================================================================
---- u-boot-2009.11.orig/net/bootp.c	2012-11-03 21:14:18.718145351 +0800
-+++ u-boot-2009.11/net/bootp.c	2012-11-03 21:14:18.798054980 +0800
-@@ -476,6 +476,16 @@
+--- a/net/bootp.c
++++ b/net/bootp.c
+@@ -476,6 +476,16 @@ static int DhcpExtended (u8 * e, int mes
  }
  
  #else
@@ -186,7 +172,7 @@ Index: u-boot-2009.11/net/bootp.c
  /*
   *	Warning: no field size check - change CONFIG_BOOTP_* at your own risk!
   */
-@@ -542,6 +552,12 @@
+@@ -542,6 +552,12 @@ static int BootpExtended (u8 * e)
  	e   += 32;
  #endif
  
@@ -199,11 +185,9 @@ Index: u-boot-2009.11/net/bootp.c
  	*e++ = 255;		/* End of the list */
  
  	return e - start;
-Index: u-boot-2009.11/tools/Makefile
-===================================================================
---- u-boot-2009.11.orig/tools/Makefile	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/tools/Makefile	2012-11-03 21:14:18.798054980 +0800
-@@ -82,6 +82,8 @@
+--- a/tools/Makefile
++++ b/tools/Makefile
+@@ -82,6 +82,8 @@ BIN_FILES-$(CONFIG_INCA_IP) += inca-swap
  BIN_FILES-y += mkimage$(SFX)
  BIN_FILES-$(CONFIG_NETCONSOLE) += ncb$(SFX)
  BIN_FILES-$(CONFIG_SHA1_CHECK_UB_IMG) += ubsha1$(SFX)
@@ -212,7 +196,7 @@ Index: u-boot-2009.11/tools/Makefile
  
  # Source files which exist outside the tools directory
  EXT_OBJ_FILES-y += common/env_embedded.o
-@@ -104,6 +106,7 @@
+@@ -104,6 +106,7 @@ OBJ_FILES-y += mkimage.o
  OBJ_FILES-$(CONFIG_NETCONSOLE) += ncb.o
  OBJ_FILES-y += os_support.o
  OBJ_FILES-$(CONFIG_SHA1_CHECK_UB_IMG) += ubsha1.o
@@ -220,7 +204,7 @@ Index: u-boot-2009.11/tools/Makefile
  
  # Don't build by default
  #ifeq ($(ARCH),ppc)
-@@ -153,6 +156,10 @@
+@@ -153,6 +156,10 @@ CPPFLAGS   = -idirafter $(SRCTREE)/inclu
  		-D__KERNEL_STRICT_NAMES
  CFLAGS     = $(HOSTCFLAGS) $(CPPFLAGS) -O
  
@@ -231,7 +215,7 @@ Index: u-boot-2009.11/tools/Makefile
  # No -pedantic switch to avoid libfdt compilation warnings
  FIT_CFLAGS = -Wall $(CPPFLAGS) -O
  
-@@ -210,6 +217,17 @@
+@@ -210,6 +217,17 @@ $(obj)ncb$(SFX):	$(obj)ncb.o
  $(obj)ubsha1$(SFX):	$(obj)os_support.o $(obj)sha1.o $(obj)ubsha1.o
  	$(CC) $(CFLAGS) -o $@ $^
  
@@ -249,7 +233,7 @@ Index: u-boot-2009.11/tools/Makefile
  # Some files complain if compiled with -pedantic, use FIT_CFLAGS
  $(obj)default_image.o: $(SRCTREE)/tools/default_image.c
  	$(CC) -g $(FIT_CFLAGS) -c -o $@ $<
-@@ -229,6 +247,9 @@
+@@ -229,6 +247,9 @@ $(obj)mkimage.o: $(SRCTREE)/tools/mkimag
  $(obj)os_support.o: $(SRCTREE)/tools/os_support.c
  	$(CC) -g $(FIT_CFLAGS) -c -o $@ $<
  
@@ -259,11 +243,9 @@ Index: u-boot-2009.11/tools/Makefile
  # Some of the tool objects need to be accessed from outside the tools directory
  $(obj)%.o: $(SRCTREE)/common/%.c
  	$(CC) -g $(FIT_CFLAGS) -c -o $@ $<
-Index: u-boot-2009.11/net/eth.c
-===================================================================
---- u-boot-2009.11.orig/net/eth.c	2012-11-03 21:14:18.774068681 +0800
-+++ u-boot-2009.11/net/eth.c	2012-11-03 21:14:18.798054980 +0800
-@@ -218,6 +218,10 @@
+--- a/net/eth.c
++++ b/net/eth.c
+@@ -218,6 +218,10 @@ int eth_initialize(bd_t *bis)
  	comcerto_gemac_initialize(bis, 0, "comcerto_gemac0");
  	comcerto_gemac_initialize(bis, 1, "comcerto_gemac1");
  #endif
@@ -274,11 +256,9 @@ Index: u-boot-2009.11/net/eth.c
  	if (!eth_devices) {
  		puts ("No ethernet found.\n");
  		show_boot_progress (-64);
-Index: u-boot-2009.11/common/dlmalloc.c
-===================================================================
---- u-boot-2009.11.orig/common/dlmalloc.c	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/common/dlmalloc.c	2012-11-03 21:14:18.798054980 +0800
-@@ -1533,7 +1533,9 @@
+--- a/common/dlmalloc.c
++++ b/common/dlmalloc.c
+@@ -1533,7 +1533,9 @@ void mem_malloc_init(ulong start, ulong
  	mem_malloc_end = start + size;
  	mem_malloc_brk = start;
  
@@ -288,10 +268,8 @@ Index: u-boot-2009.11/common/dlmalloc.c
  }
  #endif
  
-Index: u-boot-2009.11/common/env_sf.c
-===================================================================
---- u-boot-2009.11.orig/common/env_sf.c	2012-11-03 21:14:18.786063227 +0800
-+++ u-boot-2009.11/common/env_sf.c	2012-11-03 21:14:18.798054980 +0800
+--- a/common/env_sf.c
++++ b/common/env_sf.c
 @@ -30,6 +30,8 @@
  #include <malloc.h>
  #include <spi_flash.h>
@@ -301,28 +279,14 @@ Index: u-boot-2009.11/common/env_sf.c
  #ifndef CONFIG_ENV_SPI_BUS
  # define CONFIG_ENV_SPI_BUS	0
  #endif
-@@ -157,3 +159,5 @@
+@@ -157,3 +159,5 @@ int env_init(void)
  
  	return 0;
  }
 +
 +#endif /* #ifndef CONFIG_RUBY_BOARD */
-Index: u-boot-2009.11/drivers/mtd/spi/Makefile
-===================================================================
---- u-boot-2009.11.orig/drivers/mtd/spi/Makefile	2012-11-03 21:14:18.674067109 +0800
-+++ u-boot-2009.11/drivers/mtd/spi/Makefile	2012-11-03 21:14:18.798054980 +0800
-@@ -34,6 +34,7 @@
- COBJS-$(CONFIG_SPI_FLASH_WINBOND)	+= winbond.o
- COBJS-$(CONFIG_SPI_M95XXX) += eeprom_m95xxx.o
- COBJS-$(CONFIG_SPI_FLASH_RT6855A) += rt6855a_spiflash.o
-+COBJS-$(CONFIG_SPI_FLASH_RUBY) += ruby_spiflash.o
- 
- COBJS	:= $(COBJS-y)
- SRCS	:= $(COBJS:.o=.c)
-Index: u-boot-2009.11/lib_generic/lzma/LzmaTools.c
-===================================================================
---- u-boot-2009.11.orig/lib_generic/lzma/LzmaTools.c	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/lib_generic/lzma/LzmaTools.c	2012-11-03 21:14:18.802728481 +0800
+--- a/lib_generic/lzma/LzmaTools.c
++++ b/lib_generic/lzma/LzmaTools.c
 @@ -50,7 +50,21 @@
  #include <linux/string.h>
  #include <malloc.h>
@@ -345,10 +309,8 @@ Index: u-boot-2009.11/lib_generic/lzma/LzmaTools.c
  static void SzFree(void *p, void *address) { p = p; free(address); }
  
  int lzmaBuffToBuffDecompress (unsigned char *outStream, SizeT *uncompressedSize,
-Index: u-boot-2009.11/lib_generic/string.c
-===================================================================
---- u-boot-2009.11.orig/lib_generic/string.c	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/lib_generic/string.c	2012-11-03 21:14:18.802728481 +0800
+--- a/lib_generic/string.c
++++ b/lib_generic/string.c
 @@ -14,7 +14,7 @@
   * -  Added strsep() which will replace strtok() soon (because strsep() is
   *    reentrant and should be faster). Use only strsep() in new code, please.
@@ -358,11 +320,9 @@ Index: u-boot-2009.11/lib_generic/string.c
  #include <linux/types.h>
  #include <linux/string.h>
  #include <linux/ctype.h>
-Index: u-boot-2009.11/include/linux/stat.h
-===================================================================
---- u-boot-2009.11.orig/include/linux/stat.h	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/include/linux/stat.h	2012-11-03 21:14:18.802728481 +0800
-@@ -68,7 +68,7 @@
+--- a/include/linux/stat.h
++++ b/include/linux/stat.h
+@@ -68,7 +68,7 @@ struct stat {
  #endif	/* __PPC__ */
  
  #if defined (__ARM__) || defined (__I386__) || defined (__M68K__) || defined (__bfin__) ||\
@@ -371,11 +331,9 @@ Index: u-boot-2009.11/include/linux/stat.h
  
  struct stat {
  	unsigned short st_dev;
-Index: u-boot-2009.11/common/cmd_jffs2.c
-===================================================================
---- u-boot-2009.11.orig/common/cmd_jffs2.c	2012-11-03 21:14:18.762054579 +0800
-+++ u-boot-2009.11/common/cmd_jffs2.c	2012-11-03 21:14:18.802728481 +0800
-@@ -143,7 +143,7 @@
+--- a/common/cmd_jffs2.c
++++ b/common/cmd_jffs2.c
+@@ -143,7 +143,7 @@ struct mtd_device *current_mtd_dev = NUL
  u8 current_mtd_partnum = 0;
  #endif
  
@@ -384,7 +342,7 @@ Index: u-boot-2009.11/common/cmd_jffs2.c
  #include <spi_flash.h>
  struct spi_flash *spiFlash = NULL;
  #endif
-@@ -182,7 +182,7 @@
+@@ -182,7 +182,7 @@ static int mtd_device_validate(u8 type,
  
  		printf("no such FLASH device: %s%d (valid range 0 ... %d\n",
  				MTD_DEV_TYPE(type), num, CONFIG_SYS_MAX_FLASH_BANKS - 1);
@@ -393,7 +351,7 @@ Index: u-boot-2009.11/common/cmd_jffs2.c
  		spiFlash = spi_flash_probe(CONFIG_JFFS2_SPI_BUS, num, CONFIG_JFFS2_SPI_MAX_HZ, CONFIG_JFFS2_SPI_MODE);
  		if ( spiFlash != NULL ) {
  			*size = spiFlash->size;
-@@ -313,7 +313,7 @@
+@@ -313,7 +313,7 @@ static inline u32 get_part_sector_size_n
  	}
  
  	return sector_size;
@@ -402,10 +360,8 @@ Index: u-boot-2009.11/common/cmd_jffs2.c
  	return spiFlash->sector_size;
  #else
  	BUG();
-Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
-===================================================================
---- u-boot-2009.11.orig/fs/jffs2/jffs2_1pass.c	2012-11-03 21:14:18.758058818 +0800
-+++ u-boot-2009.11/fs/jffs2/jffs2_1pass.c	2012-11-03 21:14:18.802728481 +0800
+--- a/fs/jffs2/jffs2_1pass.c
++++ b/fs/jffs2/jffs2_1pass.c
 @@ -145,7 +145,7 @@
  /* keeps pointer to currentlu processed partition */
  static struct part_info *current_part;
@@ -415,7 +371,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  #include <spi_flash.h>
  extern struct spi_flash *spiFlash;
  #endif
-@@ -394,7 +394,7 @@
+@@ -394,7 +394,7 @@ static inline void *get_node_mem_nor(u32
  }
  #endif
  
@@ -424,7 +380,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  #define SPIFLASH_PAGE_SIZE 512
  #define SPIFLASH_PAGE_MASK (~(SPIFLASH_PAGE_SIZE-1))
  
-@@ -497,14 +497,14 @@
+@@ -497,14 +497,14 @@ static inline void *get_fl_mem(u32 off,
  		if ( flash_info[id->num].size > 0 ) {
  			return get_fl_mem_nor(off, size, ext_buf);
  		} else {
@@ -441,7 +397,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  	if (id->type == MTD_DEV_TYPE_NOR) {
  		return get_fl_mem_spi(off, size, ext_buf);
  	} else {
-@@ -537,14 +537,14 @@
+@@ -537,14 +537,14 @@ static inline void *get_node_mem(u32 off
  		if ( flash_info[id->num].size > 0 ) {
  			return get_node_mem_nor(off, ext_buf);
  		} else {
@@ -458,7 +414,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  	if (id->type == MTD_DEV_TYPE_NOR) {
  		return get_node_mem_spi(off, ext_buf);
  	} else {
-@@ -577,7 +577,7 @@
+@@ -577,7 +577,7 @@ static inline void put_fl_mem(void *buf,
  	if (buf == ext_buf)
  		return;
  	switch (id->type) {
@@ -467,11 +423,9 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  	case MTD_DEV_TYPE_NOR:
  		return put_fl_mem_spi(buf);
  #endif
-Index: u-boot-2009.11/include/common.h
-===================================================================
---- u-boot-2009.11.orig/include/common.h	2012-11-03 21:14:18.674067109 +0800
-+++ u-boot-2009.11/include/common.h	2012-11-03 21:14:18.802728481 +0800
-@@ -245,7 +245,11 @@
+--- a/include/common.h
++++ b/include/common.h
+@@ -245,7 +245,11 @@ void	doc_probe(unsigned long physadr);
  
  /* common/cmd_nvedit.c */
  int	env_init     (void);
