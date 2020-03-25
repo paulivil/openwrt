@@ -1,8 +1,6 @@
-Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
-===================================================================
---- u-boot-2009.11.orig/fs/jffs2/jffs2_1pass.c	2014-02-20 14:07:50.036038174 +0800
-+++ u-boot-2009.11/fs/jffs2/jffs2_1pass.c	2014-02-20 14:18:47.276018643 +0800
-@@ -2125,7 +2125,7 @@
+--- a/fs/jffs2/jffs2_1pass.c
++++ b/fs/jffs2/jffs2_1pass.c
+@@ -2125,7 +2125,7 @@ jffs2_1pass_scan_kernel(struct part_info
  	jffs_init_1pass_list(part);
  	pL = (struct b_lists *)part->jffs2_priv;
  	buf = malloc(buf_size);
@@ -11,7 +9,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  	puts ("Scanning JFFS2 FS: ");
  
  	/* start at the beginning of the partition */
-@@ -2393,10 +2393,20 @@
+@@ -2393,10 +2393,20 @@ jffs2_1pass_scan_kernel(struct part_info
              return 1;
          }
  	}

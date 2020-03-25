@@ -1,7 +1,5 @@
-Index: u-boot-2009.11/cpu/mips/start.S
-===================================================================
---- u-boot-2009.11.orig/cpu/mips/start.S	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/cpu/mips/start.S	2013-03-12 17:34:40.302303745 +0800
+--- a/cpu/mips/start.S
++++ b/cpu/mips/start.S
 @@ -25,6 +25,11 @@
  #include <config.h>
  #include <asm/regdef.h>
@@ -14,7 +12,7 @@ Index: u-boot-2009.11/cpu/mips/start.S
  
  	/*
  	 * For the moment disable interrupts, mark the kernel mode and
-@@ -228,16 +233,75 @@
+@@ -228,16 +233,75 @@ _start:
  #endif /* CONFIG_PURPLE */
  	.align 4
  reset:
@@ -90,7 +88,7 @@ Index: u-boot-2009.11/cpu/mips/start.S
  
  	/* Init Timer */
  	mtc0	zero, CP0_COUNT
-@@ -257,12 +321,80 @@
+@@ -257,12 +321,80 @@ reset:
  1:
  	lw	gp, 0(ra)
  
@@ -171,7 +169,7 @@ Index: u-boot-2009.11/cpu/mips/start.S
  
  	/* Initialize caches...
  	 */
-@@ -272,8 +404,20 @@
+@@ -272,8 +404,20 @@ reset:
  
  	/* ... and enable them.
  	 */
@@ -194,7 +192,7 @@ Index: u-boot-2009.11/cpu/mips/start.S
  #endif /* !CONFIG_SKIP_LOWLEVEL_INIT */
  
  	/* Set up temporary stack.
-@@ -285,7 +429,11 @@
+@@ -285,7 +429,11 @@ reset:
  	nop
  #endif
  
@@ -206,10 +204,8 @@ Index: u-boot-2009.11/cpu/mips/start.S
  	la	sp, 0(t0)
  
  	la	t9, board_init_f
-Index: u-boot-2009.11/cpu/mips/cache.S
-===================================================================
---- u-boot-2009.11.orig/cpu/mips/cache.S	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/cpu/mips/cache.S	2013-03-12 17:34:40.302303745 +0800
+--- a/cpu/mips/cache.S
++++ b/cpu/mips/cache.S
 @@ -146,6 +146,11 @@
  LEAF(mips_init_icache)
  	blez	a1, 9f
@@ -222,7 +218,7 @@ Index: u-boot-2009.11/cpu/mips/cache.S
  	/* clear tag to invalidate */
  	PTR_LI		t0, INDEX_BASE
  	PTR_ADDU	t1, t0, a1
-@@ -171,6 +176,11 @@
+@@ -171,6 +176,11 @@ LEAF(mips_init_icache)
  LEAF(mips_init_dcache)
  	blez	a1, 9f
  	mtc0	zero, CP0_TAGLO
@@ -234,11 +230,9 @@ Index: u-boot-2009.11/cpu/mips/cache.S
  	/* clear all tags */
  	PTR_LI		t0, INDEX_BASE
  	PTR_ADDU	t1, t0, a1
-Index: u-boot-2009.11/include/flash.h
-===================================================================
---- u-boot-2009.11.orig/include/flash.h	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/include/flash.h	2013-03-12 17:34:40.302303745 +0800
-@@ -468,6 +468,7 @@
+--- a/include/flash.h
++++ b/include/flash.h
+@@ -468,6 +468,7 @@ extern flash_info_t *flash_get_info(ulon
  #define FLASH_MT28S4M16LC 0x00E1	/* Micron MT28S4M16LC			*/
  #define FLASH_S29GL064M 0x00F0		/* Spansion S29GL064M-R6		*/
  #define FLASH_S29GL128N 0x00F1		/* Spansion S29GL128N			*/
@@ -246,11 +240,9 @@ Index: u-boot-2009.11/include/flash.h
  
  #define FLASH_UNKNOWN	0xFFFF		/* unknown flash type			*/
  
-Index: u-boot-2009.11/include/net.h
-===================================================================
---- u-boot-2009.11.orig/include/net.h	2013-03-12 17:34:40.294303845 +0800
-+++ u-boot-2009.11/include/net.h	2013-03-12 17:34:40.302303745 +0800
-@@ -288,7 +288,11 @@
+--- a/include/net.h
++++ b/include/net.h
+@@ -288,7 +288,11 @@ typedef struct icmphdr {
   * maximum packet size =  1518
   * maximum packet size and multiple of 32 bytes =  1536
   */
@@ -262,7 +254,7 @@ Index: u-boot-2009.11/include/net.h
  #define PKTSIZE_ALIGN		1536
  /*#define PKTSIZE		608*/
  
-@@ -356,7 +360,11 @@
+@@ -356,7 +360,11 @@ extern int		NetState;		/* Network loop s
  extern int		NetRestartWrap;		/* Tried all network devices	*/
  #endif
  
@@ -274,11 +266,9 @@ Index: u-boot-2009.11/include/net.h
  
  /* from net/net.c */
  extern char	BootFile[128];			/* Boot File name		*/
-Index: u-boot-2009.11/lib_mips/board.c
-===================================================================
---- u-boot-2009.11.orig/lib_mips/board.c	2013-03-12 17:34:40.230304649 +0800
-+++ u-boot-2009.11/lib_mips/board.c	2013-03-12 17:37:06.188469708 +0800
-@@ -53,6 +53,10 @@
+--- a/lib_mips/board.c
++++ b/lib_mips/board.c
+@@ -53,6 +53,10 @@ extern int timer_init(void);
  
  extern int incaip_set_cpuclk(void);
  
@@ -289,7 +279,7 @@ Index: u-boot-2009.11/lib_mips/board.c
  extern ulong uboot_end_data;
  extern ulong uboot_end;
  
-@@ -307,6 +311,9 @@
+@@ -307,6 +311,9 @@ void board_init_r (gd_t *id, ulong dest_
  #ifndef CONFIG_ENV_IS_NOWHERE
  	extern char * env_name_spec;
  #endif
@@ -299,7 +289,7 @@ Index: u-boot-2009.11/lib_mips/board.c
  	char *s;
  	bd_t *bd;
  
-@@ -384,8 +391,12 @@
+@@ -384,8 +391,12 @@ void board_init_r (gd_t *id, ulong dest_
  #endif
  
  #ifdef CONFIG_CMD_NAND
@@ -312,7 +302,7 @@ Index: u-boot-2009.11/lib_mips/board.c
  #endif
  
  #if defined(CONFIG_CMD_ONENAND)
-@@ -446,6 +457,15 @@
+@@ -446,6 +457,15 @@ void board_init_r (gd_t *id, ulong dest_
  	eth_initialize(gd->bd);
  #endif
  
@@ -328,10 +318,8 @@ Index: u-boot-2009.11/lib_mips/board.c
  	/* main_loop() can return to retry autoboot, if so just run it again. */
  	for (;;) {
  		main_loop ();
-Index: u-boot-2009.11/lib_mips/bootm.c
-===================================================================
---- u-boot-2009.11.orig/lib_mips/bootm.c	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/lib_mips/bootm.c	2013-03-12 17:34:40.302303745 +0800
+--- a/lib_mips/bootm.c
++++ b/lib_mips/bootm.c
 @@ -28,6 +28,10 @@
  #include <asm/byteorder.h>
  #include <asm/addrspace.h>
@@ -343,7 +331,7 @@ Index: u-boot-2009.11/lib_mips/bootm.c
  DECLARE_GLOBAL_DATA_PTR;
  
  #define	LINUX_MAX_ENVS		256
-@@ -43,9 +47,27 @@
+@@ -43,9 +47,27 @@ static int	linux_env_idx;
  static void linux_params_init (ulong start, char * commandline);
  static void linux_env_set (char * env_name, char * env_val);
  
@@ -371,7 +359,7 @@ Index: u-boot-2009.11/lib_mips/bootm.c
  	char	*commandline = getenv ("bootargs");
  	char	env_buf[12];
  	char	*cp;
-@@ -54,7 +76,11 @@
+@@ -54,7 +76,11 @@ int do_bootm_linux(int flag, int argc, c
  		return 1;
  
  	/* find kernel entry point */
@@ -383,7 +371,7 @@ Index: u-boot-2009.11/lib_mips/bootm.c
  
  	show_boot_progress (15);
  
-@@ -100,7 +126,17 @@
+@@ -100,7 +126,17 @@ int do_bootm_linux(int flag, int argc, c
  	/* we assume that the kernel is in place */
  	printf ("\nStarting kernel ...\n\n");
  
@@ -401,7 +389,7 @@ Index: u-boot-2009.11/lib_mips/bootm.c
  	/* does not return */
  	return 1;
  }
-@@ -108,6 +144,9 @@
+@@ -108,6 +144,9 @@ int do_bootm_linux(int flag, int argc, c
  static void linux_params_init (ulong start, char *line)
  {
  	char *next, *quote, *argp;
@@ -411,7 +399,7 @@ Index: u-boot-2009.11/lib_mips/bootm.c
  
  	linux_argc = 1;
  	linux_argv = (char **) start;
-@@ -115,7 +154,13 @@
+@@ -115,7 +154,13 @@ static void linux_params_init (ulong sta
  	argp = (char *) (linux_argv + LINUX_MAX_ARGS);
  
  	next = line;
@@ -426,7 +414,7 @@ Index: u-boot-2009.11/lib_mips/bootm.c
  	while (line && *line && linux_argc < LINUX_MAX_ARGS) {
  		quote = strchr (line, '"');
  		next = strchr (line, ' ');
-@@ -138,6 +183,18 @@
+@@ -138,6 +183,18 @@ static void linux_params_init (ulong sta
  		linux_argv[linux_argc] = argp;
  		memcpy (argp, line, next - line);
  		argp[next - line] = 0;
@@ -445,7 +433,7 @@ Index: u-boot-2009.11/lib_mips/bootm.c
  
  		argp += next - line + 1;
  		linux_argc++;
-@@ -148,6 +205,17 @@
+@@ -148,6 +205,17 @@ static void linux_params_init (ulong sta
  		line = next;
  	}
  
@@ -463,11 +451,9 @@ Index: u-boot-2009.11/lib_mips/bootm.c
  	linux_env = (char **) (((ulong) argp + 15) & ~15);
  	linux_env[0] = 0;
  	linux_env_p = (char *) (linux_env + LINUX_MAX_ENVS);
-Index: u-boot-2009.11/net/eth.c
-===================================================================
---- u-boot-2009.11.orig/net/eth.c	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/net/eth.c	2013-03-12 17:34:40.306303695 +0800
-@@ -208,6 +208,9 @@
+--- a/net/eth.c
++++ b/net/eth.c
+@@ -208,6 +208,9 @@ int eth_initialize(bd_t *bis)
  #if defined(CONFIG_DB64460) || defined(CONFIG_P3Mx)
  	mv6446x_eth_initialize(bis);
  #endif
@@ -477,11 +463,9 @@ Index: u-boot-2009.11/net/eth.c
  	if (!eth_devices) {
  		puts ("No ethernet found.\n");
  		show_boot_progress (-64);
-Index: u-boot-2009.11/net/net.c
-===================================================================
---- u-boot-2009.11.orig/net/net.c	2013-03-12 17:34:40.294303845 +0800
-+++ u-boot-2009.11/net/net.c	2013-03-12 17:34:40.306303695 +0800
-@@ -186,6 +186,10 @@
+--- a/net/net.c
++++ b/net/net.c
+@@ -186,6 +186,10 @@ void NcStart(void);
  int nc_input_packet(uchar *pkt, unsigned dest, unsigned src, unsigned len);
  #endif
  
@@ -492,7 +476,7 @@ Index: u-boot-2009.11/net/net.c
  #if defined(CONFIG_RT2880_ETH)
  #include <asm/addrspace.h>
  extern VALID_BUFFER_STRUCT  rt2880_free_buf_list;
-@@ -363,6 +367,9 @@
+@@ -363,6 +367,9 @@ int
  NetLoop(proto_t protocol)
  {
  	bd_t *bd = gd->bd;
@@ -502,7 +486,7 @@ Index: u-boot-2009.11/net/net.c
  
  #ifdef CONFIG_NET_MULTI
  	NetRestarted = 0;
-@@ -384,7 +391,16 @@
+@@ -384,7 +391,16 @@ NetLoop(proto_t protocol)
  		NetArpWaitTxPacket -= (ulong)NetArpWaitTxPacket % PKTALIGN;
  		NetArpWaitTxPacketSize = 0;
  	}
@@ -520,7 +504,7 @@ Index: u-boot-2009.11/net/net.c
  	eth_halt();
  #ifdef CONFIG_NET_MULTI
  	eth_set_current();
-@@ -393,6 +409,7 @@
+@@ -393,6 +409,7 @@ NetLoop(proto_t protocol)
  		eth_halt();
  		return(-1);
  	}
@@ -528,7 +512,7 @@ Index: u-boot-2009.11/net/net.c
  
  restart:
  #ifdef CONFIG_NET_MULTI
-@@ -408,6 +425,13 @@
+@@ -408,6 +425,13 @@ restart:
  	 *	here on, this code is a state machine driven by received
  	 *	packets and timer events.
  	 */
@@ -542,7 +526,7 @@ Index: u-boot-2009.11/net/net.c
  	NetInitLoop(protocol);
  
  	switch (net_check_prereq (protocol)) {
-@@ -504,6 +528,9 @@
+@@ -504,6 +528,9 @@ restart:
  #endif /* CONFIG_SYS_FAULT_ECHO_LINK_DOWN, ... */
  #endif /* CONFIG_MII, ... */
  
@@ -552,7 +536,7 @@ Index: u-boot-2009.11/net/net.c
  	/*
  	 *	Main packet reception loop.  Loop receiving packets until
  	 *	someone sets `NetState' to a state that terminates.
-@@ -530,8 +557,12 @@
+@@ -530,8 +557,12 @@ restart:
  			puts ("\nAbort\n");
  			return (-1);
  		}
@@ -566,7 +550,7 @@ Index: u-boot-2009.11/net/net.c
  
  		/*
  		 *	Check for a timeout, and run the timeout handler
-@@ -539,7 +570,7 @@
+@@ -539,7 +570,7 @@ restart:
  		 */
  		if (timeHandler && ((get_timer(0) - timeStart) > timeDelta)) {
  			thand_f *x;
@@ -575,7 +559,7 @@ Index: u-boot-2009.11/net/net.c
  #if defined(CONFIG_MII) || defined(CONFIG_CMD_MII)
  #  if defined(CONFIG_SYS_FAULT_ECHO_LINK_DOWN) && \
        defined(CONFIG_STATUS_LED) &&	   \
-@@ -554,6 +585,7 @@
+@@ -554,6 +585,7 @@ restart:
  			}
  #  endif /* CONFIG_SYS_FAULT_ECHO_LINK_DOWN, ... */
  #endif /* CONFIG_MII, ... */
@@ -583,7 +567,7 @@ Index: u-boot-2009.11/net/net.c
  			x = timeHandler;
  			timeHandler = (thand_f *)0;
  			(*x)();
-@@ -569,6 +601,11 @@
+@@ -569,6 +601,11 @@ restart:
  			goto restart;
  
  		case NETLOOP_SUCCESS:
@@ -595,7 +579,7 @@ Index: u-boot-2009.11/net/net.c
  			if (NetBootFileXferSize > 0) {
  				char buf[20];
  				printf("Bytes transferred = %ld (%lx hex)\n",
-@@ -1348,6 +1385,9 @@
+@@ -1348,6 +1385,9 @@ NetReceive(volatile uchar * inpkt, int l
  	IPaddr_t tmp;
  	int	x;
  	uchar *pkt;
@@ -605,7 +589,7 @@ Index: u-boot-2009.11/net/net.c
  #if defined(CONFIG_CMD_CDP)
  	int iscdp;
  #endif
-@@ -1355,6 +1395,23 @@
+@@ -1355,6 +1395,23 @@ NetReceive(volatile uchar * inpkt, int l
  
  	debug("packet received\n");
  

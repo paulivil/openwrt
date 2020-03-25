@@ -1,7 +1,6 @@
-diff -ruN a/common/cmd_jffs2.c b/common/cmd_jffs2.c
---- a/common/cmd_jffs2.c	2012-07-13 22:33:08.824534728 +0800
-+++ b/common/cmd_jffs2.c	2012-07-13 22:41:58.297217790 +0800
-@@ -143,6 +143,11 @@
+--- a/common/cmd_jffs2.c
++++ b/common/cmd_jffs2.c
+@@ -143,6 +143,11 @@ struct mtd_device *current_mtd_dev = NUL
  u8 current_mtd_partnum = 0;
  #endif
  
@@ -13,7 +12,7 @@ diff -ruN a/common/cmd_jffs2.c b/common/cmd_jffs2.c
  #if defined(CONFIG_CMD_CRAMFS)
  extern int cramfs_check (struct part_info *info);
  extern int cramfs_load (char *loadoffset, struct part_info *info, char *filename);
-@@ -177,6 +182,14 @@
+@@ -177,6 +182,14 @@ static int mtd_device_validate(u8 type,
  
  		printf("no such FLASH device: %s%d (valid range 0 ... %d\n",
  				MTD_DEV_TYPE(type), num, CONFIG_SYS_MAX_FLASH_BANKS - 1);
@@ -28,7 +27,7 @@ diff -ruN a/common/cmd_jffs2.c b/common/cmd_jffs2.c
  #else
  		printf("support for FLASH devices not present\n");
  #endif
-@@ -300,6 +313,8 @@
+@@ -300,6 +313,8 @@ static inline u32 get_part_sector_size_n
  	}
  
  	return sector_size;
@@ -37,9 +36,8 @@ diff -ruN a/common/cmd_jffs2.c b/common/cmd_jffs2.c
  #else
  	BUG();
  	return 0;
-diff -ruN a/fs/jffs2/jffs2_1pass.c b/fs/jffs2/jffs2_1pass.c
---- a/fs/jffs2/jffs2_1pass.c	2009-12-16 06:20:54.000000000 +0800
-+++ b/fs/jffs2/jffs2_1pass.c	2012-05-27 16:37:45.948663762 +0800
+--- a/fs/jffs2/jffs2_1pass.c
++++ b/fs/jffs2/jffs2_1pass.c
 @@ -145,6 +145,11 @@
  /* keeps pointer to currentlu processed partition */
  static struct part_info *current_part;
@@ -52,7 +50,7 @@ diff -ruN a/fs/jffs2/jffs2_1pass.c b/fs/jffs2/jffs2_1pass.c
  #if (defined(CONFIG_JFFS2_NAND) && \
       defined(CONFIG_CMD_NAND) )
  #include <nand.h>
-@@ -389,6 +394,94 @@
+@@ -389,6 +394,94 @@ static inline void *get_node_mem_nor(u32
  }
  #endif
  
@@ -147,12 +145,13 @@ diff -ruN a/fs/jffs2/jffs2_1pass.c b/fs/jffs2/jffs2_1pass.c
  
  /*
   * Generic jffs2 raw memory and node read routines.
-@@ -399,9 +492,25 @@
+@@ -399,9 +492,25 @@ static inline void *get_fl_mem(u32 off,
  	struct mtdids *id = current_part->dev->id;
  
  #if defined(CONFIG_CMD_FLASH)
 +	extern flash_info_t flash_info[];
-+	if (id->type == MTD_DEV_TYPE_NOR) {
+ 	if (id->type == MTD_DEV_TYPE_NOR) {
+-		return get_fl_mem_nor(off, size, ext_buf);
 +		if ( flash_info[id->num].size > 0 ) {
 +			return get_fl_mem_nor(off, size, ext_buf);
 +		} else {
@@ -162,19 +161,18 @@ diff -ruN a/fs/jffs2/jffs2_1pass.c b/fs/jffs2/jffs2_1pass.c
 +			return NULL;
 +  #endif
 +		}
-+	}
+ 	}
 +#elif defined(CONFIG_SPI_FLASH) || defined(CONFIG_SPI_FLASH_RT6855A)
- 	if (id->type == MTD_DEV_TYPE_NOR) {
--		return get_fl_mem_nor(off, size, ext_buf);
++	if (id->type == MTD_DEV_TYPE_NOR) {
 +		return get_fl_mem_spi(off, size, ext_buf);
 +	} else {
 +		return NULL;
- 	}
++	}
 +
  #endif
  
  #if defined(CONFIG_JFFS2_NAND) && defined(CONFIG_CMD_NAND)
-@@ -423,8 +532,25 @@
+@@ -423,8 +532,25 @@ static inline void *get_node_mem(u32 off
  	struct mtdids *id = current_part->dev->id;
  
  #if defined(CONFIG_CMD_FLASH)
@@ -202,7 +200,7 @@ diff -ruN a/fs/jffs2/jffs2_1pass.c b/fs/jffs2/jffs2_1pass.c
  #endif
  
  #if defined(CONFIG_JFFS2_NAND) && \
-@@ -451,6 +577,10 @@
+@@ -451,6 +577,10 @@ static inline void put_fl_mem(void *buf,
  	if (buf == ext_buf)
  		return;
  	switch (id->type) {
@@ -213,10 +211,9 @@ diff -ruN a/fs/jffs2/jffs2_1pass.c b/fs/jffs2/jffs2_1pass.c
  #if defined(CONFIG_JFFS2_NAND) && defined(CONFIG_CMD_NAND)
  	case MTD_DEV_TYPE_NAND:
  		return put_fl_mem_nand(buf);
-diff -ruN a/include/spi_flash.h b/include/spi_flash.h
---- a/include/spi_flash.h	2009-12-16 06:20:54.000000000 +0800
-+++ b/include/spi_flash.h	2012-05-27 11:38:48.100756610 +0800
-@@ -38,6 +38,10 @@
+--- a/include/spi_flash.h
++++ b/include/spi_flash.h
+@@ -38,6 +38,10 @@ struct spi_flash {
  
  	u32		size;
  

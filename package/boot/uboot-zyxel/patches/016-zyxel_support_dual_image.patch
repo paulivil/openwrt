@@ -1,8 +1,6 @@
-Index: u-boot-2009.11/common/cmd_jffs2.c
-===================================================================
---- u-boot-2009.11.orig/common/cmd_jffs2.c	2014-02-13 14:32:16.035758891 +0800
-+++ u-boot-2009.11/common/cmd_jffs2.c	2014-02-13 14:59:54.107980818 +0800
-@@ -421,6 +421,13 @@
+--- a/common/cmd_jffs2.c
++++ b/common/cmd_jffs2.c
+@@ -421,6 +421,13 @@ int mtdparts_init(void)
  		part->offset = 0x00000000;
  #endif
  

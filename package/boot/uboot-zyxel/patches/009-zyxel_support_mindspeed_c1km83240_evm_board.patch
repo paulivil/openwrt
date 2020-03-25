@@ -1,6 +1,5 @@
-diff -ruN a/common/cmd_spi.c b/common/cmd_spi.c
---- a/common/cmd_spi.c	2009-12-16 06:20:54.000000000 +0800
-+++ b/common/cmd_spi.c	2012-09-11 17:14:17.000000000 +0800
+--- a/common/cmd_spi.c
++++ b/common/cmd_spi.c
 @@ -29,6 +29,7 @@
  #include <command.h>
  #include <spi.h>
@@ -9,7 +8,7 @@ diff -ruN a/common/cmd_spi.c b/common/cmd_spi.c
  /*-----------------------------------------------------------------------
   * Definitions
   */
-@@ -144,3 +145,137 @@
+@@ -144,3 +145,137 @@ U_BOOT_CMD(
  	"<bit_len> - Number of bits to send (base 10)\n"
  	"<dout>    - Hexadecimal string that gets sent"
  );
@@ -147,9 +146,8 @@ diff -ruN a/common/cmd_spi.c b/common/cmd_spi.c
 +);
 +
 +#endif  /* defined(CONFIG_COMCERTO_100) */
-diff -ruN a/common/command.c b/common/command.c
---- a/common/command.c	2009-12-16 06:20:54.000000000 +0800
-+++ b/common/command.c	2012-09-13 12:09:33.000000000 +0800
+--- a/common/command.c
++++ b/common/command.c
 @@ -28,11 +28,48 @@
  #include <common.h>
  #include <command.h>
@@ -199,9 +197,8 @@ diff -ruN a/common/command.c b/common/command.c
  	return 0;
  }
  
-diff -ruN a/cpu/arm920t/start.S b/cpu/arm920t/start.S
---- a/cpu/arm920t/start.S	2009-12-16 06:20:54.000000000 +0800
-+++ b/cpu/arm920t/start.S	2012-09-11 17:15:29.000000000 +0800
+--- a/cpu/arm920t/start.S
++++ b/cpu/arm920t/start.S
 @@ -26,6 +26,9 @@
  
  #include <common.h>
@@ -212,7 +209,7 @@ diff -ruN a/cpu/arm920t/start.S b/cpu/arm920t/start.S
  
  /*
   *************************************************************************
-@@ -71,7 +74,11 @@
+@@ -71,7 +74,11 @@ _fiq:			.word fiq
   */
  
  _TEXT_BASE:
@@ -224,7 +221,7 @@ diff -ruN a/cpu/arm920t/start.S b/cpu/arm920t/start.S
  
  .globl _armboot_start
  _armboot_start:
-@@ -106,6 +113,24 @@
+@@ -106,6 +113,24 @@ FIQ_STACK_START:
   */
  
  start_code:
@@ -249,10 +246,9 @@ diff -ruN a/cpu/arm920t/start.S b/cpu/arm920t/start.S
  	/*
  	 * set the cpu to SVC32 mode
  	 */
-diff -ruN a/drivers/net/Makefile b/drivers/net/Makefile
---- a/drivers/net/Makefile	2012-09-18 18:39:47.978550186 +0800
-+++ b/drivers/net/Makefile	2012-09-11 17:15:37.000000000 +0800
-@@ -74,6 +74,7 @@
+--- a/drivers/net/Makefile
++++ b/drivers/net/Makefile
+@@ -74,6 +74,7 @@ COBJS-$(CONFIG_ULI526X) += uli526x.o
  COBJS-$(CONFIG_VSC7385_ENET) += vsc7385.o
  COBJS-$(CONFIG_XILINX_EMACLITE) += xilinx_emaclite.o
  COBJS-$(CONFIG_RT2880_ETH) += rt2880_eth.o rt2880_mii.o
@@ -260,10 +256,9 @@ diff -ruN a/drivers/net/Makefile b/drivers/net/Makefile
  
  COBJS	:= $(COBJS-y)
  SRCS	:= $(COBJS:.o=.c)
-diff -ruN a/include/miiphy.h b/include/miiphy.h
---- a/include/miiphy.h	2009-12-16 06:20:54.000000000 +0800
-+++ b/include/miiphy.h	2012-09-13 19:03:00.000000000 +0800
-@@ -154,6 +154,23 @@
+--- a/include/miiphy.h
++++ b/include/miiphy.h
+@@ -154,6 +154,23 @@ int bb_miiphy_write (char *devname, unsi
  #define PHY_BMSR_JD		0x0002
  #define PHY_BMSR_EXT		0x0001
  
@@ -287,10 +282,9 @@ diff -ruN a/include/miiphy.h b/include/miiphy.h
  /*phy ANLPAR */
  #define PHY_ANLPAR_NP		0x8000
  #define PHY_ANLPAR_ACK		0x4000
-diff -ruN a/net/eth.c b/net/eth.c
---- a/net/eth.c	2012-09-18 18:39:49.686543957 +0800
-+++ b/net/eth.c	2012-09-11 17:16:00.000000000 +0800
-@@ -211,6 +211,13 @@
+--- a/net/eth.c
++++ b/net/eth.c
+@@ -211,6 +211,13 @@ int eth_initialize(bd_t *bis)
  #if defined(CONFIG_AR7240)
      ag7240_enet_initialize(bis);
  #endif

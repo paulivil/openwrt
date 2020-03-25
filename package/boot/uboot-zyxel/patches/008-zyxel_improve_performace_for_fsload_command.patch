@@ -1,6 +1,6 @@
---- a/fs/jffs2/jffs2_1pass.c	2012-09-07 16:53:40.479027866 +0800
-+++ b/fs/jffs2/jffs2_1pass.c	2012-09-07 16:44:11.251219435 +0800
-@@ -812,6 +812,7 @@
+--- a/fs/jffs2/jffs2_1pass.c
++++ b/fs/jffs2/jffs2_1pass.c
+@@ -812,6 +812,7 @@ jffs_init_1pass_list(struct part_info *p
  	return 0;
  }
  
@@ -8,7 +8,7 @@
  /* find the inode from the slashless name given a parent */
  static long
  jffs2_1pass_read_inode(struct b_lists *pL, u32 inode, char *dest)
-@@ -944,7 +945,9 @@
+@@ -944,7 +945,9 @@ jffs2_1pass_read_inode(struct b_lists *p
  #endif
  	return totalSize;
  }
@@ -18,7 +18,7 @@
  /* find the inode from the slashless name given a parent */
  static u32
  jffs2_1pass_find_inode(struct b_lists * pL, const char *name, u32 pino)
-@@ -994,6 +997,7 @@
+@@ -994,6 +997,7 @@ jffs2_1pass_find_inode(struct b_lists *
  	}
  	return inode;
  }
@@ -26,7 +26,7 @@
  
  char *mkmodestr(unsigned long mode, char *str)
  {
-@@ -1121,6 +1125,7 @@
+@@ -1121,6 +1125,7 @@ jffs2_1pass_list_inodes(struct b_lists *
  }
  #endif
  
@@ -34,7 +34,7 @@
  static u32
  jffs2_1pass_search_inode(struct b_lists * pL, const char *fname, u32 pino)
  {
-@@ -1252,6 +1257,7 @@
+@@ -1252,6 +1257,7 @@ jffs2_1pass_resolve_inode(struct b_lists
  
  	return jffs2_1pass_search_inode(pL, tmp, pino);
  }
@@ -42,7 +42,7 @@
  
  #ifdef CONFIG_CMD_JFFS2_LS
  static u32
-@@ -1571,6 +1577,7 @@
+@@ -1571,6 +1577,7 @@ static inline uint32_t EMPTY_SCAN_SIZE(u
  		return DEFAULT_EMPTY_SCAN_SIZE;
  }
  
@@ -50,7 +50,7 @@
  static u32
  jffs2_1pass_build_lists(struct part_info * part)
  {
-@@ -1870,7 +1877,7 @@
+@@ -1870,7 +1877,7 @@ jffs2_1pass_build_lists(struct part_info
  	led_blink(0x0, 0x0, 0x1, 0x1);	/* off, forever, on 100ms, off 100ms */
  	return 1;
  }
@@ -59,7 +59,7 @@
  
  #ifdef CONFIG_CMD_JFFS2_FSINFO
  static u32
-@@ -1902,6 +1909,7 @@
+@@ -1902,6 +1909,7 @@ jffs2_1pass_fill_info(struct b_lists * p
  }
  #endif
  
@@ -67,7 +67,7 @@
  static struct b_lists *
  jffs2_get_list(struct part_info * part, const char *who)
  {
-@@ -1916,7 +1924,7 @@
+@@ -1916,7 +1924,7 @@ jffs2_get_list(struct part_info * part,
  	}
  	return (struct b_lists *)part->jffs2_priv;
  }
@@ -76,7 +76,7 @@
  
  /* Print directory / file contents */
  #ifdef CONFIG_CMD_JFFS2_LS
-@@ -1944,7 +1952,538 @@
+@@ -1944,7 +1952,538 @@ jffs2_1pass_ls(struct part_info * part,
  	return ret;
  }
  #endif
@@ -247,7 +247,7 @@
 +
 +    /* copy requested part_info struct pointer to global location */
 +    current_part = part;
-+
+ 
 +	/* if we are building a list we need to refresh the cache. */
 +	jffs2_1pass_rescan_needed(part);
 +	jffs_init_1pass_list(part);
@@ -594,7 +594,7 @@
 +    puts("done\n");
 +    return 0;
 +}
- 
++
 +/* Load the kernel file from flash into memory*/
 +u32
 +jffs2_1pass_uload(char *dest, struct part_info * part, const char *fname)
@@ -615,7 +615,7 @@
  /* Load a file from flash into memory. fname can be a full path */
  u32
  jffs2_1pass_load(char *dest, struct part_info * part, const char *fname)
-@@ -1977,6 +2516,7 @@
+@@ -1977,6 +2516,7 @@ jffs2_1pass_load(char *dest, struct part
  				(unsigned long) dest, ret);
  	return ret;
  }
@@ -623,16 +623,16 @@
  
  #ifdef CONFIG_CMD_JFFS2_FSINFO
  /* Return information about the fs on this partition */
---- a/include/jffs2/jffs2_1pass.h	2009-12-16 06:20:54.000000000 +0800
-+++ b/include/jffs2/jffs2_1pass.h	2012-09-07 16:33:05.611580699 +0800
+--- a/include/jffs2/jffs2_1pass.h
++++ b/include/jffs2/jffs2_1pass.h
 @@ -1,3 +1,4 @@
  u32 jffs2_1pass_ls(struct part_info *part,const char *fname);
  u32 jffs2_1pass_load(char *dest, struct part_info *part,const char *fname);
 +u32 jffs2_1pass_uload(char *dest, struct part_info *part, const char *fname);
  u32 jffs2_1pass_info(struct part_info *part);
---- a/include/jffs2/jffs2.h	2009-12-16 06:20:54.000000000 +0800
-+++ b/include/jffs2/jffs2.h	2012-09-07 16:59:32.858681162 +0800
-@@ -216,6 +216,7 @@
+--- a/include/jffs2/jffs2.h
++++ b/include/jffs2/jffs2.h
+@@ -216,6 +216,7 @@ enum
  
  u32 jffs2_1pass_ls(struct part_info *part,const char *fname);
  u32 jffs2_1pass_load(char *dest, struct part_info *part,const char *fname);
@@ -640,9 +640,9 @@
  u32 jffs2_1pass_info(struct part_info *part);
  
  void rtime_decompress(unsigned char *data_in, unsigned char *cpage_out,
---- a/common/cmd_jffs2.c	2012-09-07 16:53:40.479027866 +0800
-+++ b/common/cmd_jffs2.c	2012-09-07 10:46:55.175072047 +0800
-@@ -489,7 +489,6 @@
+--- a/common/cmd_jffs2.c
++++ b/common/cmd_jffs2.c
+@@ -489,7 +489,6 @@ static struct part_info* jffs2_part_info
  /***************************************************/
  /* U-boot commands				   */
  /***************************************************/
@@ -650,7 +650,7 @@
  /**
   * Routine implementing fsload u-boot command. This routine tries to load
   * a requested file from jffs2/cramfs filesystem on a current partition.
-@@ -536,7 +535,16 @@
+@@ -536,7 +535,16 @@ int do_jffs2_fsload(cmd_tbl_t *cmdtp, in
  			size = cramfs_load ((char *) offset, part, filename);
  		} else {
  			/* if this is not cramfs assume jffs2 */

@@ -1,7 +1,5 @@
-Index: u-boot-2009.11/cpu/mips/start.S
-===================================================================
---- u-boot-2009.11.orig/cpu/mips/start.S	2013-01-15 19:38:04.286515816 +0800
-+++ u-boot-2009.11/cpu/mips/start.S	2013-01-15 19:39:26.945476654 +0800
+--- a/cpu/mips/start.S
++++ b/cpu/mips/start.S
 @@ -25,10 +25,13 @@
  #include <config.h>
  #include <asm/regdef.h>
@@ -18,7 +16,7 @@ Index: u-boot-2009.11/cpu/mips/start.S
  #endif
  
  	/*
-@@ -256,6 +259,56 @@
+@@ -256,6 +259,56 @@ reset:
  	mtc0	zero, $14
  	mtc0	zero, $15
  	mtc0	zero, $16
@@ -75,7 +73,7 @@ Index: u-boot-2009.11/cpu/mips/start.S
  #if !defined(CONFIG_WASP_SUPPORT)
  	mtc0	zero, $17
  #endif
-@@ -274,7 +327,7 @@
+@@ -274,7 +327,7 @@ reset:
  	mtc0	zero, $26
  	mtc0	zero, $27
  	mtc0	zero, $28
@@ -84,7 +82,7 @@ Index: u-boot-2009.11/cpu/mips/start.S
  	mtc0	zero, $29	# C0_TagHi
  	mtc0	zero, $28, 2	# C0_DTagLo
  	mtc0	zero, $29, 2	# C0_DTagHi
-@@ -352,7 +405,7 @@
+@@ -352,7 +405,7 @@ normal_path:
  #if !defined(CONFIG_SKIP_LOWLEVEL_INIT)
  	/* Initialize any external memory.
  	 */
@@ -93,7 +91,7 @@ Index: u-boot-2009.11/cpu/mips/start.S
  	la      t9, lowlevel_init
  	jalr    t9
  	nop
-@@ -369,8 +422,10 @@
+@@ -369,8 +422,10 @@ normal_path:
  
  rel_start:
  	/* REMAP_DISABLE */
@@ -106,7 +104,7 @@ Index: u-boot-2009.11/cpu/mips/start.S
  	li	t0, 0x243
  #else
  	li	t0, 0x43
-@@ -429,7 +484,7 @@
+@@ -429,7 +484,7 @@ rel_start:
  	nop
  #endif
  
@@ -115,11 +113,9 @@ Index: u-boot-2009.11/cpu/mips/start.S
  	li	t0, 0xbd007000	/* Setup stack in SRAM */
  #else
  	li	t0, CONFIG_SYS_SDRAM_BASE + CONFIG_SYS_INIT_SP_OFFSET
-Index: u-boot-2009.11/lib_mips/board.c
-===================================================================
---- u-boot-2009.11.orig/lib_mips/board.c	2013-01-15 19:38:04.286515816 +0800
-+++ u-boot-2009.11/lib_mips/board.c	2013-01-15 19:38:04.378514660 +0800
-@@ -53,7 +53,7 @@
+--- a/lib_mips/board.c
++++ b/lib_mips/board.c
+@@ -53,7 +53,7 @@ extern int timer_init(void);
  
  extern int incaip_set_cpuclk(void);
  
@@ -128,7 +124,7 @@ Index: u-boot-2009.11/lib_mips/board.c
  extern void ath_set_tuning_caps(void);
  #endif
  
-@@ -461,7 +461,7 @@
+@@ -462,7 +462,7 @@ void board_init_r (gd_t *id, ulong dest_
  	ath_nand_init();
  #endif
  
@@ -137,11 +133,9 @@ Index: u-boot-2009.11/lib_mips/board.c
          ath_set_tuning_caps(); /* Needed here not to mess with Ethernet clocks */
  #endif
  
-Index: u-boot-2009.11/lib_mips/bootm.c
-===================================================================
---- u-boot-2009.11.orig/lib_mips/bootm.c	2013-01-15 19:38:04.286515816 +0800
-+++ u-boot-2009.11/lib_mips/bootm.c	2013-01-15 19:38:04.378514660 +0800
-@@ -62,7 +62,7 @@
+--- a/lib_mips/bootm.c
++++ b/lib_mips/bootm.c
+@@ -62,7 +62,7 @@ void wasp_set_cca(void)
  
  int do_bootm_linux(int flag, int argc, char *argv[], bootm_headers_t *images)
  {
@@ -150,7 +144,7 @@ Index: u-boot-2009.11/lib_mips/bootm.c
      int flash_size_mbytes;
  	void (*theKernel) (int, char **, char **, int);
  #else
-@@ -76,7 +76,7 @@
+@@ -76,7 +76,7 @@ int do_bootm_linux(int flag, int argc, c
  		return 1;
  
  	/* find kernel entry point */
@@ -159,7 +153,7 @@ Index: u-boot-2009.11/lib_mips/bootm.c
  	theKernel = (void (*)(int, char **, char **, int))images->ep;
  #else
  	theKernel = (void (*)(int, char **, char **, int *))images->ep;
-@@ -126,11 +126,11 @@
+@@ -126,11 +126,11 @@ int do_bootm_linux(int flag, int argc, c
  	/* we assume that the kernel is in place */
  	printf ("\nStarting kernel ...\n\n");
  
@@ -172,7 +166,7 @@ Index: u-boot-2009.11/lib_mips/bootm.c
      /* Pass the flash size as expected by current Linux kernel for AR7100 */
      flash_size_mbytes = gd->bd->bi_flashsize/(1024 * 1024);
  	theKernel (linux_argc, linux_argv, linux_env, flash_size_mbytes);
-@@ -144,7 +144,7 @@
+@@ -144,7 +144,7 @@ int do_bootm_linux(int flag, int argc, c
  static void linux_params_init (ulong start, char *line)
  {
  	char *next, *quote, *argp;
@@ -181,7 +175,7 @@ Index: u-boot-2009.11/lib_mips/bootm.c
  	char memstr[32];
  #endif
  
-@@ -154,7 +154,7 @@
+@@ -154,7 +154,7 @@ static void linux_params_init (ulong sta
  	argp = (char *) (linux_argv + LINUX_MAX_ARGS);
  
  	next = line;
@@ -190,7 +184,7 @@ Index: u-boot-2009.11/lib_mips/bootm.c
  	if (strstr(line, "mem=")) {
  		memstr[0] = 0;
  	} else {
-@@ -205,7 +205,7 @@
+@@ -205,7 +205,7 @@ static void linux_params_init (ulong sta
  		line = next;
  	}
  
@@ -199,11 +193,9 @@ Index: u-boot-2009.11/lib_mips/bootm.c
  	/* Add mem size to command line */
  	if (memstr[0]) {
  		sprintf(memstr, "mem=%uM", gd->ram_size >> 20);
-Index: u-boot-2009.11/net/eth.c
-===================================================================
---- u-boot-2009.11.orig/net/eth.c	2013-01-15 19:38:04.342515113 +0800
-+++ u-boot-2009.11/net/eth.c	2013-01-15 19:38:04.378514660 +0800
-@@ -221,6 +221,9 @@
+--- a/net/eth.c
++++ b/net/eth.c
+@@ -221,6 +221,9 @@ int eth_initialize(bd_t *bis)
  #if defined (CONFIG_ARC_EMAC)
  	arc_eth_init(bis);
  #endif

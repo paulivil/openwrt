@@ -1,8 +1,6 @@
-Index: u-boot-2009.11/net/tftp.c
-===================================================================
---- u-boot-2009.11.orig/net/tftp.c	2012-11-04 20:28:57.445143014 +0800
-+++ u-boot-2009.11/net/tftp.c	2012-11-04 20:28:57.501141772 +0800
-@@ -487,6 +487,13 @@
+--- a/net/tftp.c
++++ b/net/tftp.c
+@@ -487,6 +487,13 @@ TftpHandler (uchar * pkt, unsigned dest,
  static void
  TftpTimeout (void)
  {
@@ -16,11 +14,9 @@ Index: u-boot-2009.11/net/tftp.c
  	if (++TftpTimeoutCount > TftpTimeoutCountMax) {
  		puts ("\nRetry count exceeded; starting again\n");
  #ifdef CONFIG_MCAST_TFTP
-Index: u-boot-2009.11/common/cmd_bootm.c
-===================================================================
---- u-boot-2009.11.orig/common/cmd_bootm.c	2012-11-04 20:28:57.469146912 +0800
-+++ u-boot-2009.11/common/cmd_bootm.c	2012-11-04 20:29:25.269171163 +0800
-@@ -421,6 +421,7 @@
+--- a/common/cmd_bootm.c
++++ b/common/cmd_bootm.c
+@@ -421,6 +421,7 @@ static int bootm_load_os(image_info_t os
  		return BOOTM_ERR_OVERLAP;
  	}
  
@@ -28,11 +24,9 @@ Index: u-boot-2009.11/common/cmd_bootm.c
  	return 0;
  }
  
-Index: u-boot-2009.11/common/exports.c
-===================================================================
---- u-boot-2009.11.orig/common/exports.c	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/common/exports.c	2012-11-04 20:28:57.501141772 +0800
-@@ -46,4 +46,55 @@
+--- a/common/exports.c
++++ b/common/exports.c
+@@ -46,4 +46,55 @@ void jumptable_init (void)
  	gd->jt[XF_spi_release_bus] = (void *) spi_release_bus;
  	gd->jt[XF_spi_xfer] = (void *) spi_xfer;
  #endif
@@ -88,10 +82,8 @@ Index: u-boot-2009.11/common/exports.c
 +    SETUP_JUMP_TBL(max_pio_num);
 +#endif /* #ifdef CONFIG_ZYXEL_ZLOADER */
  }
-Index: u-boot-2009.11/common/main.c
-===================================================================
---- u-boot-2009.11.orig/common/main.c	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/common/main.c	2012-11-04 20:30:39.677729062 +0800
+--- a/common/main.c
++++ b/common/main.c
 @@ -40,7 +40,7 @@
  
  #include <post.h>
@@ -101,7 +93,7 @@ Index: u-boot-2009.11/common/main.c
  DECLARE_GLOBAL_DATA_PTR;
  #endif
  
-@@ -270,6 +270,32 @@
+@@ -270,6 +270,32 @@ static __inline__ int abortboot(int boot
  #endif	/* CONFIG_BOOTDELAY >= 0  */
  
  /****************************************************************************/
@@ -134,7 +126,7 @@ Index: u-boot-2009.11/common/main.c
  
  void main_loop (void)
  {
-@@ -436,6 +462,23 @@
+@@ -436,6 +462,23 @@ void main_loop (void)
  	}
  #endif
  
@@ -158,7 +150,7 @@ Index: u-boot-2009.11/common/main.c
  	/*
  	 * Main Loop for Monitor Command Processing
  	 */
-@@ -1329,8 +1372,11 @@
+@@ -1329,8 +1372,11 @@ int run_command (const char *cmd, int fl
  #ifdef DEBUG_PARSER
  	printf ("[PROCESS_SEPARATORS] %s\n", cmd);
  #endif
@@ -171,7 +163,7 @@ Index: u-boot-2009.11/common/main.c
  		/*
  		 * Find separator, or string end
  		 * Allow simple escape of ';' by writing "\;"
-@@ -1446,3 +1492,10 @@
+@@ -1446,3 +1492,10 @@ int do_run (cmd_tbl_t * cmdtp, int flag,
  	return 0;
  }
  #endif
@@ -182,11 +174,9 @@ Index: u-boot-2009.11/common/main.c
 +	return &console_buffer[0];
 +}
 +#endif
-Index: u-boot-2009.11/include/_exports.h
-===================================================================
---- u-boot-2009.11.orig/include/_exports.h	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/include/_exports.h	2012-11-04 20:28:57.505172453 +0800
-@@ -30,3 +30,42 @@
+--- a/include/_exports.h
++++ b/include/_exports.h
+@@ -30,3 +30,42 @@ EXPORT_FUNC(spi_free_slave)
  EXPORT_FUNC(spi_claim_bus)
  EXPORT_FUNC(spi_release_bus)
  EXPORT_FUNC(spi_xfer)
@@ -229,11 +219,9 @@ Index: u-boot-2009.11/include/_exports.h
 +EXPORT_FUNC(get_pio)
 +EXPORT_FUNC(max_pio_num)
 +
-Index: u-boot-2009.11/include/exports.h
-===================================================================
---- u-boot-2009.11.orig/include/exports.h	2009-12-16 06:20:54.000000000 +0800
-+++ u-boot-2009.11/include/exports.h	2012-11-04 20:28:57.505172453 +0800
-@@ -19,13 +19,14 @@
+--- a/include/exports.h
++++ b/include/exports.h
+@@ -19,13 +19,14 @@ void free(void*);
  void udelay(unsigned long);
  unsigned long get_timer(unsigned long);
  void vprintf(const char *, va_list);
@@ -249,7 +237,7 @@ Index: u-boot-2009.11/include/exports.h
  #ifdef CONFIG_HAS_UID
  void forceenv (char *varname, char *varvalue);
  #endif
-@@ -34,6 +35,23 @@
+@@ -34,6 +35,23 @@ int i2c_write (uchar, uint, int , uchar*
  int i2c_read (uchar, uint, int , uchar* , int);
  #endif
  #include <spi.h>
@@ -273,7 +261,7 @@ Index: u-boot-2009.11/include/exports.h
  
  void app_startup(char **);
  
-@@ -47,7 +65,7 @@
+@@ -47,7 +65,7 @@ enum {
  	XF_MAX
  };
  
@@ -282,11 +270,9 @@ Index: u-boot-2009.11/include/exports.h
  
  #if defined(CONFIG_I386)
  extern gd_t *global_data;
-Index: u-boot-2009.11/include/net.h
-===================================================================
---- u-boot-2009.11.orig/include/net.h	2012-11-04 20:28:57.445143014 +0800
-+++ u-boot-2009.11/include/net.h	2012-11-04 20:29:25.609141308 +0800
-@@ -404,6 +404,9 @@
+--- a/include/net.h
++++ b/include/net.h
+@@ -404,6 +404,9 @@ struct _VALID_BUFFER_STRUCT_
  };
  #endif
  
@@ -296,11 +282,9 @@ Index: u-boot-2009.11/include/net.h
  /* Initialize the network adapter */
  extern int	NetLoop(proto_t);
  
-Index: u-boot-2009.11/net/net.c
-===================================================================
---- u-boot-2009.11.orig/net/net.c	2012-11-04 20:28:57.489138566 +0800
-+++ u-boot-2009.11/net/net.c	2012-11-04 20:29:25.625755156 +0800
-@@ -310,29 +310,9 @@
+--- a/net/net.c
++++ b/net/net.c
+@@ -310,29 +310,9 @@ NetInitLoop(proto_t protocol)
  	return;
  }
  
@@ -331,7 +315,7 @@ Index: u-boot-2009.11/net/net.c
  #if defined(CONFIG_RT2880_ETH)
  	if (!NetTxPacket) {
  		int     i;
-@@ -371,6 +351,34 @@
+@@ -371,6 +351,34 @@ NetLoop(proto_t protocol)
  	}
  #endif
  
@@ -366,7 +350,7 @@ Index: u-boot-2009.11/net/net.c
  	if (!NetArpWaitTxPacket) {
  		NetArpWaitTxPacket = &NetArpWaitPacketBuf[0] + (PKTALIGN - 1);
  		NetArpWaitTxPacket -= (ulong)NetArpWaitTxPacket % PKTALIGN;
-@@ -1593,6 +1601,16 @@
+@@ -1593,6 +1601,16 @@ NetReceive(volatile uchar * inpkt, int l
  		}
  		/* If it is not for us, ignore it */
  		tmp = NetReadIP(&ip->ip_dst);
@@ -383,7 +367,7 @@ Index: u-boot-2009.11/net/net.c
  		if (NetOurIP && tmp != NetOurIP && tmp != 0xFFFFFFFF) {
  #ifdef CONFIG_MCAST_TFTP
  			if (Mcast_addr != tmp)
-@@ -1998,3 +2016,11 @@
+@@ -1998,3 +2016,11 @@ ushort getenv_VLAN(char *var)
  {
  	return (string_to_VLAN(getenv(var)));
  }

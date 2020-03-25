@@ -1,8 +1,6 @@
-Index: u-boot-2009.11/common/cmd_mii.c
-===================================================================
---- u-boot-2009.11.orig/common/cmd_mii.c	2012-11-29 11:05:11.773855080 +0800
-+++ u-boot-2009.11/common/cmd_mii.c	2012-11-29 11:07:41.804950602 +0800
-@@ -359,6 +359,21 @@
+--- a/common/cmd_mii.c
++++ b/common/cmd_mii.c
+@@ -359,6 +359,21 @@ int do_mii (cmd_tbl_t * cmdtp, int flag,
  		}
  
  		for (j = start; j <= end; j++) {
@@ -24,7 +22,7 @@ Index: u-boot-2009.11/common/cmd_mii.c
  			if (miiphy_info (devname, j, &oui, &model, &rev) == 0) {
  				printf("PHY 0x%02X: "
  					"OUI = 0x%04X, "
-@@ -372,6 +387,7 @@
+@@ -372,6 +387,7 @@ int do_mii (cmd_tbl_t * cmdtp, int flag,
  					(miiphy_duplex (devname, j) == FULL)
  						? "FDX" : "HDX");
  			}
@@ -32,11 +30,9 @@ Index: u-boot-2009.11/common/cmd_mii.c
  		}
  	} else if (op[0] == 'r') {
  		for (addr = addrlo; addr <= addrhi; addr++) {
-Index: u-boot-2009.11/common/miiphyutil.c
-===================================================================
---- u-boot-2009.11.orig/common/miiphyutil.c	2012-11-29 10:56:48.261095238 +0800
-+++ u-boot-2009.11/common/miiphyutil.c	2012-11-29 11:16:13.657809942 +0800
-@@ -328,6 +328,170 @@
+--- a/common/miiphyutil.c
++++ b/common/miiphyutil.c
+@@ -328,6 +328,170 @@ int miiphy_reset (char *devname, unsigne
  	return (0);
  }
  
@@ -207,7 +203,7 @@ Index: u-boot-2009.11/common/miiphyutil.c
  /*****************************************************************************
   *
   * Determine the ethernet speed (10/100/1000).  Return 10 on error.
-@@ -461,6 +625,7 @@
+@@ -461,6 +625,7 @@ int miiphy_is_1000base_x (char *devname,
  	return 0;
  #endif
  }
@@ -215,11 +211,9 @@ Index: u-boot-2009.11/common/miiphyutil.c
  
  #ifdef CONFIG_SYS_FAULT_ECHO_LINK_DOWN
  /*****************************************************************************
-Index: u-boot-2009.11/drivers/mtd/cfi_flash.c
-===================================================================
---- u-boot-2009.11.orig/drivers/mtd/cfi_flash.c	2012-11-29 11:10:29.080937680 +0800
-+++ u-boot-2009.11/drivers/mtd/cfi_flash.c	2012-11-29 11:11:19.564912134 +0800
-@@ -76,7 +76,11 @@
+--- a/drivers/mtd/cfi_flash.c
++++ b/drivers/mtd/cfi_flash.c
+@@ -76,7 +76,11 @@ static uint flash_verbose = 1;
  # define CFI_MAX_FLASH_BANKS	CONFIG_SYS_MAX_FLASH_BANKS
  #endif
  
@@ -231,7 +225,7 @@ Index: u-boot-2009.11/drivers/mtd/cfi_flash.c
  
  /*
   * Check if chip width is defined. If not, start detecting with 8bit.
-@@ -147,6 +151,13 @@
+@@ -147,6 +151,13 @@ u64 flash_read64(void *addr)__attribute_
  #define flash_read64	__flash_read64
  #endif
  
@@ -245,7 +239,7 @@ Index: u-boot-2009.11/drivers/mtd/cfi_flash.c
  /*-----------------------------------------------------------------------
   */
  #if defined(CONFIG_ENV_IS_IN_FLASH) || defined(CONFIG_ENV_ADDR_REDUND) || (CONFIG_SYS_MONITOR_BASE >= CONFIG_SYS_FLASH_BASE)
-@@ -263,7 +274,7 @@
+@@ -263,7 +274,7 @@ static inline uchar flash_read_uchar (fl
  	uchar retval;
  
  	cp = flash_map (info, 0, offset);
@@ -254,7 +248,7 @@ Index: u-boot-2009.11/drivers/mtd/cfi_flash.c
  	retval = flash_read8(cp);
  #else
  	retval = flash_read8(cp + info->portwidth - 1);
-@@ -308,7 +319,7 @@
+@@ -308,7 +319,7 @@ static ulong flash_read_long (flash_info
  		debug ("addr[%x] = 0x%x\n", x, flash_read8(addr + x));
  	}
  #endif
@@ -263,7 +257,7 @@ Index: u-boot-2009.11/drivers/mtd/cfi_flash.c
  	retval = ((flash_read8(addr) << 16) |
  		  (flash_read8(addr + info->portwidth) << 24) |
  		  (flash_read8(addr + 2 * info->portwidth)) |
-@@ -930,7 +941,11 @@
+@@ -930,7 +941,11 @@ out_unmap:
  
  /*-----------------------------------------------------------------------
   */
@@ -275,7 +269,7 @@ Index: u-boot-2009.11/drivers/mtd/cfi_flash.c
  {
  	int rcode = 0;
  	int prot;
-@@ -1014,7 +1029,11 @@
+@@ -1014,7 +1029,11 @@ int flash_erase (flash_info_t * info, in
  
  /*-----------------------------------------------------------------------
   */
@@ -287,7 +281,7 @@ Index: u-boot-2009.11/drivers/mtd/cfi_flash.c
  {
  	int i;
  
-@@ -1141,7 +1160,11 @@
+@@ -1141,7 +1160,11 @@ void flash_print_info (flash_info_t * in
   * 1 - write timeout
   * 2 - Flash not erased
   */
@@ -299,7 +293,7 @@ Index: u-boot-2009.11/drivers/mtd/cfi_flash.c
  {
  	ulong wp;
  	uchar *p;
-@@ -1256,7 +1279,11 @@
+@@ -1256,7 +1279,11 @@ int write_buff (flash_info_t * info, uch
   */
  #ifdef CONFIG_SYS_FLASH_PROTECTION
  
@@ -311,7 +305,7 @@ Index: u-boot-2009.11/drivers/mtd/cfi_flash.c
  {
  	int retcode = 0;
  
-@@ -1895,7 +1922,11 @@
+@@ -1895,7 +1922,11 @@ void flash_set_verbose(uint v)
  
  /*-----------------------------------------------------------------------
   */

@@ -1,8 +1,6 @@
-Index: u-boot-2009.11/net/net.c
-===================================================================
---- u-boot-2009.11.orig/net/net.c	2012-10-19 16:28:05.509512011 +0800
-+++ u-boot-2009.11/net/net.c	2012-10-19 16:28:17.909505974 +0800
-@@ -431,18 +431,20 @@
+--- a/net/net.c
++++ b/net/net.c
+@@ -431,18 +431,20 @@ restart:
  			DhcpRequest();		/* Basically same as BOOTP */
  			break;
  #endif
@@ -25,11 +23,9 @@ Index: u-boot-2009.11/net/net.c
  #if defined(CONFIG_CMD_PING)
  		case PING:
  			PingStart();
-Index: u-boot-2009.11/net/Makefile
-===================================================================
---- u-boot-2009.11.orig/net/Makefile	2012-10-19 16:28:05.513516711 +0800
-+++ u-boot-2009.11/net/Makefile	2012-10-19 16:28:17.913508439 +0800
-@@ -32,7 +32,7 @@
+--- a/net/Makefile
++++ b/net/Makefile
+@@ -32,7 +32,7 @@ COBJS-$(CONFIG_CMD_DNS)  += dns.o
  COBJS-y += eth.o
  COBJS-y += net.o
  COBJS-y += nfs.o
@@ -38,11 +34,9 @@ Index: u-boot-2009.11/net/Makefile
  COBJS-$(CONFIG_CMD_SNTP) += sntp.o
  COBJS-y += tftp.o
  
-Index: u-boot-2009.11/net/bootp.c
-===================================================================
---- u-boot-2009.11.orig/net/bootp.c	2012-10-19 16:28:05.501508198 +0800
-+++ u-boot-2009.11/net/bootp.c	2012-10-19 16:29:49.000000000 +0800
-@@ -72,6 +72,8 @@
+--- a/net/bootp.c
++++ b/net/bootp.c
+@@ -72,6 +72,8 @@ extern u8 *dhcp_vendorex_proc (u8 *e); /
  
  #endif
  
@@ -51,7 +45,7 @@ Index: u-boot-2009.11/net/bootp.c
  static int BootpCheckPkt(uchar *pkt, unsigned dest, unsigned src, unsigned len)
  {
  	Bootp_t *bp = (Bootp_t *) pkt;
-@@ -138,9 +140,10 @@
+@@ -138,9 +140,10 @@ static int truncate_sz (const char *name
  	}
  	return (curlen);
  }
@@ -63,7 +57,7 @@ Index: u-boot-2009.11/net/bootp.c
  static void BootpVendorFieldProcess (u8 * ext)
  {
  	int size = *(ext + 1);
-@@ -278,7 +281,7 @@
+@@ -278,7 +281,7 @@ static void BootpVendorProcess (u8 * ext
  		debug("NetOurNISDomain : %s\n", NetOurNISDomain);
  
  	if (NetBootFileSize)
@@ -72,7 +66,7 @@ Index: u-boot-2009.11/net/bootp.c
  }
  /*
   *	Handle a BOOTP received packet.
-@@ -336,10 +339,12 @@
+@@ -336,10 +339,12 @@ BootpHandler(uchar * pkt, unsigned dest,
  	TftpStart();
  }
  #endif
@@ -85,7 +79,7 @@ Index: u-boot-2009.11/net/bootp.c
  static void
  BootpTimeout(void)
  {
-@@ -351,6 +356,7 @@
+@@ -351,6 +356,7 @@ BootpTimeout(void)
  		BootpRequest ();
  	}
  }
@@ -93,7 +87,7 @@ Index: u-boot-2009.11/net/bootp.c
  
  /*
   *	Initialize BOOTP extension fields in the request.
-@@ -473,6 +479,7 @@
+@@ -473,6 +479,7 @@ static int DhcpExtended (u8 * e, int mes
  /*
   *	Warning: no field size check - change CONFIG_BOOTP_* at your own risk!
   */
@@ -101,7 +95,7 @@ Index: u-boot-2009.11/net/bootp.c
  static int BootpExtended (u8 * e)
  {
  	u8 *start = e;
-@@ -540,7 +547,9 @@
+@@ -540,7 +547,9 @@ static int BootpExtended (u8 * e)
  	return e - start;
  }
  #endif
@@ -111,7 +105,7 @@ Index: u-boot-2009.11/net/bootp.c
  void
  BootpRequest (void)
  {
-@@ -677,6 +686,7 @@
+@@ -677,6 +686,7 @@ BootpRequest (void)
  #endif
  	NetSendPacket(NetTxPacket, pktlen);
  }
@@ -119,11 +113,9 @@ Index: u-boot-2009.11/net/bootp.c
  
  #if defined(CONFIG_CMD_DHCP)
  static void DhcpOptionsProcess (uchar * popt, Bootp_t *bp)
-Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
-===================================================================
---- u-boot-2009.11.orig/fs/jffs2/jffs2_1pass.c	2012-10-19 16:28:05.493510810 +0800
-+++ u-boot-2009.11/fs/jffs2/jffs2_1pass.c	2012-10-19 16:28:17.913508439 +0800
-@@ -593,6 +593,7 @@
+--- a/fs/jffs2/jffs2_1pass.c
++++ b/fs/jffs2/jffs2_1pass.c
+@@ -593,6 +593,7 @@ static inline void put_fl_mem(void *buf,
  }
  
  /* Compression names */
@@ -131,7 +123,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  static char *compr_names[] = {
  	"NONE",
  	"ZERO",
-@@ -606,6 +607,7 @@
+@@ -606,6 +607,7 @@ static char *compr_names[] = {
  	"LZARI",
  #endif
  };
@@ -139,7 +131,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  
  /* Memory management */
  struct mem_block {
-@@ -1074,6 +1076,7 @@
+@@ -1074,6 +1076,7 @@ static inline u32 dump_inode(struct b_li
  	return 0;
  }
  
@@ -147,7 +139,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  /* list inodes with the given pino */
  static u32
  jffs2_1pass_list_inodes(struct b_lists * pL, u32 pino)
-@@ -1116,6 +1119,7 @@
+@@ -1116,6 +1119,7 @@ jffs2_1pass_list_inodes(struct b_lists *
  	}
  	return pino;
  }
@@ -155,7 +147,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  
  static u32
  jffs2_1pass_search_inode(struct b_lists * pL, const char *fname, u32 pino)
-@@ -1249,6 +1253,7 @@
+@@ -1249,6 +1253,7 @@ jffs2_1pass_resolve_inode(struct b_lists
  	return jffs2_1pass_search_inode(pL, tmp, pino);
  }
  
@@ -163,7 +155,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  static u32
  jffs2_1pass_search_list_inodes(struct b_lists * pL, const char *fname, u32 pino)
  {
-@@ -1296,6 +1301,7 @@
+@@ -1296,6 +1301,7 @@ jffs2_1pass_search_list_inodes(struct b_
  	return pino;
  
  }
@@ -171,7 +163,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  
  unsigned char
  jffs2_1pass_rescan_needed(struct part_info *part)
-@@ -1866,6 +1872,7 @@
+@@ -1866,6 +1872,7 @@ jffs2_1pass_build_lists(struct part_info
  }
  
  
@@ -179,7 +171,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  static u32
  jffs2_1pass_fill_info(struct b_lists * pL, struct b_jffs2_info * piL)
  {
-@@ -1893,7 +1900,7 @@
+@@ -1893,7 +1900,7 @@ jffs2_1pass_fill_info(struct b_lists * p
  	}
  	return 0;
  }
@@ -188,7 +180,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  
  static struct b_lists *
  jffs2_get_list(struct part_info * part, const char *who)
-@@ -1912,6 +1919,7 @@
+@@ -1912,6 +1919,7 @@ jffs2_get_list(struct part_info * part,
  
  
  /* Print directory / file contents */
@@ -196,7 +188,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  u32
  jffs2_1pass_ls(struct part_info * part, const char *fname)
  {
-@@ -1935,7 +1943,7 @@
+@@ -1935,7 +1943,7 @@ jffs2_1pass_ls(struct part_info * part,
  
  	return ret;
  }
@@ -205,7 +197,7 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  
  /* Load a file from flash into memory. fname can be a full path */
  u32
-@@ -1970,6 +1978,7 @@
+@@ -1970,6 +1978,7 @@ jffs2_1pass_load(char *dest, struct part
  	return ret;
  }
  
@@ -213,15 +205,13 @@ Index: u-boot-2009.11/fs/jffs2/jffs2_1pass.c
  /* Return information about the fs on this partition */
  u32
  jffs2_1pass_info(struct part_info * part)
-@@ -1994,3 +2003,4 @@
+@@ -1994,3 +2003,4 @@ jffs2_1pass_info(struct part_info * part
  	}
  	return 1;
  }
 +#endif
-Index: u-boot-2009.11/common/cmd_net.c
-===================================================================
---- u-boot-2009.11.orig/common/cmd_net.c	2012-10-19 16:28:05.529506178 +0800
-+++ u-boot-2009.11/common/cmd_net.c	2012-10-19 16:28:17.913508439 +0800
+--- a/common/cmd_net.c
++++ b/common/cmd_net.c
 @@ -31,7 +31,7 @@
  extern int do_bootm (cmd_tbl_t *, int, int, char *[]);
  
@@ -231,7 +221,7 @@ Index: u-boot-2009.11/common/cmd_net.c
  int do_bootp (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
  {
  	return netboot_common (BOOTP, cmdtp, argc, argv);
-@@ -42,7 +42,7 @@
+@@ -42,7 +42,7 @@ U_BOOT_CMD(
  	"boot image via network using BOOTP/TFTP protocol",
  	"[loadAddress] [[hostIPaddr:]bootfilename]"
  );
@@ -240,7 +230,7 @@ Index: u-boot-2009.11/common/cmd_net.c
  int do_tftpb (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
  {
  	return netboot_common (TFTP, cmdtp, argc, argv);
-@@ -53,7 +53,7 @@
+@@ -53,7 +53,7 @@ U_BOOT_CMD(
  	"boot image via network using TFTP protocol",
  	"[loadAddress] [[hostIPaddr:]bootfilename]"
  );
@@ -249,7 +239,7 @@ Index: u-boot-2009.11/common/cmd_net.c
  int do_rarpb (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
  {
  	return netboot_common (RARP, cmdtp, argc, argv);
-@@ -64,7 +64,7 @@
+@@ -64,7 +64,7 @@ U_BOOT_CMD(
  	"boot image via network using RARP/TFTP protocol",
  	"[loadAddress] [[hostIPaddr:]bootfilename]"
  );
@@ -258,11 +248,9 @@ Index: u-boot-2009.11/common/cmd_net.c
  #if defined(CONFIG_CMD_DHCP)
  int do_dhcp (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
  {
-Index: u-boot-2009.11/common/cmd_jffs2.c
-===================================================================
---- u-boot-2009.11.orig/common/cmd_jffs2.c	2012-10-19 16:28:05.521520524 +0800
-+++ u-boot-2009.11/common/cmd_jffs2.c	2012-10-19 16:28:17.913508439 +0800
-@@ -554,6 +554,7 @@
+--- a/common/cmd_jffs2.c
++++ b/common/cmd_jffs2.c
+@@ -554,6 +554,7 @@ int do_jffs2_fsload(cmd_tbl_t *cmdtp, in
  	return 1;
  }
  
@@ -270,7 +258,7 @@ Index: u-boot-2009.11/common/cmd_jffs2.c
  /**
   * Routine implementing u-boot ls command which lists content of a given
   * directory on a current partition.
-@@ -591,7 +592,8 @@
+@@ -591,7 +592,8 @@ int do_jffs2_ls(cmd_tbl_t *cmdtp, int fl
  	}
  	return 1;
  }
@@ -280,7 +268,7 @@ Index: u-boot-2009.11/common/cmd_jffs2.c
  /**
   * Routine implementing u-boot fsinfo command. This routine prints out
   * miscellaneous filesystem informations/statistics.
-@@ -629,7 +631,7 @@
+@@ -629,7 +631,7 @@ int do_jffs2_fsinfo(cmd_tbl_t *cmdtp, in
  	}
  	return 1;
  }
@@ -289,7 +277,7 @@ Index: u-boot-2009.11/common/cmd_jffs2.c
  /***************************************************/
  U_BOOT_CMD(
  	fsload,	3,	0,	do_jffs2_fsload,
-@@ -638,15 +640,18 @@
+@@ -638,15 +640,18 @@ U_BOOT_CMD(
  	"    - load binary file from flash bank\n"
  	"      with offset 'off'"
  );

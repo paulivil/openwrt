@@ -1,6 +1,6 @@
---- a/common/cmd_bootm.c	2009-12-16 06:20:54.000000000 +0800
-+++ b/common/cmd_bootm.c	2012-06-07 15:28:04.921110220 +0800
-@@ -436,7 +436,13 @@
+--- a/common/cmd_bootm.c
++++ b/common/cmd_bootm.c
+@@ -436,7 +436,13 @@ static int bootm_start_standalone(ulong
  		setenv("filesize", buf);
  		return 0;
  	}
