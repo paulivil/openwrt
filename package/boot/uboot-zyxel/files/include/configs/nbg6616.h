@@ -246,7 +246,7 @@ do { \
   #define ROOTFS_MTD_NO		"mtdblock6"
   #define UPGRADE_IMG_CMD	UPDATE_LOADER_CMD UPDATE_ROOTFS_CMD
 
-  #define BOOT_FLASH_CMD        "boot_flash=run setmtdparts flashargs addtty addmtd;fsload ${loadaddr} /boot/vmlinux.lzma.uImage;bootm ${loadaddr}\0"
+  #define BOOT_FLASH_CMD        "boot_flash=fsload ${loadaddr} /boot/vmlinux.lzma.uImage;bootm ${loadaddr} - ${ftd_addr}\0"
   #define BOOTARG_DEFAULT	"board=" CONFIG_BOARD_NAME " root=/dev/" ROOTFS_MTD_NO " rootfstype=jffs2 noinitrd ${bootmode} ${zld_ver}"
 #else
   #error "This configuration must be enable option 'CONFIG_EMBEDDED_KERNEL_IN_ROOTFS'"
@@ -257,6 +257,7 @@ do { \
     "uboot_env_ver=" CONFIG_ENV_VERSION "\0" \
     "img_prefix=nbg6616-\0"	\
     "loadaddr=80400000\0" \
+    "ftd_addr=803F8000\0" \
     "readonly=ro\0" \
     "setmtdparts=setenv mtdparts " MTDPARTS_DEFAULT "\0" \
     "flashargs=setenv bootargs " BOOTARG_DEFAULT "\0"  \
