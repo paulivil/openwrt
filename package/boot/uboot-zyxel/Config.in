@@ -52,6 +52,8 @@ config UBOOT_ZYXEL_TARGET
 	default "amitsample" if TARGET_rt6856_amitsample
 	default "nbg5615" if TARGET_rt6856_nbg5615
 	default "pla4231" if TARGET_ar934x_pla4231
+	default "nbg6616" if TARGET_ath79_generic_DEVICE_zyxel_nbg6616
+	default "nbg6716" if TARGET_ath79_nand_DEVICE_zyxel_nbg6716
 
 config UBOOT_ZYXEL_SUPPORT_ROMD
 	bool "Support ROM_D partition"
@@ -69,4 +71,30 @@ config UBOOT_ZYXEL_ZLOADER_OFFSET
 	depends on UBOOT_ZYXEL_SUPPORT_ZLOADER
 	help
 		The offset to fetch the zloader from ZLD image.
+
+choice
+	prompt "Zloader default compression mode"
+		default ZLOADER_COMPRESS_MODE_LZMA
+		depends on !arm
+		help
+		  You can set here the default compression mode for zLoader
+		  from the available compression modes. Don't touch if unsure.
+	
+	config ZLOADER_COMPRESS_MODE_NONE
+		bool "no compression"
+		help
+		  Uses no compression.
+
+	config ZLOADER_COMPRESS_MODE_LZMA
+		bool "LZMA"
+		help
+		  Uses LZMA compression.
+
+	config ZLOADER_COMPRESS_MODE_GZIP
+		bool "GZIP"
+		help
+		  Uses GZIP compression.
+	endchoice
+
+
 endmenu
