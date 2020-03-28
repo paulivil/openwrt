@@ -13,9 +13,9 @@ PKG_VERSION:=2009.11
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://github.com/u-boot/u-boot/archive/
-PKG_HASH:=9eb1f2c60aad6c6d801b6e0b66e318353c25a4987b9cb55011a66f2df8bde7df
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=ftp://ftp.denx.de/pub/u-boot
+PKG_HASH:=066615314fc90a314823ac975ca2a525a51fdad41802f4088a3a21ce073e8de6
 
 
 PKG_TARGETS:=bin
@@ -122,8 +122,7 @@ define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/uboot-zyxel
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) -L $(PKG_BUILD_DIR)/include/* $(1)/usr/include/uboot-zyxel/
-	$(CP) -L $(PKG_BUILD_DIR)/$(CONFIG_UBOOT_ZYXEL_TARGET)/include/* $(1)/usr/include/uboot-zyxel/
-	$(CP) -L $(PKG_BUILD_DIR)/$(CONFIG_UBOOT_ZYXEL_TARGET)/include2/* $(1)/usr/include/uboot-zyxel/
+	$(CP) -L -H $(PKG_BUILD_DIR)/include/* $(1)/usr/include/uboot-zyxel/
 endef
 endif
 

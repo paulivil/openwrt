@@ -1,4 +1,5 @@
 menu "Kernel Images"
+depends on PACKAGE_uboot-zyxel
 	config EMBEDDED_KERNEL_IN_ROOTFS
 		bool "To embedded the kernel image in rootfs image"
 		default n
@@ -35,6 +36,50 @@ menu "Kernel Images"
 		  Uses GZIP compression.
 	endchoice
 endmenu
+
+menu "zloader Configuration"
+depends on PACKAGE_uboot-zyxel
+
+config ZYXEL_ZLOADER
+	bool "ZyXEL zloader"
+	default y
+	help
+		Keep zLoader, don't replace it with U-Boot
+config UBOOT_ZYXEL_SUPPORT_ZLOADER
+	bool "Support for ZyXEL zloader"
+	default y
+	depends on ZYXEL_ZLOADER
+	help
+		add zloader support to u-boot
+
+
+
+choice
+	prompt "Zloader default compression mode"
+		default ZLOADER_COMPRESS_MODE_LZMA
+		depends on ZYXEL_ZLOADER
+		help
+		  You can set here the default compression mode for zLoader
+		  from the available compression modes. Don't touch if unsure.
+	
+	config ZLOADER_COMPRESS_MODE_NONE
+		bool "no compression"
+		help
+		  Uses no compression.
+
+	config ZLOADER_COMPRESS_MODE_LZMA
+		bool "LZMA"
+		help
+		  Uses LZMA compression.
+
+	config ZLOADER_COMPRESS_MODE_GZIP
+		bool "GZIP"
+		help
+		  Uses GZIP compression.
+	endchoice
+
+
+endmenu
 menu "uboot-zyxel Configuration"
 	depends on PACKAGE_uboot-zyxel
 
@@ -61,40 +106,7 @@ config UBOOT_ZYXEL_SUPPORT_ROMD
 	help
 		Support ROM_D partition
 
-config UBOOT_ZYXEL_SUPPORT_ZLOADER
-	bool "Support for ZyXEL zloader"
-	default y
-	
-config UBOOT_ZYXEL_ZLOADER_OFFSET
-	int "The offset of zloader in ZLD image"
-	default 131072
-	depends on UBOOT_ZYXEL_SUPPORT_ZLOADER
-	help
-		The offset to fetch the zloader from ZLD image.
-
-choice
-	prompt "Zloader default compression mode"
-		default ZLOADER_COMPRESS_MODE_LZMA
-		depends on !arm
-		help
-		  You can set here the default compression mode for zLoader
-		  from the available compression modes. Don't touch if unsure.
-	
-	config ZLOADER_COMPRESS_MODE_NONE
-		bool "no compression"
-		help
-		  Uses no compression.
-
-	config ZLOADER_COMPRESS_MODE_LZMA
-		bool "LZMA"
-		help
-		  Uses LZMA compression.
-
-	config ZLOADER_COMPRESS_MODE_GZIP
-		bool "GZIP"
-		help
-		  Uses GZIP compression.
-	endchoice
-
 
 endmenu
+
+

@@ -1142,8 +1142,6 @@ define Device/zyxel_nbg6616
   IMAGE_SIZE := 15323k
   KERNEL_SIZE := 2048k
   BLOCKSIZE := 64k
-  ZLOADER_LOAD_ADDR :=0x86400000
-  PAD_ZLD_IMG_TO_ALIGN_BYTE :=2048
   IMAGES := factory.bin sysupgrade.bin
   KERNEL := kernel-bin |  append-dtb | lzma | uImage lzma | jffs2 boot/vmlinux.lzma.uImage
   IMAGE/factory.bin :=  append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs | pad-rootfs  | \
