@@ -121,8 +121,8 @@ define Build/InstallDev
 # share standlone library for ZyBoot
 	$(INSTALL_DIR) $(1)/usr/include/uboot-zyxel
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) -L $(PKG_BUILD_DIR)/include/* $(1)/usr/include/uboot-zyxel/
-	$(CP) -L -H $(PKG_BUILD_DIR)/include/* $(1)/usr/include/uboot-zyxel/
+	$(CP) -L -H $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)/include/* $(1)/usr/include/uboot-zyxel/
+	$(CP) -L -H $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)/include2/* $(1)/usr/include/uboot-zyxel/
 endef
 endif
 
