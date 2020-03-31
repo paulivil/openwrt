@@ -78,6 +78,11 @@ choice
 		  Uses GZIP compression.
 	endchoice
 
+	config PAD_ZLD_IMG_TO_ALIGN_BYTE
+	int "Pad zloader image to align bytes"
+	default 2048
+	
+
 
 endmenu
 menu "uboot-zyxel Configuration"
@@ -105,6 +110,14 @@ config UBOOT_ZYXEL_SUPPORT_ROMD
 	default n
 	help
 		Support ROM_D partition
+
+config UBOOT_ZYXEL_ZLOADER_OFFSET
+	int "Pad u-boot image to align bytes"
+	default 131072 if TARGET_ath79_generic_DEVICE_zyxel_nbg6616
+	default 196608 if TARGET_ath79_nand_DEVICE_zyxel_nbg6716
+	help
+		Image Alignment
+	
 
 
 endmenu

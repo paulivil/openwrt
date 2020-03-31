@@ -227,9 +227,8 @@ do { \
 
 
   #ifndef CONFIG_ZYXEL_ZLOADER
-  #define CONFIG_ZLOADER_LOAD_ADDR	0x86400000
-  #define PAD_ZLD_IMG_TO_ALIGN_BYTE	2048
-  #endif 
+  #define CONFIG_ZLOADER_LOAD_ADDR		0x86400000
+   #endif 
 
   #define LOADER_IMG_ENV_VAL	gen_img_env_val(ldr, CFG_LOADER_PART_ADDR, CFG_LOADER_PART_SIZE)
   #define ENV_IMG_ENV_VAL	gen_img_env_val(env, CFG_ENV_PART_ADDR, CFG_ENV_PART_SIZE)
