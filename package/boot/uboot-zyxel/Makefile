@@ -8,6 +8,7 @@
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
+
 PKG_NAME:=u-boot
 PKG_VERSION:=2009.11
 PKG_RELEASE:=1
@@ -18,7 +19,11 @@ PKG_SOURCE_URL:=ftp://ftp.denx.de/pub/u-boot
 PKG_HASH:=066615314fc90a314823ac975ca2a525a51fdad41802f4088a3a21ce073e8de6
 
 
+
 PKG_TARGETS:=bin
+PKG_BUILD_PARALLEL:=1
+
+export GCC_HONOUR_COPTS=s
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -95,9 +100,11 @@ define mkUbootuImage
         $(1)/$(2).uImage
 endef
 
+DTC=$(wildcard $(LINUX_DIR)/scripts/dtc/dtc)
 
 define Build/Compile/Target
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+	$(if $(DTC),DTC="$(DTC)") \
 		$(UBOOT_MAKE_OPTS) \
 		O=$(PKG_BUILD_DIR)/$(1) \
 		all
@@ -121,8 +128,8 @@ define Build/InstallDev
 # share standlone library for ZyBoot
 	$(INSTALL_DIR) $(1)/usr/include/uboot-zyxel
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) -L -H $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)/include/* $(1)/usr/include/uboot-zyxel/
-	$(CP) -L -H $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)/include2/* $(1)/usr/include/uboot-zyxel/
+	$(CP) -L  $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)/include/* $(1)/usr/include/uboot-zyxel/
+	$(CP) -L  $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)/include2/* $(1)/usr/include/uboot-zyxel/
 endef
 endif
 
