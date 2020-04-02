@@ -77,6 +77,9 @@ choice
 		help
 		  Uses GZIP compression.
 	endchoice
+	config ZLOADER_LOAD_ADDR
+	int "Data address for zLoader image"
+	default 0x86400000		
 
 	config PAD_ZLD_IMG_TO_ALIGN_BYTE
 	int "Pad zloader image to align bytes"
