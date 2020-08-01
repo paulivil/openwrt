@@ -37,57 +37,7 @@ depends on PACKAGE_uboot-zyxel
 	endchoice
 endmenu
 
-menu "zloader Configuration"
-depends on PACKAGE_uboot-zyxel
 
-config ZYXEL_ZLOADER
-	bool "ZyXEL zloader"
-	default y
-	help
-		Keep zLoader, don't replace it with U-Boot
-config UBOOT_ZYXEL_SUPPORT_ZLOADER
-	bool "Support for ZyXEL zloader"
-	default y
-	depends on ZYXEL_ZLOADER
-	help
-		add zloader support to u-boot
-
-
-
-choice
-	prompt "Zloader default compression mode"
-		default ZLOADER_COMPRESS_MODE_LZMA
-		depends on ZYXEL_ZLOADER
-		help
-		  You can set here the default compression mode for zLoader
-		  from the available compression modes. Don't touch if unsure.
-	
-	config ZLOADER_COMPRESS_MODE_NONE
-		bool "no compression"
-		help
-		  Uses no compression.
-
-	config ZLOADER_COMPRESS_MODE_LZMA
-		bool "LZMA"
-		help
-		  Uses LZMA compression.
-
-	config ZLOADER_COMPRESS_MODE_GZIP
-		bool "GZIP"
-		help
-		  Uses GZIP compression.
-	endchoice
-	config ZLOADER_LOAD_ADDR
-	int "Data address for zLoader image"
-	default 0x86400000		
-
-	config PAD_ZLD_IMG_TO_ALIGN_BYTE
-	int "Pad zloader image to align bytes"
-	default 2048
-	
-
-
-endmenu
 menu "uboot-zyxel Configuration"
 	depends on PACKAGE_uboot-zyxel
 
@@ -113,11 +63,16 @@ config UBOOT_ZYXEL_SUPPORT_ROMD
 	default n
 	help
 		Support ROM_D partition
+config UBOOT_ZYXEL_SUPPORT_ZLOADER
+	bool "Support for ZyXEL zloader"
+	default y
+	depends on PACKAGE_zloader
 
 config UBOOT_ZYXEL_ZLOADER_OFFSET
 	int "Pad u-boot image to align bytes"
 	default 131072 if TARGET_ath79_generic_DEVICE_zyxel_nbg6616
 	default 196608 if TARGET_ath79_nand_DEVICE_zyxel_nbg6716
+	depends on UBOOT_ZYXEL_SUPPORT_ZLOADER
 	help
 		Image Alignment
 	
