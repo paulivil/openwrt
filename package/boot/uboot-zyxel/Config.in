@@ -2,7 +2,7 @@ menu "Kernel Images"
 depends on PACKAGE_uboot-zyxel
 	config EMBEDDED_KERNEL_IN_ROOTFS
 		bool "To embed the kernel image in rootfs image"
-		default n
+		default y
 		help
 		  Kernel image will be embedded into rootfs image when you 
 		  enable this option.
@@ -10,7 +10,7 @@ depends on PACKAGE_uboot-zyxel
 	config PAD_KERNEL_IMG_TO_ALIGN_BYTE
 		int "Pad kernel image to align bytes"
 		default 2048
-		depends on !EMBEDDED_KERNEL_IN_ROOTFS
+		depends on EMBEDDED_KERNEL_IN_ROOTFS
 
 	choice
 		prompt "Kernel image default compression mode"
@@ -60,7 +60,7 @@ config UBOOT_ZYXEL_TARGET
 
 config UBOOT_ZYXEL_SUPPORT_ROMD
 	bool "Support ROM_D partition"
-	default n
+	default y
 	help
 		Support ROM_D partition
 config UBOOT_ZYXEL_SUPPORT_ZLOADER
