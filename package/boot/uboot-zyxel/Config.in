@@ -1,7 +1,7 @@
 menu "Kernel Images"
 depends on PACKAGE_uboot-zyxel
 	config EMBEDDED_KERNEL_IN_ROOTFS
-		bool "To embedded the kernel image in rootfs image"
+		bool "To embed the kernel image in rootfs image"
 		default n
 		help
 		  Kernel image will be embedded into rootfs image when you 
