@@ -10,7 +10,7 @@ depends on PACKAGE_uboot-zyxel
 	config PAD_KERNEL_IMG_TO_ALIGN_BYTE
 		int "Pad kernel image to align bytes"
 		default 2048
-		depends on EMBEDDED_KERNEL_IN_ROOTFS
+		depends on !EMBEDDED_KERNEL_IN_ROOTFS
 
 	choice
 		prompt "Kernel image default compression mode"
@@ -66,7 +66,6 @@ config UBOOT_ZYXEL_SUPPORT_ROMD
 config UBOOT_ZYXEL_SUPPORT_ZLOADER
 	bool "Support for ZyXEL zloader"
 	default y
-	depends on PACKAGE_zloader
 
 config UBOOT_ZYXEL_ZLOADER_OFFSET
 	int "Pad u-boot image to align bytes"
