@@ -93,7 +93,7 @@ endef
 
 # Usage: mkUbootuImage(path,input_img,img_name)
 define mkUbootuImage
-        $(STAGING_DIR_HOST)/bin/mkimage -A $(LINUX_KARCH) -T standalone -C lzma \
+        $(STAGING_DIR_HOST)/bin/mkimage -A $(LINUX_KARCH) -T standalone -C none \
         -a $(call getLoadAddress,$(1)) \
         -e $(call getEntryPoint,$(1)) \
         -n $(3) \
