@@ -7,6 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
+include $(INCLUDE_DIR)/image.mk
 
 
 PKG_NAME:=u-boot
@@ -92,7 +93,7 @@ endef
 
 # Usage: mkUbootuImage(path,input_img,img_name)
 define mkUbootuImage
-        $(STAGING_DIR_HOST)/bin/mkimage -A $(LINUX_KARCH) -T standalone -C none \
+        $(STAGING_DIR_HOST)/bin/mkimage -A $(LINUX_KARCH) -T standalone -C lzma \
         -a $(call getLoadAddress,$(1)) \
         -e $(call getEntryPoint,$(1)) \
         -n $(3) \
@@ -137,7 +138,7 @@ define Package/uboot-zyxel/install
 	$(call CreateTargetImage,$(1),$(UBOOT_ZYXEL_TARGET))
 	$(CP) $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)/u-boot $(1)/$(UBOOT_ZYXEL_TARGET)/
 	$(CP) $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)/u-boot.map $(1)/$(UBOOT_ZYXEL_TARGET)/
-ifeq ($(CONFIG_UBOOT_ZYXEL_RAMBOOT),y)
+	ifeq ($(CONFIG_UBOOT_ZYXEL_RAMBOOT),y)
 	$(call CreateTargetImage,$(1),$(UBOOT_ZYXEL_TARGET)_ramboot)
 	$(CP) $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)_ramboot/u-boot $(1)/$(UBOOT_ZYXEL_TARGET)_ramboot/
 	$(CP) $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)_ramboot/u-boot.map $(1)/$(UBOOT_ZYXEL_TARGET)_ramboot/

@@ -66,6 +66,7 @@ config UBOOT_ZYXEL_SUPPORT_ROMD
 config UBOOT_ZYXEL_SUPPORT_ZLOADER
 	bool "Support for ZyXEL zloader"
 	default y
+	depends on PACKAGE_zloader
 
 config UBOOT_ZYXEL_ZLOADER_OFFSET
 	int "Pad u-boot image to align bytes"
