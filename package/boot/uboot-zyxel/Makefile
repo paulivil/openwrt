@@ -7,7 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
-include $(INCLUDE_DIR)/image.mk
+
 
 
 PKG_NAME:=u-boot
@@ -156,4 +156,3 @@ define Package/uboot-zyxel/install
 endef
 
 $(eval $(call BuildPackage,uboot-zyxel))
-
