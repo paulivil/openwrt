@@ -77,18 +77,18 @@ endef
 
 define Build/Configure
 	$(call Build/Configure/Target,$(UBOOT_ZYXEL_TARGET))
-	ifeq ($(CONFIG_UBOOT_ZYXEL_RAMBOOT),y)
-		$(call Build/Configure/Target,$(UBOOT_ZYXEL_TARGET)_ramboot)
-	endif
+ifeq ($(CONFIG_UBOOT_ZYXEL_RAMBOOT),y)
+	$(call Build/Configure/Target,$(UBOOT_ZYXEL_TARGET)_ramboot)
+endif
 endef
 
 # Get load address from image of u-boot
 define getLoadAddress
-	0x`readelf -a $(1)/u-boot|grep "\[ 1\]"|tr -s ' '|cut -d' ' -f6`
+0x`readelf -a $(1)/u-boot|grep "\[ 1\]"|tr -s ' '|cut -d' ' -f6`
 endef
 # Get entry point from image of u-boot
 define getEntryPoint
-	`readelf -a $(1)/u-boot|grep "Entry point address"|cut -d":" -f2`
+`readelf -a $(1)/u-boot|grep "Entry point address"|cut -d":" -f2`
 endef 
 
 # Usage: mkUbootuImage(path,input_img,img_name)
@@ -113,9 +113,9 @@ endef
 
 define Build/Compile
 	$(call Build/Compile/Target,$(UBOOT_ZYXEL_TARGET))
-	ifeq ($(CONFIG_UBOOT_ZYXEL_RAMBOOT),y)
-		$(call Build/Compile/Target,$(UBOOT_ZYXEL_TARGET)_ramboot)
-	endif
+ifeq ($(CONFIG_UBOOT_ZYXEL_RAMBOOT),y)
+	$(call Build/Compile/Target,$(UBOOT_ZYXEL_TARGET)_ramboot)
+endif
 endef
 
 define CreateTargetImage
@@ -125,7 +125,7 @@ define CreateTargetImage
 endef
 
 ifneq ($(CONFIG_UBOOT_ZYXEL_SUPPORT_ZLOADER),)
-	define Build/InstallDev
+define Build/InstallDev
 # share standlone library for ZyBoot
 		$(INSTALL_DIR) $(1)/usr/include/uboot-zyxel
 		$(INSTALL_DIR) $(1)/usr/lib
@@ -137,22 +137,22 @@ endif
 define Package/uboot-zyxel/install
 	$(call CreateTargetImage,$(1),$(UBOOT_ZYXEL_TARGET))
 	$(CP) $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)/u-boot $(1)/$(UBOOT_ZYXEL_TARGET)/
-	(CP) $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)/u-boot.map $(1)/$(UBOOT_ZYXEL_TARGET)/
-	ifeq ($(CONFIG_UBOOT_ZYXEL_RAMBOOT),y)
-		$(call CreateTargetImage,$(1),$(UBOOT_ZYXEL_TARGET)_ramboot)
-		$(CP) $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)_ramboot/u-boot $(1)/$(UBOOT_ZYXEL_TARGET)_ramboot/
-		$(CP) $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)_ramboot/u-boot.map $(1)/$(UBOOT_ZYXEL_TARGET)_ramboot/
-		$(call mkUbootuImage,$(1)/$(UBOOT_ZYXEL_TARGET)_ramboot,u-boot.bin,uboot-ram)
-	endif
-		ifneq ($(CONFIG_UBOOT_ZYXEL_SUPPORT_ZLOADER),)
-			@( \
-					if [ `stat -c %s $(1)/$(UBOOT_ZYXEL_TARGET)/u-boot.bin` -ne $(UBOOT_MAX_SIZE) ]; then \
-					echo "The size of uboot must be equal to $(UBOOT_MAX_SIZE) if you want to support zloader!"; \
-					echo "Current size is `stat -c %s $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)/u-boot.bin`"; \
-					exit 1; \
-			 fi;\
-			)	
-		endif
+	$(CP) $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)/u-boot.map $(1)/$(UBOOT_ZYXEL_TARGET)/
+ifeq ($(CONFIG_UBOOT_ZYXEL_RAMBOOT),y)
+	$(call CreateTargetImage,$(1),$(UBOOT_ZYXEL_TARGET)_ramboot)
+	$(CP) $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)_ramboot/u-boot $(1)/$(UBOOT_ZYXEL_TARGET)_ramboot/
+	$(CP) $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)_ramboot/u-boot.map $(1)/$(UBOOT_ZYXEL_TARGET)_ramboot/
+	$(call mkUbootuImage,$(1)/$(UBOOT_ZYXEL_TARGET)_ramboot,u-boot.bin,uboot-ram)
+endif
+ifneq ($(CONFIG_UBOOT_ZYXEL_SUPPORT_ZLOADER),)
+	@( \
+		if [ `stat -c %s $(1)/$(UBOOT_ZYXEL_TARGET)/u-boot.bin` -ne $(UBOOT_MAX_SIZE) ]; then \
+			echo "The size of uboot must be equal to $(UBOOT_MAX_SIZE) if you want to support zloader!"; \
+			echo "Current size is `stat -c %s $(PKG_BUILD_DIR)/$(UBOOT_ZYXEL_TARGET)/u-boot.bin`"; \
+			exit 1; \
+		fi;\
+	)	
+endif
 endef
 
 $(eval $(call BuildPackage,uboot-zyxel))

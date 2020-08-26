@@ -1,43 +1,3 @@
-menu "Kernel Images"
-depends on PACKAGE_uboot-zyxel
-	config EMBEDDED_KERNEL_IN_ROOTFS
-		bool "To embed the kernel image in rootfs image"
-		default y
-		help
-		  Kernel image will be embedded into rootfs image when you 
-		  enable this option.
-
-	config PAD_KERNEL_IMG_TO_ALIGN_BYTE
-		int "Pad kernel image to align bytes"
-		default 2048
-		depends on !EMBEDDED_KERNEL_IN_ROOTFS
-
-	choice
-		prompt "Kernel image default compression mode"
-		default KERNEL_COMPRESS_MODE_LZMA
-		depends on !arm
-		help
-		  You can set here the default compression mode of kernel image
-		  from the available compression modes. Don't touch if unsure.
-
-	config KERNEL_COMPRESS_MODE_NONE
-		bool "no compression"
-		help
-		  Uses no compression.
-
-	config KERNEL_COMPRESS_MODE_LZMA
-		bool "LZMA"
-		help
-		  Uses LAMZ compression.
-
-	config KERNEL_COMPRESS_MODE_GZIP
-		bool "GZIP"
-		help
-		  Uses GZIP compression.
-	endchoice
-endmenu
-
-
 menu "uboot-zyxel Configuration"
 	depends on PACKAGE_uboot-zyxel
 
@@ -47,7 +7,7 @@ config UBOOT_ZYXEL_RAMBOOT
 	  To build u-boot image for booting from RAM not ROM.
 	  While executing the image in the RAM the functionality of the uboot image can be tested first without touching 
 	  the original flash.
-	  Note: Be carefull, by saving the environment the flash will be modified.
+	  Note: Be careful, by saving the environment the flash will be modified.
 
 config UBOOT_ZYXEL_TARGET
 	string "u-boot config"
@@ -76,6 +36,20 @@ config UBOOT_ZYXEL_ZLOADER_OFFSET
 	help
 		Image Alignment
 	
+endmenu
+menu "Kernel Images"
+depends on PACKAGE_uboot-zyxel
+	config EMBEDDED_KERNEL_IN_ROOTFS
+		bool "To embed the kernel image in rootfs image"
+		default y
+		help
+		  Kernel image will be embedded into rootfs image when you 
+		  enable this option.
+
+	config PAD_KERNEL_IMG_TO_ALIGN_BYTE
+		int "Pad kernel image to align bytes"
+		default 2048
+		depends on !EMBEDDED_KERNEL_IN_ROOTFS
 
 
 endmenu
