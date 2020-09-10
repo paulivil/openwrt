@@ -16,7 +16,7 @@ if [ ! -e $1 ]; then
 fi
 
 OrigFileSize=`stat -c %s $1`
-if [ $(($OrigFileSize & ($2 - 1))) == 0 ]; then
+if [ $(($OrigFileSize & ($2 - 1))) = 0 ]; then
 	ExpectSize=$OrigFileSize
 else
 	ExpectSize=$((($OrigFileSize | ($2 - 1)) + 1))
