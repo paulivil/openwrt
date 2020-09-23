@@ -1140,10 +1140,10 @@ define Device/zyxel_nbg6616
   RAS_ROOTFS_SIZE := 14464k
   RAS_VERSION := "$(VERSION_DIST) $(REVISION)"
   IMAGE_SIZE := 15323k
-  KERNEL_SIZE := 2048k
+  KERNEL_SIZE := 4096k
   BLOCKSIZE := 64k
   IMAGES := factory.bin sysupgrade.bin
-  KERNEL := kernel-bin |  append-dtb | lzma | uImage lzma | jffs2 boot/vmlinux.lzma.uImage
+  KERNEL := kernel-bin |  fit lzma image-qca9557_zyxel_nbg6616.dtb |  jffs2 boot/vmlinux.lzma.itb
   IMAGE/factory.bin :=  append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs | pad-rootfs  | \
  	   zyxel-ras-image 
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs | pad-rootfs |  \
