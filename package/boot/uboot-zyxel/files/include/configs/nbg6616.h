@@ -32,9 +32,7 @@ do { \
 #else
 #define CONFIG_BOOTDELAY	3	/* autoboot after 3 seconds	*/
 #endif
-#ifdef UBOOT_ZYXEL_SUPPORT_ZLOADER
-define CONFIG_ZFLASH_CMD
-#endif
+
 
 /*-----------------------------------------------------------------------
  * Atheros Source Code Configuration
@@ -93,6 +91,9 @@ define CONFIG_ZFLASH_CMD
  */
 #define CONFIG_BOARD_NBG6616		1
 #define CONFIG_BOARD_NAME		"NBG6616"
+
+/* Enable devicetree support */
+#define CONFIG_OF_LIBFDT
 
 
 /*-----------------------------------------------------------------------
@@ -296,13 +297,13 @@ define CONFIG_ZFLASH_CMD
 #define CONFIG_SERVERIP 192.168.1.33
 #define CONFIG_IPADDR 192.168.1.1
 #define CONFIG_ETHADDR 00:AA:BB:CC:DD:00
-
 #define CONFIG_NET_MULTI
 
 #ifndef CONFIG_ZYXEL_ZLOADER
 #define CONFIG_MII
 #define CONFIG_CMD_MII
 #define CONFIG_PHY_GIGE
+#define CONFIG_CMD_DHCP
 #endif
 
 #define CONFIG_SYS_CONSOLE_INFO_QUIET

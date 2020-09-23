@@ -11,7 +11,7 @@
 	model = "ZyXEL NBG6616";
 
 	chosen {
-		bootargs-append = "console=ttyS0,115200n8 mtdparts=root=31:7";
+		
 	};
 
 	aliases {
