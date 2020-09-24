@@ -8,6 +8,15 @@
  /* find the inode from the slashless name given a parent */
  static long
  jffs2_1pass_read_inode(struct b_lists *pL, u32 inode, char *dest)
+@@ -923,7 +924,7 @@ jffs2_1pass_read_inode(struct b_lists *p
+ #endif
+ 				default:
+ 					/* unknown */
+-					putLabeledWord("UNKOWN COMPRESSION METHOD = ", jNode->compr);
++					putLabeledWord("UNKNOWN COMPRESSION METHOD = ", jNode->compr);
+ 					put_fl_mem(jNode, pL->readbuf);
+ 					return -1;
+ 					break;
 @@ -944,7 +945,9 @@ jffs2_1pass_read_inode(struct b_lists *p
  #endif
  	return totalSize;
@@ -76,7 +85,7 @@
  
  /* Print directory / file contents */
  #ifdef CONFIG_CMD_JFFS2_LS
-@@ -1944,7 +1952,538 @@ jffs2_1pass_ls(struct part_info * part,
+@@ -1944,7 +1952,540 @@ jffs2_1pass_ls(struct part_info * part,
  	return ret;
  }
  #endif
@@ -234,7 +243,6 @@
 +	u32 max_totlen = 0;
 +	u32 buf_size = DEFAULT_EMPTY_SCAN_SIZE;
 +	char *buf;
-+	
 +	u32 len = 0;
 +    u32 pino = 1;
 +    u32 boot_inode = 0;
@@ -483,7 +491,7 @@
 +                    uimage_inode = jDir->ino;
 +                    uimage_version = jDir->version;
 +                    printf("'/boot/%s' found", fname);
-+                }				
++                }
 +				break;
 +			case JFFS2_NODETYPE_CLEANMARKER:
 +				if (node->totlen != sizeof(struct jffs2_unknown_node))
@@ -554,17 +562,20 @@
 +        *fileSize += jNode->dsize;
 +        switch (jNode->compr) {
 +            case JFFS2_COMPR_NONE:
-+                ldr_memcpy(lDest, src, jNode->dsize);
++               ret = (unsigned long) ldr_memcpy(lDest, src, jNode->dsize);
 +                break;
 +            case JFFS2_COMPR_ZERO:
++		ret = 0;
 +                for (i = 0; i < jNode->dsize; i++)
 +                    *(lDest++) = 0;
 +                break;
 +            case JFFS2_COMPR_RTIME:
++		ret = 0;
 +                rtime_decompress(src, lDest, jNode->csize, jNode->dsize);
 +                break;
 +            case JFFS2_COMPR_DYNRUBIN:
 +                /* this is slow but it works */
++		ret = 0;
 +                dynrubin_decompress(src, lDest, jNode->csize, jNode->dsize);
 +                break;
 +            case JFFS2_COMPR_ZLIB:
@@ -580,7 +591,7 @@
 +#endif
 +            default:
 +                /* unknown */
-+                printf("Unkown compression method = 0x%02X\n", (unsigned int)jNode->compr);
++                printf("Unknown compression method = 0x%02X\n", (unsigned int)jNode->compr);
 +                put_fl_mem(jNode, pL->readbuf);
 +                return -1;
 +        }
@@ -615,7 +626,7 @@
  /* Load a file from flash into memory. fname can be a full path */
  u32
  jffs2_1pass_load(char *dest, struct part_info * part, const char *fname)
-@@ -1977,6 +2516,7 @@ jffs2_1pass_load(char *dest, struct part
+@@ -1977,6 +2518,7 @@ jffs2_1pass_load(char *dest, struct part
  				(unsigned long) dest, ret);
  	return ret;
  }
