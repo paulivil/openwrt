@@ -1,5 +1,18 @@
 --- a/fs/jffs2/jffs2_1pass.c
 +++ b/fs/jffs2/jffs2_1pass.c
+@@ -602,10 +602,10 @@ static char *compr_names[] = {
+ 	"COPY",
+ 	"DYNRUBIN",
+ 	"ZLIB",
+-#if defined(CONFIG_JFFS2_LZO_LZARI)
++#if defined(CONFIG_JFFS2_LZO)
+ 	"LZO",
+-	"LZARI",
+ #endif
++	"LZMA",
+ };
+ #endif
+ 
 @@ -812,6 +812,7 @@ jffs_init_1pass_list(struct part_info *p
  	return 0;
  }
@@ -8,8 +21,53 @@
  /* find the inode from the slashless name given a parent */
  static long
  jffs2_1pass_read_inode(struct b_lists *pL, u32 inode, char *dest)
-@@ -923,7 +924,7 @@ jffs2_1pass_read_inode(struct b_lists *p
+@@ -822,7 +823,6 @@ jffs2_1pass_read_inode(struct b_lists *p
+ 	u32 latestVersion = 0;
+ 	uchar *lDest;
+ 	uchar *src;
+-	long ret;
+ 	int i;
+ 	u32 counter = 0;
+ #ifdef CONFIG_SYS_JFFS2_SORT_FRAGMENTS
+@@ -894,36 +894,34 @@ jffs2_1pass_read_inode(struct b_lists *p
  #endif
+ 				switch (jNode->compr) {
+ 				case JFFS2_COMPR_NONE:
+-					ret = (unsigned long) ldr_memcpy(lDest, src, jNode->dsize);
++					ldr_memcpy(lDest, src, jNode->dsize);
+ 					break;
+ 				case JFFS2_COMPR_ZERO:
+-					ret = 0;
+ 					for (i = 0; i < jNode->dsize; i++)
+ 						*(lDest++) = 0;
+ 					break;
+ 				case JFFS2_COMPR_RTIME:
+-					ret = 0;
+ 					rtime_decompress(src, lDest, jNode->csize, jNode->dsize);
+ 					break;
+ 				case JFFS2_COMPR_DYNRUBIN:
+ 					/* this is slow but it works */
+-					ret = 0;
+ 					dynrubin_decompress(src, lDest, jNode->csize, jNode->dsize);
+ 					break;
+ 				case JFFS2_COMPR_ZLIB:
+-					ret = zlib_decompress(src, lDest, jNode->csize, jNode->dsize);
++				        zlib_decompress(src, lDest, jNode->csize, jNode->dsize);
+ 					break;
+-#if defined(CONFIG_JFFS2_LZO_LZARI)
++#if defined(CONFIG_JFFS2_LZO)
+ 				case JFFS2_COMPR_LZO:
+-					ret = lzo_decompress(src, lDest, jNode->csize, jNode->dsize);
+-					break;
+-				case JFFS2_COMPR_LZARI:
+-					ret = lzari_decompress(src, lDest, jNode->csize, jNode->dsize);
++					lzo_decompress(src, lDest, jNode->csize, jNode->dsize);
+ 					break;
+ #endif
++				case JFFS2_COMPR_LZMA:
++					lzma_decompress(src, lDest, jNode->csize, jNode->dsize);
++					break;
++
  				default:
  					/* unknown */
 -					putLabeledWord("UNKOWN COMPRESSION METHOD = ", jNode->compr);
@@ -17,7 +75,15 @@
  					put_fl_mem(jNode, pL->readbuf);
  					return -1;
  					break;
-@@ -944,7 +945,9 @@ jffs2_1pass_read_inode(struct b_lists *p
+@@ -932,7 +930,6 @@ jffs2_1pass_read_inode(struct b_lists *p
+ 
+ #if 0
+ 			putLabeledWord("read_inode: totalSize = ", totalSize);
+-			putLabeledWord("read_inode: compr ret = ", ret);
+ #endif
+ 		}
+ 		counter++;
+@@ -944,7 +941,9 @@ jffs2_1pass_read_inode(struct b_lists *p
  #endif
  	return totalSize;
  }
@@ -27,7 +93,7 @@
  /* find the inode from the slashless name given a parent */
  static u32
  jffs2_1pass_find_inode(struct b_lists * pL, const char *name, u32 pino)
-@@ -994,6 +997,7 @@ jffs2_1pass_find_inode(struct b_lists *
+@@ -994,6 +993,7 @@ jffs2_1pass_find_inode(struct b_lists *
  	}
  	return inode;
  }
@@ -35,7 +101,7 @@
  
  char *mkmodestr(unsigned long mode, char *str)
  {
-@@ -1121,6 +1125,7 @@ jffs2_1pass_list_inodes(struct b_lists *
+@@ -1121,6 +1121,7 @@ jffs2_1pass_list_inodes(struct b_lists *
  }
  #endif
  
@@ -43,7 +109,7 @@
  static u32
  jffs2_1pass_search_inode(struct b_lists * pL, const char *fname, u32 pino)
  {
-@@ -1252,6 +1257,7 @@ jffs2_1pass_resolve_inode(struct b_lists
+@@ -1252,6 +1253,7 @@ jffs2_1pass_resolve_inode(struct b_lists
  
  	return jffs2_1pass_search_inode(pL, tmp, pino);
  }
@@ -51,7 +117,7 @@
  
  #ifdef CONFIG_CMD_JFFS2_LS
  static u32
-@@ -1571,6 +1577,7 @@ static inline uint32_t EMPTY_SCAN_SIZE(u
+@@ -1571,6 +1573,7 @@ static inline uint32_t EMPTY_SCAN_SIZE(u
  		return DEFAULT_EMPTY_SCAN_SIZE;
  }
  
@@ -59,7 +125,18 @@
  static u32
  jffs2_1pass_build_lists(struct part_info * part)
  {
-@@ -1870,7 +1877,7 @@ jffs2_1pass_build_lists(struct part_info
+@@ -1708,9 +1711,8 @@ jffs2_1pass_build_lists(struct part_info
+ 
+ 			if (*(uint32_t *)(&buf[ofs-buf_ofs]) == 0xffffffff) {
+ 				uint32_t inbuf_ofs;
+-				uint32_t empty_start, scan_end;
++				uint32_t scan_end;
+ 
+-				empty_start = ofs;
+ 				ofs += 4;
+ 				scan_end = min_t(uint32_t, EMPTY_SCAN_SIZE(
+ 							part->sector_size)/8,
+@@ -1870,7 +1872,7 @@ jffs2_1pass_build_lists(struct part_info
  	led_blink(0x0, 0x0, 0x1, 0x1);	/* off, forever, on 100ms, off 100ms */
  	return 1;
  }
@@ -68,7 +145,7 @@
  
  #ifdef CONFIG_CMD_JFFS2_FSINFO
  static u32
-@@ -1902,6 +1909,7 @@ jffs2_1pass_fill_info(struct b_lists * p
+@@ -1902,6 +1904,7 @@ jffs2_1pass_fill_info(struct b_lists * p
  }
  #endif
  
@@ -76,7 +153,7 @@
  static struct b_lists *
  jffs2_get_list(struct part_info * part, const char *who)
  {
-@@ -1916,7 +1924,7 @@ jffs2_get_list(struct part_info * part,
+@@ -1916,7 +1919,7 @@ jffs2_get_list(struct part_info * part,
  	}
  	return (struct b_lists *)part->jffs2_priv;
  }
@@ -85,7 +162,7 @@
  
  /* Print directory / file contents */
  #ifdef CONFIG_CMD_JFFS2_LS
-@@ -1944,7 +1952,540 @@ jffs2_1pass_ls(struct part_info * part,
+@@ -1944,7 +1947,535 @@ jffs2_1pass_ls(struct part_info * part,
  	return ret;
  }
  #endif
@@ -255,7 +332,7 @@
 +
 +    /* copy requested part_info struct pointer to global location */
 +    current_part = part;
- 
++
 +	/* if we are building a list we need to refresh the cache. */
 +	jffs2_1pass_rescan_needed(part);
 +	jffs_init_1pass_list(part);
@@ -263,7 +340,7 @@
 +	buf = malloc(buf_size);
 +    len = strlen("boot");
 +	puts ("Scanning JFFS2 FS: ");
-+
+ 
 +	/* start at the beginning of the partition */
 +	for (i = 0; i < nr_sectors; i++) {
 +		uint32_t sector_ofs = i * part->sector_size;
@@ -375,9 +452,8 @@
 +
 +			if (*(uint32_t *)(&buf[ofs-buf_ofs]) == 0xffffffff) {
 +				uint32_t inbuf_ofs;
-+				uint32_t empty_start, scan_end;
++				uint32_t scan_end;
 +
-+				empty_start = ofs;
 +				ofs += 4;
 +				scan_end = min_t(uint32_t, EMPTY_SCAN_SIZE(
 +							part->sector_size)/8,
@@ -542,7 +618,6 @@
 +//    u32 latestVersion = 0;
 +    uchar *lDest;
 +    uchar *src;
-+    long ret;
 +    int i=0;
 +    struct b_node *b;
 +    struct b_lists *pL = (struct b_lists *)part->jffs2_priv;
@@ -558,37 +633,34 @@
 +        }
 +        i++;
 +        lDest = (uchar *) (dest + jNode->offset);
-+        ret = 0;
++	ret = 0;
 +        *fileSize += jNode->dsize;
 +        switch (jNode->compr) {
 +            case JFFS2_COMPR_NONE:
-+               ret = (unsigned long) ldr_memcpy(lDest, src, jNode->dsize);
++                ldr_memcpy(lDest, src, jNode->dsize);
 +                break;
 +            case JFFS2_COMPR_ZERO:
-+		ret = 0;
 +                for (i = 0; i < jNode->dsize; i++)
 +                    *(lDest++) = 0;
 +                break;
 +            case JFFS2_COMPR_RTIME:
-+		ret = 0;
 +                rtime_decompress(src, lDest, jNode->csize, jNode->dsize);
 +                break;
 +            case JFFS2_COMPR_DYNRUBIN:
 +                /* this is slow but it works */
-+		ret = 0;
 +                dynrubin_decompress(src, lDest, jNode->csize, jNode->dsize);
 +                break;
 +            case JFFS2_COMPR_ZLIB:
-+                ret = zlib_decompress(src, lDest, jNode->csize, jNode->dsize);
++                zlib_decompress(src, lDest, jNode->csize, jNode->dsize);
 +                break;
-+#if defined(CONFIG_JFFS2_LZO_LZARI)
++#if defined(CONFIG_JFFS2_LZO)
 +            case JFFS2_COMPR_LZO:
-+                ret = lzo_decompress(src, lDest, jNode->csize, jNode->dsize);
-+                break;
-+            case JFFS2_COMPR_LZARI:
-+                ret = lzari_decompress(src, lDest, jNode->csize, jNode->dsize);
++                lzo_decompress(src, lDest, jNode->csize, jNode->dsize);
 +                break;
 +#endif
++            case JFFS2_COMPR_LZMA:
++                lzma_decompress(src, lDest, jNode->csize, jNode->dsize);
++                break;
 +            default:
 +                /* unknown */
 +                printf("Unknown compression method = 0x%02X\n", (unsigned int)jNode->compr);
@@ -626,7 +698,7 @@
  /* Load a file from flash into memory. fname can be a full path */
  u32
  jffs2_1pass_load(char *dest, struct part_info * part, const char *fname)
-@@ -1977,6 +2518,7 @@ jffs2_1pass_load(char *dest, struct part
+@@ -1977,6 +2508,7 @@ jffs2_1pass_load(char *dest, struct part
  				(unsigned long) dest, ret);
  	return ret;
  }
