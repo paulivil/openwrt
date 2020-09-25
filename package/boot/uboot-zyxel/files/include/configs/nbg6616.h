@@ -307,7 +307,7 @@ do { \
 #define CONFIG_MII
 #define CONFIG_CMD_MII
 #define CONFIG_PHY_GIGE
-#define CONFIG_CMD_DHCP
+//#define CONFIG_CMD_DHCP
 #endif
 
 #define CONFIG_SYS_CONSOLE_INFO_QUIET
@@ -345,6 +345,8 @@ do { \
 #undef CONFIG_CMD_LOADS
 #undef CONFIG_CMD_SETGETDCR
 #undef CONFIG_CMD_XIMG
+#undef CONFIG_CMD_SOURCE
+#undef CONFIG_CMD_NFS
 
 
 #if TEXT_BASE != 0x9F000000
