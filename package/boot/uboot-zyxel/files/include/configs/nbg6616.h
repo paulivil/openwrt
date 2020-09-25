@@ -130,6 +130,14 @@ do { \
 #define CONFIG_SYS_MONITOR_LEN		CFG_LOADER_PART_SIZE
 
 #define CONFIG_SYS_64BIT_VSPRINTF
+/*
+ * For booting Linux, the board info and command line data
+ * have to be in the first 8 MB of memory, since this is
+ * the maximum mapped by the Linux kernel during initialization ??
+ */
+#define CONFIG_SYS_SDRAM_SIZE   128       /* SDRAM size in MB */
+#define CONFIG_SYS_BOOTMAPSZ		(CONFIG_SYS_SDRAM_BASE + (CONFIG_SYS_SDRAM_SIZE << 20))
+#define CONFIG_SYS_BOOTM_LEN		(CONFIG_SYS_SDRAM_SIZE << 20)
 
 /*-----------------------------------------------------------------------
  * FLASH and environment organization
