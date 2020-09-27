@@ -183,6 +183,8 @@ do { \
  * Partition Configuration
  */
 #undef	CONFIG_BOOTARGS
+#undef CONFIG_BOOTARGS_RD
+#undef CONFIG_BOOTARGS_FL
 
 #define __gen_nand_cmd(cmd, offs, file, eraseCmd, writeCmd, eraseSize)	\
 	#cmd "=tftp ${loadaddr} ${dir}" #file ";"						\
@@ -296,8 +298,8 @@ do { \
 #define CONFIG_CMD_JFFS2
 #define CONFIG_CMD_JFFS2_ULOAD
 #define CONFIG_JFFS2_SUMMARY
-//#define CONFIG_CMD_JFFS2_LS
-//#define CONFIG_CMD_JFFS2_FSINFO
+#define CONFIG_CMD_JFFS2_LS
+#define CONFIG_CMD_JFFS2_FSINFO
 #define CONFIG_JFFS2_PART_OFFSET	(CFG_ROOTFS_PART_ADDR-CONFIG_SYS_FLASH_BASE)
 // Default using remaining flash space if you ignore 'CONFIG_JFFS_PART_SIZE'
 #define CONFIG_JFFS2_PART_SIZE		CFG_ROOTFS_PART_SIZE

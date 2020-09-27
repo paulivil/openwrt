@@ -1,18 +1,18 @@
 --- a/fs/jffs2/jffs2_1pass.c
 +++ b/fs/jffs2/jffs2_1pass.c
-@@ -602,10 +602,10 @@ static char *compr_names[] = {
+@@ -602,9 +602,9 @@ static char *compr_names[] = {
  	"COPY",
  	"DYNRUBIN",
  	"ZLIB",
 -#if defined(CONFIG_JFFS2_LZO_LZARI)
-+#if defined(CONFIG_JFFS2_LZO)
- 	"LZO",
+-	"LZO",
 -	"LZARI",
- #endif
 +	"LZMA",
++#if defined(CONFIG_JFFS2_LZO)
++	"LZO"
+ #endif
  };
  #endif
- 
 @@ -812,6 +812,7 @@ jffs_init_1pass_list(struct part_info *p
  	return 0;
  }
@@ -55,18 +55,18 @@
 +				        zlib_decompress(src, lDest, jNode->csize, jNode->dsize);
  					break;
 -#if defined(CONFIG_JFFS2_LZO_LZARI)
-+#if defined(CONFIG_JFFS2_LZO)
- 				case JFFS2_COMPR_LZO:
+-				case JFFS2_COMPR_LZO:
 -					ret = lzo_decompress(src, lDest, jNode->csize, jNode->dsize);
--					break;
++				case JFFS2_COMPR_LZMA:
++					lzma_decompress(src, lDest, jNode->csize, jNode->dsize);
+ 					break;
 -				case JFFS2_COMPR_LZARI:
 -					ret = lzari_decompress(src, lDest, jNode->csize, jNode->dsize);
++#if defined(CONFIG_JFFS2_LZO)
++				case JFFS2_COMPR_LZO:
 +					lzo_decompress(src, lDest, jNode->csize, jNode->dsize);
  					break;
  #endif
-+				case JFFS2_COMPR_LZMA:
-+					lzma_decompress(src, lDest, jNode->csize, jNode->dsize);
-+					break;
 +
  				default:
  					/* unknown */
@@ -162,7 +162,7 @@
  
  /* Print directory / file contents */
  #ifdef CONFIG_CMD_JFFS2_LS
-@@ -1944,7 +1947,535 @@ jffs2_1pass_ls(struct part_info * part,
+@@ -1944,7 +1947,539 @@ jffs2_1pass_ls(struct part_info * part,
  	return ret;
  }
  #endif
@@ -618,6 +618,7 @@
 +//    u32 latestVersion = 0;
 +    uchar *lDest;
 +    uchar *src;
++    long ret;
 +    int i=0;
 +    struct b_node *b;
 +    struct b_lists *pL = (struct b_lists *)part->jffs2_priv;
@@ -637,30 +638,33 @@
 +        *fileSize += jNode->dsize;
 +        switch (jNode->compr) {
 +            case JFFS2_COMPR_NONE:
-+                ldr_memcpy(lDest, src, jNode->dsize);
++                ret = (unsigned long) ldr_memcpy(lDest, src, jNode->dsize);
 +                break;
 +            case JFFS2_COMPR_ZERO:
++		ret = 0;
 +                for (i = 0; i < jNode->dsize; i++)
 +                    *(lDest++) = 0;
 +                break;
 +            case JFFS2_COMPR_RTIME:
++		ret = 0;
 +                rtime_decompress(src, lDest, jNode->csize, jNode->dsize);
 +                break;
 +            case JFFS2_COMPR_DYNRUBIN:
 +                /* this is slow but it works */
++		ret = 0;
 +                dynrubin_decompress(src, lDest, jNode->csize, jNode->dsize);
 +                break;
 +            case JFFS2_COMPR_ZLIB:
-+                zlib_decompress(src, lDest, jNode->csize, jNode->dsize);
++                ret =zlib_decompress(src, lDest, jNode->csize, jNode->dsize);
++                break;
++ 	    case JFFS2_COMPR_LZMA:
++                ret = lzma_decompress(src, lDest, jNode->csize, jNode->dsize);
 +                break;
 +#if defined(CONFIG_JFFS2_LZO)
 +            case JFFS2_COMPR_LZO:
-+                lzo_decompress(src, lDest, jNode->csize, jNode->dsize);
++                ret= lzo_decompress(src, lDest, jNode->csize, jNode->dsize);
 +                break;
 +#endif
-+            case JFFS2_COMPR_LZMA:
-+                lzma_decompress(src, lDest, jNode->csize, jNode->dsize);
-+                break;
 +            default:
 +                /* unknown */
 +                printf("Unknown compression method = 0x%02X\n", (unsigned int)jNode->compr);
@@ -698,7 +702,7 @@
  /* Load a file from flash into memory. fname can be a full path */
  u32
  jffs2_1pass_load(char *dest, struct part_info * part, const char *fname)
-@@ -1977,6 +2508,7 @@ jffs2_1pass_load(char *dest, struct part
+@@ -1977,6 +2512,7 @@ jffs2_1pass_load(char *dest, struct part
  				(unsigned long) dest, ret);
  	return ret;
  }
@@ -715,6 +719,23 @@
  u32 jffs2_1pass_info(struct part_info *part);
 --- a/include/jffs2/jffs2.h
 +++ b/include/jffs2/jffs2.h
+@@ -68,12 +68,12 @@
+ #define JFFS2_COMPR_COPY	0x04
+ #define JFFS2_COMPR_DYNRUBIN	0x05
+ #define JFFS2_COMPR_ZLIB	0x06
+-#if defined(CONFIG_JFFS2_LZO_LZARI)
+-#define JFFS2_COMPR_LZO		0x07
+-#define JFFS2_COMPR_LZARI	0x08
++#define JFFS2_COMPR_LZMA	0x07
++#if defined(CONFIG_JFFS2_LZO)
++#define JFFS2_COMPR_LZO		0x08
+ #define JFFS2_NUM_COMPR		9
+ #else
+-#define JFFS2_NUM_COMPR		7
++#define JFFS2_NUM_COMPR		8
+ #endif
+ 
+ /* Compatibility flags. */
 @@ -216,6 +216,7 @@ enum
  
  u32 jffs2_1pass_ls(struct part_info *part,const char *fname);
@@ -723,6 +744,21 @@
  u32 jffs2_1pass_info(struct part_info *part);
  
  void rtime_decompress(unsigned char *data_in, unsigned char *cpage_out,
+@@ -226,11 +227,11 @@ void dynrubin_decompress(unsigned char *
+ 		unsigned long sourcelen, unsigned long dstlen);
+ long zlib_decompress(unsigned char *data_in, unsigned char *cpage_out,
+ 		__u32 srclen, __u32 destlen);
+-#if defined(CONFIG_JFFS2_LZO_LZARI)
++int lzma_decompress(unsigned char *data_in, unsigned char *cpage_out,
++        	 u32 srclen, u32 destlen);
++#if defined(CONFIG_JFFS2_LZO)
+ int lzo_decompress(unsigned char *data_in, unsigned char *cpage_out,
+ 		u32 srclen, u32 destlen);
+-int lzari_decompress(unsigned char *data_in, unsigned char *cpage_out,
+-		u32 srclen, u32 destlen);
+ #endif
+ 
+ char *mkmodestr(unsigned long mode, char *str);
 --- a/common/cmd_jffs2.c
 +++ b/common/cmd_jffs2.c
 @@ -489,7 +489,6 @@ static struct part_info* jffs2_part_info
@@ -750,3 +786,113 @@
  		}
  
  		if (size > 0) {
+--- a/fs/jffs2/Makefile
++++ b/fs/jffs2/Makefile
+@@ -27,11 +27,11 @@ LIB	= $(obj)libjffs2.a
+ 
+ AOBJS	=
+ ifdef CONFIG_CMD_JFFS2
+-COBJS-$(CONFIG_JFFS2_LZO_LZARI) += compr_lzari.o
+-COBJS-$(CONFIG_JFFS2_LZO_LZARI) += compr_lzo.o
++COBJS-$(CONFIG_JFFS2_LZO) += compr_lzo.o
+ COBJS-y += compr_rtime.o
+ COBJS-y += compr_rubin.o
+ COBJS-y += compr_zlib.o
++COBJS-y += compr_lzma.o
+ COBJS-y += jffs2_1pass.o
+ COBJS-y += mini_inflate.o
+ endif
+--- /dev/null
++++ b/fs/jffs2/compr_lzma.c
+@@ -0,0 +1,53 @@
++/*
++ * JFFS2 -- Journalling Flash File System, Version 2.
++ *
++ * For licensing information, see the file 'LICENCE' in this directory.
++ *
++ * JFFS2 wrapper to the LZMA C SDK
++ *
++ */
++
++#include <lzma/LzmaDec.h>
++#include <jffs2/jffs2.h>
++
++
++#define LZMA_MALLOC malloc
++#define LZMA_FREE free
++
++
++Byte propsEncoded[LZMA_PROPS_SIZE];
++SizeT propsSize = sizeof(propsEncoded);
++
++static void *p_lzma_malloc(void *p, size_t size)
++{
++        if (size == 0)
++                return NULL;
++
++        return LZMA_MALLOC(size);
++}
++
++static void p_lzma_free(void *p, void *address)
++{
++        if (address != NULL)
++                LZMA_FREE(address);
++}
++
++static ISzAlloc lzma_alloc = {p_lzma_malloc, p_lzma_free};
++
++
++int lzma_decompress(unsigned char *data_in, unsigned char *cpage_out,
++				 UInt32 srclen, UInt32 destlen)
++{
++	int ret;
++	SizeT dl = (SizeT)destlen;
++	SizeT sl = (SizeT)srclen;
++	ELzmaStatus status;
++
++	ret = LzmaDecode(cpage_out, &dl, data_in, &sl, propsEncoded,
++		propsSize, LZMA_FINISH_ANY, &status, &lzma_alloc);
++
++	if (ret != SZ_OK || status == LZMA_STATUS_NOT_FINISHED || dl != (SizeT)destlen)
++		return -1;
++
++	return 0;
++}
+--- a/fs/jffs2/jffs2_nand_1pass.c
++++ b/fs/jffs2/jffs2_nand_1pass.c
+@@ -34,9 +34,9 @@ static char *compr_names[] = {
+ 	"COPY",
+ 	"DYNRUBIN",
+ 	"ZLIB",
+-#if defined(CONFIG_JFFS2_LZO_LZARI)
++	"LZMA",
++#if defined(CONFIG_JFFS2_LZO)
+ 	"LZO",
+-	"LZARI",
+ #endif
+ };
+ 
+@@ -344,17 +344,17 @@ jffs2_1pass_read_inode(struct b_lists *p
+ 			case JFFS2_COMPR_ZLIB:
+ 				ret = zlib_decompress(src, dst, inode->csize, inode->dsize);
+ 				break;
+-#if defined(CONFIG_JFFS2_LZO_LZARI)
++			case JFFS2_COMPR_LZMA:
++				ret = lzma_decompress(src, dst, inode->csize, inode->dsize);
++				break;
++#if defined(CONFIG_JFFS2_LZO)
+ 			case JFFS2_COMPR_LZO:
+ 				ret = lzo_decompress(src, dst, inode->csize, inode->dsize);
+ 				break;
+-			case JFFS2_COMPR_LZARI:
+-				ret = lzari_decompress(src, dst, inode->csize, inode->dsize);
+-				break;
+-#endif
++			#endif
+ 			default:
+ 				/* unknown */
+-				putLabeledWord("UNKOWN COMPRESSION METHOD = ", inode->compr);
++				putLabeledWord("UNKNOWN COMPRESSION METHOD = ", inode->compr);
+ 				return -1;
+ 			}
+ 		}
