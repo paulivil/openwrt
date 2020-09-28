@@ -816,7 +816,7 @@
 +
 +#include <lzma/LzmaDec.h>
 +#include <jffs2/jffs2.h>
-+
++#include <exports.h>
 +
 +#define LZMA_MALLOC malloc
 +#define LZMA_FREE free
