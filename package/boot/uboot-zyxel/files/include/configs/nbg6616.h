@@ -30,6 +30,7 @@ do { \
 #define SENAO_FACTORY_BTN_TRIGGER_LEVEL     ZGPIO_LEVEL_LOW
 #define SENAO_FACTORY_IMG_FILE              "factoryNBG6616.bin"
 #else
+#define CONFIG_ZFLASH_CMD
 #define CONFIG_BOOTDELAY	3	/* autoboot after 3 seconds	*/
 #endif
 
@@ -194,7 +195,7 @@ do { \
 #define gen_nand_cmd(cmd, offs, file, partSize)			\
 	__gen_nand_cmd(cmd, offs, file, nand erase, nand write, partSize)
 
-#ifndef CONFIG_ZYXEL_ZLOADER
+#ifndef CONFIG_ZFLASH_CMD
 #define __gen_cmd(cmd, offs, file, eraseCmd, writeCmd, eraseSize)	\
 	#cmd "=tftp ${loadaddr} ${dir}" #file ";"						\
 	#eraseCmd " " #offs " +" #eraseSize ";"							\
@@ -278,6 +279,7 @@ do { \
     "img_prefix=nbg6616-\0"	\
     "loadaddr=80400000\0" \
     "fdtaddr=80400000\0" \
+    "fdt_addr_r=803F8000\0" \
     "readonly=ro\0" \
     "setmtdparts=setenv mtdparts " MTDPARTS_DEFAULT "\0" \
     "flashargs=setenv bootargs " BOOTARG_DEFAULT "\0"  \

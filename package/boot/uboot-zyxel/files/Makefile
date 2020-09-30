@@ -251,9 +251,8 @@ LIBS += common/libcommon.a
 LIBS += libfdt/libfdt.a
 LIBS += api/libapi.a
 LIBS += post/libpost.a
-ifeq ($(CONFIG_UBOOT_SUPPORT_ZLOADER),y)
 LIBS += lib_zloader/libzloader.a
-endif
+
 
 LIBS := $(addprefix $(obj),$(LIBS))
 .PHONY : $(LIBS) $(TIMESTAMP_FILE) $(VERSION_FILE)
