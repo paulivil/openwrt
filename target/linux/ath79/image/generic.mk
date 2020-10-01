@@ -1142,7 +1142,6 @@ define Device/zyxel_nbg6616
   IMAGE_SIZE := 15323k
   KERNEL_SIZE := 2048k
   DEVICE_DTS_CONFIG := config@zyxel.nbg6616
-  KERNEL_LOADADDR = 0x80400000
   BLOCKSIZE := 64k
   IMAGES := factory.bin sysupgrade.bin
   KERNEL := kernel-bin | lzma |  fit lzma image-qca9557_zyxel_nbg6616.dtb |  jffs2 boot/vmlinux.lzma.itb | pad-to $$(BLOCKSIZE)

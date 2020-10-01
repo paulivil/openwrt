@@ -12,8 +12,8 @@
             data= /incbin/("build_dir/target-mips_24kc_musl/linux-ath79_generic/zyxel_nbg6616-kernel.bin");
             arch= "mips";
             os=           "linux";
-            load= <0x80400000>;
-            entry=  <0x80400000>;
+            load= <0x20000>;
+            entry=  <0x20000>;
   
                     };
 
@@ -22,7 +22,7 @@
               type=         "flat_dt";
               compression=  "none";
               data= /incbin/("target/linux/ath79/dts/qca9557_zyxel_nbg6616.dtb");
-              load = <0x803F8000>;
+              
                     };
                 configurations{
                 default= "config@1";
