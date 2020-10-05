@@ -32,7 +32,7 @@ void board_debug_uart_init(void)
 	/*
 	 * Enable GPIO10 as UART0_SOUT
 	 */
-	val = readl(regs + QCA953X_GPIO_REG_OUT_FUNC2);
+	val = readl(regs + QCA955X_GPIO_REG_OUT_FUNC2);
 	val &= ~QCA955X_GPIO_MUX_MASK(16);
 	val |= QCA955X_GPIO_OUT_MUX_UART0_SOUT << 16;
 	writel(val, regs + QCA953X_GPIO_REG_OUT_FUNC2);
@@ -40,10 +40,10 @@ void board_debug_uart_init(void)
 	/*
 	 * Enable GPIO9 as UART0_SIN
 	 */
-	val = readl(regs + QCA953X_GPIO_REG_IN_ENABLE0);
+	val = readl(regs + QCA955X_GPIO_REG_IN_ENABLE0);
 	val &= ~QCA955X_GPIO_MUX_MASK(8);
 	val |= QCA955X_GPIO_IN_MUX_UART0_SIN << 8;
-	writel(val, regs + QCA953X_GPIO_REG_IN_ENABLE0);
+	writel(val, regs + QCA955X_GPIO_REG_IN_ENABLE0);
 
 	/*
 	 * Enable GPIO10 output

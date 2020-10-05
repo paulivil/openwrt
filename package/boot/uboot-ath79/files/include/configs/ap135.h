@@ -16,8 +16,8 @@
 #define CONFIG_SYS_MIPS_TIMER_FREQ      (CONFIG_SYS_MHZ * 1000000)
 
 /* Cache Configuration */
-#define CONFIG_SYS_DCACHE_SIZE          0x8000
-#define CONFIG_SYS_ICACHE_SIZE          0x10000
+#define CONFIG_SYS_DCACHE_SIZE          32768
+#define CONFIG_SYS_ICACHE_SIZE          65536
 #define CONFIG_SYS_CACHELINE_SIZE       32
 
 #define CONFIG_SYS_MONITOR_BASE         CONFIG_SYS_TEXT_BASE
@@ -55,11 +55,10 @@
 #define MTDIDS_DEFAULT                  "nor0=spi-flash.0"
 #define MTDPARTS_DEFAULT                "mtdparts=spi-flash.0:" \
 					"192k(u-boot),64k(env)," \
-					"64k(RFdata),384k(zyxel_rfsd)"
+					"64k(RFdata),384k(zyxel_rfsd)" \
 					 "384k(romd),64k(header)" \
 					 "2048k(uImage),13184k(rootfs)"
 
-#define CONFIG_ENV_SPI_MAX_HZ           25000000
 #define CONFIG_ENV_IS_IN_SPI_FLASH
 #define CONFIG_ENV_OFFSET               0x00000
 #define CONFIG_ENV_SECT_SIZE            0x10000
@@ -75,9 +74,11 @@
 #define CONFIG_SYS_MAXARGS              16
 #define CONFIG_SYS_PBSIZE               (CONFIG_SYS_CBSIZE + \
 					sizeof(CONFIG_SYS_PROMPT) + 16)
-#define CONFIG_SYS_LONGHELP
+					
+#define CONFIG_SYS_LONGHELP					
 #define CONFIG_CMDLINE_EDITING
-#define CONFIG_AUTO_COMPLETE
+#define CONFIG_AUTO_COMPLETE					
+
 
 /*
  * Diagnostics

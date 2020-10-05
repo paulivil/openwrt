@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_VERSION:=2019.07
 PKG_RELEASE:=1
 
-PKG_HASH:=902d1b2c15787df55186fae4033685fb0c5a5a12755a08383e97c4a3e255925b
+PKG_HASH:=bff4fa77e8da17521c030ca4c5b947a056c1b1be4d3e6ee8637020b8d50251d0
 
 include $(INCLUDE_DIR)/u-boot.mk
 include $(INCLUDE_DIR)/package.mk
@@ -30,6 +30,7 @@ define Build/Prepare
 	$(call Build/Prepare/Default)
 	$(CP) ./files/* $(PKG_BUILD_DIR)
 	find $(PKG_BUILD_DIR) -name .svn | $(XARGS) rm -rf
+endef
 
 UBOOT_MAKE_FLAGS :=
 
