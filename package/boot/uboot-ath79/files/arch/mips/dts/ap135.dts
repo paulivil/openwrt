@@ -19,7 +19,7 @@
 	};
 };
 
-&xtal {
+&extosc {
 	clock-frequency = <40000000>;
 };
 

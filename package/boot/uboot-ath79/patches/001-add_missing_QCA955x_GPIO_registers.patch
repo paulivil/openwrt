@@ -1,0 +1,25 @@
+
+ .../mips/mach-ath79/include/mach/ar71xx_regs.h | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+
+--- a/arch/mips/mach-ath79/include/mach/ar71xx_regs.h
++++ b/arch/mips/mach-ath79/include/mach/ar71xx_regs.h
+@@ -1027,6 +1027,7 @@
+ #define QCA955X_GPIO_REG_OUT_FUNC3			0x38
+ #define QCA955X_GPIO_REG_OUT_FUNC4			0x3c
+ #define QCA955X_GPIO_REG_OUT_FUNC5			0x40
++#define QCA955X_GPIO_REG_IN_ENABLE0			0x44
+ #define QCA955X_GPIO_REG_FUNC				0x6c
+ 
+ #define QCA956X_GPIO_REG_OUT_FUNC0			0x2c
+@@ -1136,6 +1137,10 @@
+ #define QCA953X_GPIO_IN_MUX_UART0_SIN			9
+ #define QCA953X_GPIO_IN_MUX_SPI_DATA_IN			8
+ 
++#define QCA955X_GPIO(x)					BIT(x)
++#define QCA955X_GPIO_MUX_MASK(x)			(0xff << (x))
++#define QCA955X_GPIO_IN_MUX_UART0_SIN  			0x12
++
+ #define QCA956X_GPIO(x)					BIT(x)
+ #define QCA956X_GPIO_MUX_MASK(x)			(0xff << (x))
+ #define QCA956X_GPIO_OUT_MUX_GE0_MDO			32
