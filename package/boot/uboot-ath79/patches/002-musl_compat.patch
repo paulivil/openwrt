@@ -1,0 +1,13 @@
+--- a/include/compiler.h
++++ b/include/compiler.h
+@@ -44,6 +44,10 @@
+ #ifdef __linux__
+ # include <endian.h>
+ # include <byteswap.h>
++#ifndef __GLIBC__
++typedef unsigned long ulong;
++typedef unsigned int  uint;
++#endif
+ #elif defined(__MACH__) || defined(__FreeBSD__)
+ # include <machine/endian.h>
+ typedef unsigned long ulong;
