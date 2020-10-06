@@ -28,7 +28,7 @@
 #define CONFIG_SYS_SDRAM_BASE           0x80000000
 #define CONFIG_SYS_LOAD_ADDR            0x81000000
 
-#define CONFIG_SYS_NO_FLASH
+#define CONFIG_SYS_NO_FLASH					1
 
 #define CONFIG_SYS_INIT_RAM_ADDR        0xbd000000
 #define CONFIG_SYS_INIT_RAM_SIZE        0x2000
@@ -50,7 +50,7 @@
 #define CONFIG_BOOTCOMMAND              "sf probe;" \
 					"mtdparts default;" \
 					"bootm 0x9f300000"
-#define CONFIG_LZMA
+#define CONFIG_LZMA						1
 
 #define MTDIDS_DEFAULT                  "nor0=spi-flash.0"
 #define MTDPARTS_DEFAULT                "mtdparts=spi-flash.0:" \
@@ -59,7 +59,7 @@
 					 "384k(romd),64k(header)" \
 					 "2048k(uImage),13184k(rootfs)"
 
-#define CONFIG_ENV_IS_IN_SPI_FLASH
+#define CONFIG_ENV_IS_IN_SPI_FLASH		1
 #define CONFIG_ENV_OFFSET               0x00000
 #define CONFIG_ENV_SECT_SIZE            0x10000
 #define CONFIG_ENV_SIZE                 0x10000
@@ -67,7 +67,7 @@
 /*
  * Command
  */
-#define CONFIG_CMD_MTDPARTS
+#define CONFIG_CMD_MTDPARTS			1
 
 /* Miscellaneous configurable options */
 #define CONFIG_SYS_CBSIZE               256
@@ -75,7 +75,7 @@
 #define CONFIG_SYS_PBSIZE               (CONFIG_SYS_CBSIZE + \
 					sizeof(CONFIG_SYS_PROMPT) + 16)
 					
-#define CONFIG_SYS_LONGHELP					
+					
 #define CONFIG_CMDLINE_EDITING
 #define CONFIG_AUTO_COMPLETE					
 

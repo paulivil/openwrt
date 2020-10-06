@@ -6,9 +6,10 @@
 #
 
 include $(TOPDIR)/rules.mk
-
 PKG_VERSION:=2019.07
 PKG_RELEASE:=1
+
+
 
 PKG_HASH:=bff4fa77e8da17521c030ca4c5b947a056c1b1be4d3e6ee8637020b8d50251d0
 
@@ -24,6 +25,7 @@ define U-Boot/nbg6616
   TITLE:=NBG6616 router
   BUILD_DEVICES:=nbg6616
   HIDDEN:=y
+  NAME:=NBG6616
 endef
 
 define Build/Prepare
