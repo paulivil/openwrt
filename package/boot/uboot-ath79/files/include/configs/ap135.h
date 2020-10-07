@@ -60,7 +60,7 @@
 					 "2048k(uImage),13184k(rootfs)"
 
 #define CONFIG_ENV_IS_IN_SPI_FLASH		1
-#define CONFIG_ENV_OFFSET               0x00000
+#define CONFIG_ENV_OFFSET               0x30000
 #define CONFIG_ENV_SECT_SIZE            0x10000
 #define CONFIG_ENV_SIZE                 0x10000
 
