@@ -19,13 +19,13 @@ include $(INCLUDE_DIR)/package.mk
 define U-Boot/Default
   BUILD_TARGET:=ath79
   BUILD_SUBTARGET:=generic
+  BUILD_DEVICES:=$(1)
+  UBOOT_IMAGE:=u-boot-dtb.bin
 endef
 
 define U-Boot/nbg6616
-  TITLE:=NBG6616 router
-  BUILD_DEVICES:=nbg6616
-  HIDDEN:=y
-  NAME:=NBG6616
+  NAME:=ZyXEL NBG6616
+  UBOOT_CONFIG:=ap135
 endef
 
 define Build/Prepare
@@ -37,5 +37,7 @@ endef
 UBOOT_MAKE_FLAGS :=-mno-mips16
 
 UBOOT_TARGETS:=ap135
+
+
 
 $(eval $(call BuildPackage/U-Boot))
