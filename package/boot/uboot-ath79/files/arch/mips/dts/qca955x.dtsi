@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-2.0+
 /*
- * SPDX-License-Identifier: GPL-2.0+
+ * Copyright (C) 2015-2016 Wills Wang <wills.wang@live.com>
  */
+
 
 #include <dt-bindings/interrupt-controller/irq.h>
 #include "skeleton.dtsi"
@@ -34,14 +36,7 @@
 		};
 	};
 
-	pinctrl {
-		u-boot,dm-pre-reloc;
-		compatible = "qca,qca955x-pinctrl";
-		ranges;
-		#address-cells = <1>;
-		#size-cells = <1>;
-		reg = <0x18040000 0x100>;
-	};
+	
 
 	ahb {
 		compatible = "simple-bus";
@@ -58,19 +53,33 @@
 			#size-cells = <1>;
 
 			uart0: uart@18020000 {
-				compatible = "ns16550";
+				compatible = "ns16550a";
 				reg = <0x18020000 0x20>;
 				reg-shift = <2>;
 				clock-frequency = <25000000>;
-				interrupts = <128 IRQ_TYPE_LEVEL_HIGH>;
+				interrupts = <3>;
 
 				status = "disabled";
 			};
+
+			pinctrl: pinctrl@1804002c {
+		u-boot,dm-pre-reloc;
+		compatible = "qca,qca955x-pinctrl";
+		ranges;
+		#address-cells = <1>;
+		#size-cells = <1>;
+		reg = <0x1804002c 0x44>;
+	};
+		};
+
+		gmac: gmac@18070000 {
+			compatible = "qca,qca9550-gmac";
+			reg = <0x18070000 0x58>;
 		};
 
 		spi0: spi@1f000000 {
 			compatible = "qca,ar934x-spi";
-			reg = <0x1f000000 0x10>;
+			reg = <0x1f000000 0x1c>;
 			interrupts = <129 IRQ_TYPE_LEVEL_HIGH>;
 
 			status = "disabled";

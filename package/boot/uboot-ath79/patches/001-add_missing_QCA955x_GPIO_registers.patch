@@ -12,13 +12,19 @@
  #define QCA955X_GPIO_REG_FUNC				0x6c
  
  #define QCA956X_GPIO_REG_OUT_FUNC0			0x2c
-@@ -1136,6 +1137,10 @@
+@@ -1136,6 +1137,16 @@
  #define QCA953X_GPIO_IN_MUX_UART0_SIN			9
  #define QCA953X_GPIO_IN_MUX_SPI_DATA_IN			8
  
 +#define QCA955X_GPIO(x)					BIT(x)
 +#define QCA955X_GPIO_MUX_MASK(x)			(0xff << (x))
++#define QCA955X_GPIO_OUT_MUX_SPI_CS0                    9
++#define QCA955X_GPIO_OUT_MUX_SPI_CLK                    8
++#define QCA955X_GPIO_OUT_MUX_SPI_MOSI                   12
++#define QCA955X_GPIO_OUT_MUX_UART0_SOUT                 0x16
++
 +#define QCA955X_GPIO_IN_MUX_UART0_SIN  			0x12
++#define QCA955X_GPIO_IN_MUX_SPI_DATA_IN                 8
 +
  #define QCA956X_GPIO(x)					BIT(x)
  #define QCA956X_GPIO_MUX_MASK(x)			(0xff << (x))
