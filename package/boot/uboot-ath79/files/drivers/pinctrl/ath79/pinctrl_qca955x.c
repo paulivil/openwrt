@@ -154,3 +154,4 @@ U_BOOT_DRIVER(pinctrl_qca955x) = {
 	.ops		= &qca955x_pinctrl_ops,
 	.probe		= qca955x_pinctrl_probe,
 };
+

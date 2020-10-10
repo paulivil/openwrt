@@ -39,7 +39,7 @@ config SOC_QCA955X
 	select SUPPORTS_CPU_MIPS32_R1
 	select SUPPORTS_CPU_MIPS32_R2
 	select ROM_EXCEPTION_VECTORS
-	select MIPS_TUNE_24KC
+	select MIPS_TUNE_74KC
 	help
 	  This supports QCA/Atheros qca955x family SOCs.
 
