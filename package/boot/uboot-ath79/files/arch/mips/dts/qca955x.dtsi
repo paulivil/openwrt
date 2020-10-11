@@ -5,6 +5,7 @@
 
 
 #include <dt-bindings/interrupt-controller/irq.h>
+#include <dt-bindings/clock/ath79-clk.h>
 #include "skeleton.dtsi"
 
 / {
@@ -20,6 +21,7 @@
 		cpu@0 {
 			device_type = "cpu";
 			compatible = "mips,mips74Kc";
+			clocks = <&pll ATH79_CLK_CPU>;
 			reg = <0>;
 		};
 	};
@@ -29,10 +31,11 @@
 		#size-cells = <1>;
 		ranges;
 
-		extosc: ref {
+		xtal: xtal {
 			#clock-cells = <0>;
 			compatible = "fixed-clock";
-			clock-output-names = "ref";
+			clock-output-names = "xtal";
+			clock-frequency = <40000000>;
 		};
 	};
 
@@ -53,10 +56,10 @@
 			#size-cells = <1>;
 
 			uart0: uart@18020000 {
-				compatible = "ns16550a";
+				compatible = "ns16550";
 				reg = <0x18020000 0x20>;
 				reg-shift = <2>;
-				clock-frequency = <25000000>;
+				clocks = <&pll ATH79_CLK_REF>;
 				interrupts = <3>;
 
 				status = "disabled";
@@ -73,14 +76,9 @@
 		pinctrl-single,register-width = <32>;
 		pinctrl-single,function-mask = <0x1>;
 		#pinctrl-cells = <2>;
-		state_0_node_a {
-			
-		jtag_disable_pins 
-				{ 
-				pinmux = <0x40 0x2  0x2>;
-					 	input-disable;
+		jtag_disable_pins: pinmux_jtag_disable_pins {
+					pinctrl-single,bits = <0x40 0x2  0x2>;
 				};
-					};
 		};
 
 		gmac: gmac@18070000 {
@@ -92,6 +90,7 @@
 			compatible = "qca,ar934x-spi";
 			reg = <0x1f000000 0x1c>;
 			interrupts = <129 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&pll ATH79_CLK_AHB>;
 
 			status = "disabled";
 
@@ -99,4 +98,37 @@
 			#size-cells = <0>;
 		};
 	};
+};
+&mdio0 {
+	compatible = "qca,ar9340-mdio";
+};
+
+&eth0 {
+	compatible = "qca,qca9550-eth", "syscon";
+
+	pll-reg = <0 0x28 0>;
+	pll-handle = <&pll>;
+
+	pll-data = <0x16000000 0x00000101 0x00001616>;
+	phy-mode = "rgmii";
+
+	resets = <&rst 9>, <&rst 22>;
+	reset-names = "mac", "mdio";
+};
+
+&mdio1 {
+	compatible = "qca,ar9340-mdio";
+};
+
+&eth1 {
+	compatible = "qca,qca9550-eth", "syscon";
+
+	pll-reg = <0 0x48 0>;
+	pll-handle = <&pll>;
+
+	pll-data = <0x16000000 0x00000101 0x00001616>;
+	phy-mode = "sgmii";
+
+	resets = <&rst 13>, <&rst 23>;
+	reset-names = "mac", "mdio";
 };
