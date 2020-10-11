@@ -6,6 +6,7 @@
 
 #include <dt-bindings/interrupt-controller/irq.h>
 #include <dt-bindings/clock/ath79-clk.h>
+#include "ath79.dtsi"
 #include "skeleton.dtsi"
 
 / {
