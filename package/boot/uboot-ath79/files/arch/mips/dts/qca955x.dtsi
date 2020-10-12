@@ -4,10 +4,8 @@
  */
 
 
-#include <dt-bindings/interrupt-controller/irq.h>
 #include <dt-bindings/clock/ath79-clk.h>
 #include "ath79.dtsi"
-#include "skeleton.dtsi"
 
 / {
 	compatible = "qca,qca955x";
@@ -90,7 +88,6 @@
 		spi0: spi@1f000000 {
 			compatible = "qca,ar934x-spi";
 			reg = <0x1f000000 0x1c>;
-			interrupts = <129 IRQ_TYPE_LEVEL_HIGH>;
 			clocks = <&pll ATH79_CLK_AHB>;
 
 			status = "disabled";
