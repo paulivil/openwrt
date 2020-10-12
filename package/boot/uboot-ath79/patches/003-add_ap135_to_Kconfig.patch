@@ -1,0 +1,37 @@
+--- a/arch/mips/mach-ath79/Kconfig
++++ b/arch/mips/mach-ath79/Kconfig
+@@ -33,6 +33,15 @@ config SOC_QCA953X
+ 	help
+ 	  This supports QCA/Atheros qca953x family SOCs.
+ 
++config SOC_QCA955X
++        bool
++        select MIPS_TUNE_74KC
++        select SUPPORTS_BIG_ENDIAN
++        select SUPPORTS_CPU_MIPS32_R1
++        select SUPPORTS_CPU_MIPS32_R2
++        help
++          This supports QCA/Atheros qca955x family SOCs.
++
+ config SOC_QCA956X
+ 	bool
+ 	select MIPS_TUNE_74KC
+@@ -53,6 +62,10 @@ config TARGET_AP143
+ 	bool "AP143 Reference Board"
+ 	select SOC_QCA953X
+ 
++config TARGET_AP135
++        bool "AP135 Reference Board"
++        select SOC_QCA955X
++
+ config TARGET_AP152
+ 	bool "AP152 Reference Board"
+ 	select SOC_QCA956X
+@@ -65,6 +78,7 @@ endchoice
+ 
+ source "board/qca/ap121/Kconfig"
+ source "board/qca/ap143/Kconfig"
++source "board/qca/ap135/Kconfig"
+ source "board/qca/ap152/Kconfig"
+ source "board/tplink/wdr4300/Kconfig"
+ 

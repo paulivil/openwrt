@@ -35,7 +35,6 @@ define Build/Prepare
 endef
 
 UBOOT_MAKE_FLAGS :=-mno-mips16
-
 UBOOT_TARGETS:=ap135
 
 

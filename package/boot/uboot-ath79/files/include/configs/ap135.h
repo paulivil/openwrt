@@ -1,11 +1,38 @@
 /*
  * SPDX-License-Identifier: GPL-2.0+
  */
+/*
+ * This file contains the configuration parameters for the AP135 board.
+ */
 
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
+/*-----------------------------------------------------------------------
+ * Atheros Source Code Configuration
+ */
+/* see see lsdk-10.0.91/boot/u-boot/include/configs/board955x.h */
+#define CFG_PLL_FREQ             CFG_PLL_720_600_200
+#include <atheros.h>
+
+#define CFG_FLASH_SECTOR_SIZE	(64*1024)
+#if (FLASH_SIZE == 16)
+#define CFG_FLASH_SIZE		0x01000000	/* Total flash size */
+#elif (FLASH_SIZE == 8)
+#define CFG_FLASH_SIZE		0x00800000	/* max number of sectors on one chip */
+#else
+#define CFG_FLASH_SIZE		0x00400000	/* Total flash size */
+#endif
+
+/*-----------------------------------------------------------------------
+ * Miscellaneous configurable options
+ */
+#define CONFIG_SYS_MONITOR_LEN		CFG_LOADER_PART_SIZE
 #define CONFIG_SYS_TEXT_BASE            0x9f000000
+#define CONFIG_SYS_MALLOC_LEN           256*1024
+#define CONFIG_SYS_BOOTPARAMS_LEN       128*1024
+
+#define FLASH_SIZE               16
 
 #define CONFIG_DISPLAY_CPUINFO
 #define CONFIG_DISPLAY_BOARDINFO
@@ -22,8 +49,7 @@
 
 #define CONFIG_SYS_MONITOR_BASE         CONFIG_SYS_TEXT_BASE
 
-#define CONFIG_SYS_MALLOC_LEN           256*1024
-#define CONFIG_SYS_BOOTPARAMS_LEN       128*1024
+
 
 #define CONFIG_SYS_SDRAM_BASE           0x80000000
 #define CONFIG_SYS_LOAD_ADDR            0x81000000
@@ -60,10 +86,13 @@
 					 "2048k(uImage),13184k(rootfs)"
 
 #define CONFIG_ENV_IS_IN_SPI_FLASH		1
-#define CONFIG_ENV_OFFSET               0x30000
-#define CONFIG_ENV_SECT_SIZE            0x10000
-#define CONFIG_ENV_SIZE                 0x10000
+#define CONFIG_ENV_SECT_SIZE	CFG_FLASH_SECTOR_SIZE
+#define CONFIG_ENV_SIZE		CFG_ENV_PART_SIZE
+#define CONFIG_ENV_ADDR		(CONFIG_SYS_FLASH_BASE + CONFIG_SYS_MONITOR_LEN)
+#define CONFIG_ENV_OVERWRITE
 
+#define CFG_ENV_PART_ADDR		0x9f030000
+#define CFG_ENV_PART_SIZE		0x10000
 /*
  * Command
  */
