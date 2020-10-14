@@ -70,7 +70,10 @@
 #define CONFIG_SYS_CBSIZE               512  /* Console I/O Buffer Size   */
 #define CONFIG_SYS_MAXARGS              16 /* max number of command args*/
 #define CONFIG_SYS_PBSIZE               (CONFIG_SYS_CBSIZE+sizeof(CONFIG_SYS_PROMPT)+16)  /* Print Buffer Size */
-					
+
+#define CONFIG_SYS_HZ                   CFG_HZ
+#define CONFIG_SYS_MHZ                  700
+#define CONFIG_SYS_MIPS_TIMER_FREQ      (CONFIG_SYS_MHZ * 1000000)
 					
 #define CONFIG_CMDLINE_EDITING
 #define CONFIG_AUTO_COMPLETE
@@ -89,9 +92,14 @@
 /*-----------------------------------------------------------------------
  * FLASH and environment organization
  */
+
 #define CONFIG_ENV_IS_IN_SPI_FLASH		1
 /* NOR Flash start address */
 #define CONFIG_SYS_FLASH_BASE			0x9f000000
+#define CONFIG_SF_DEFAULT_BUS		0
+#define CONFIG_SF_DEFAULT_CS		0
+#define CONFIG_SF_DEFAULT_SPEED	25000000
+#define CONFIG_SF_DEFAULT_MODE		SPI_MODE_0
 #ifdef COMPRESSED_UBOOT
 #define BOOTSTRAP_TEXT_BASE		CONFIG_SYS_FLASH_BASE
 #define BOOTSTRAP_CFG_MONITOR_BASE	BOOTSTRAP_TEXT_BASE
@@ -207,8 +215,7 @@
 
 /* ROOTFS_MTD_NO, MTDPARTS_DEFAULT, BOOT_FLASH_CMD, IMG_ENV_VAL, UPGRADE_IMG_CMD */
 #define	CONFIG_EXTRA_ENV_SETTINGS					\
-    "uboot_env_ver=" CONFIG_ENV_VERSION "\0" \
-    "img_prefix=nbg6616-\0"	\
+    "img_prefix=AP135-\0"	\
     "loadaddr=80400000\0" \
     "fdtaddr=80400000\0" \
     "fdt_addr_r=803F8000\0" \
@@ -223,7 +230,7 @@
     UPGRADE_IMG_CMD \
     "countrycode=ff\0" \
     "serialnum=S100Z47000001\0" \
-    "hostname=NBG6616\0"
+    "hostname=AP135\0"
 /*-----------------------------------------------------------------------
  * JFFS2 Filesystem Configuration
  */

@@ -2,4 +2,4 @@
 
 obj-y += clk.o
 obj-y += ddr.o
-obj-y += lowlevel_init.o
+obj-y += 955x.o

@@ -23,10 +23,13 @@
 #define _QCA955X_H
 
 #ifndef __ASSEMBLY__
-#include <asm/mipsregs.h>
-#include <asm/addrspace.h>
 #include <asm/types.h>
 #include <linux/types.h>
+#include <asm/mipsregs.h>
+#include <asm/addrspace.h>
+
+
+
 #endif /* __ASSEMBLY__ */
 
 #undef is_qca955x
