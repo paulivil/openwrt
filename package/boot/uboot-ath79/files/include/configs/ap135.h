@@ -66,12 +66,10 @@
 #define CONFIG_DISPLAY_BOARDINFO
 #define CONFIG_BOARD_EARLY_INIT_F
 
-#define CONFIG_SYS_MHZ                  700
-#define CONFIG_SYS_MIPS_TIMER_FREQ      (CONFIG_SYS_MHZ * 1000000)
-#define CONFIG_SYS_CBSIZE               512
-#define CONFIG_SYS_MAXARGS              16
-#define CONFIG_SYS_PBSIZE               (CONFIG_SYS_CBSIZE + \
-					sizeof(CONFIG_SYS_PROMPT) + 16)  /* Print Buffer Size */
+#define CONFIG_SYS_PROMPT           CONFIG_BOARD_NAME "# "              /* Monitor Command Prompt    */
+#define CONFIG_SYS_CBSIZE               512  /* Console I/O Buffer Size   */
+#define CONFIG_SYS_MAXARGS              16 /* max number of command args*/
+#define CONFIG_SYS_PBSIZE               (CONFIG_SYS_CBSIZE+sizeof(CONFIG_SYS_PROMPT)+16)  /* Print Buffer Size */
 					
 					
 #define CONFIG_CMDLINE_EDITING
