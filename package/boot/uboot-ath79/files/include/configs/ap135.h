@@ -204,7 +204,7 @@
   #define UPGRADE_IMG_CMD	UPDATE_LOADER_CMD UPDATE_ROOTFS_CMD
 
   #define BOOT_FLASH_CMD        "boot_flash=fsload ${loadaddr} /boot/vmlinux.lzma.itb;bootm ${loadaddr}\0"
-  #define BOOTARG_DEFAULT	"board=" CONFIG_BOARD_NAME " root=/dev/" ROOTFS_MTD_NO " rootfstype=jffs2 noinitrd ${bootmode}
+  #define BOOTARG_DEFAULT	"board=" CONFIG_BOARD_NAME " root=/dev/" ROOTFS_MTD_NO " rootfstype=jffs2 noinitrd ${bootmode}"
 
 
 /* ROOTFS_MTD_NO, MTDPARTS_DEFAULT, BOOT_FLASH_CMD, IMG_ENV_VAL, UPGRADE_IMG_CMD */
@@ -264,8 +264,7 @@
  */
 #define CONFIG_DEBUG_UART_BASE 			0x18020000
 #define CONFIG_BAUDRATE                 115200
-#define CONFIG_SYS_BAUDRATE_TABLE \
-	{9600, 19200, 38400, 57600, 115200}
+#define CONFIG_SYS_BAUDRATE_TABLE	{9600, 19200, 38400, 57600, 115200}
 
 
 /*
