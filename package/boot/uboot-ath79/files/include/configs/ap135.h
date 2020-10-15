@@ -35,13 +35,15 @@
  */
 #define CONFIG_BOARD_AP135		1
 #define CONFIG_BOARD_NAME		"AP135"
+#define CFG_DDR_REFRESH_VAL		0x4138
+#define CONFIG_ATHEROS_SOC  1
 
 /* Cache Configuration */
 #define CONFIG_SYS_DCACHE_SIZE          32768
 #define CONFIG_SYS_ICACHE_SIZE          65536
-//#define CONFIG_SYS_CACHELINE_SIZE       32
+#define CONFIG_SYS_CACHELINE_SIZE       32
 
-//#define CONFIG_SYS_MONITOR_BASE         CONFIG_SYS_TEXT_BASE
+#define CONFIG_SYS_MONITOR_BASE         CONFIG_SYS_TEXT_BASE
 
 
 
@@ -254,17 +256,17 @@
 //* Console I/O Buffer Size   */
 #define CONFIG_SYS_MAXARGS              16
 //* max number of command args*/
-// #define CONFIG_SYS_PBSIZE               (CONFIG_SYS_CBSIZE+sizeof(CONFIG_SYS_PROMPT)+16)
+ #define CONFIG_SYS_PBSIZE               (CONFIG_SYS_CBSIZE+sizeof(CONFIG_SYS_PROMPT)+16)
 //* Print Buffer Size */
 
-//#define CONFIG_SYS_HZ                   CFG_HZ
+#define CONFIG_SYS_HZ                   CFG_HZ
 #define CONFIG_SYS_MHZ                  700
 #define CONFIG_SYS_MIPS_TIMER_FREQ      (CONFIG_SYS_MHZ * 1000000)
 					
-//#define CONFIG_CMDLINE_EDITING
-//#define CONFIG_AUTO_COMPLETE
+#define CONFIG_CMDLINE_EDITING
+#define CONFIG_AUTO_COMPLETE
 #define CONFIG_LZMA						1
-//#define CONFIG_SYS_MONITOR_BASE		TEXT_BASE
+#define CONFIG_SYS_MONITOR_BASE		TEXT_BASE
 #define CONFIG_SYS_MONITOR_LEN		CFG_LOADER_PART_SIZE
 /*
  * For booting Linux, the board info and command line data
@@ -281,7 +283,7 @@
  */
 #define CONFIG_DEBUG_UART_BASE 			0x18020000
 #define CONFIG_BAUDRATE                 115200
-//#define CONFIG_SYS_BAUDRATE_TABLE	{9600, 19200, 38400, 57600, 115200}
+#define CONFIG_SYS_BAUDRATE_TABLE	{9600, 19200, 38400, 57600, 115200}
 
 
 /*

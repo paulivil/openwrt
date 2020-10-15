@@ -1971,6 +1971,15 @@
 #define GPIO_OUT_ADDRESS                                             0x18040008
 #define GPIO_SPARE_ADDRESS                                           0x18040028
 
+#define GPIO_IN_ADDRESS                                              0x18040004
+#define GPIO_SET_ADDRESS                                             0x1804000C
+#define GPIO_CLEAR_ADDRESS                                           0x18040010
+#define GPIO_OUT_FUNCTION0_ADDRESS                                   0x1804002C
+
+#define GPIO_IN_ENABLE1_ADDRESS                                      0x18040048
+#define GPIO_IN_ENABLE4_ADDRESS                                      0x18040054
+#define GPIO_IN_ENABLE9_ADDRESS                                      0x18040068
+
 #define GPIO_OUT_FUNCTION1_ENABLE_GPIO_7_MSB                         31
 #define GPIO_OUT_FUNCTION1_ENABLE_GPIO_7_LSB                         24
 #define GPIO_OUT_FUNCTION1_ENABLE_GPIO_7_MASK                        0xff000000
@@ -2573,7 +2582,7 @@
 
 
 
-// #define CONFIG_MIPS32		1	/* MIPS32 CPU core	*/
+ #define CONFIG_MIPS32		1	/* MIPS32 CPU core	*/
 
 // #define CONFIG_BOOTDELAY	1	/* autoboot after 4 seconds	*/
 
@@ -2587,7 +2596,7 @@
 // #define CONFIG_BAUDRATE		115200
 // #define CFG_BAUDRATE_TABLE	{115200}
 
-// #define	CONFIG_TIMESTAMP		/* Print image info with timestamp */
+ #define	CONFIG_TIMESTAMP		/* Print image info with timestamp */
 
 // #define CONFIG_ROOTFS_RD
 
@@ -2605,45 +2614,45 @@
 /*
  * Miscellaneous configurable options
  */
-#define	CFG_LONGHELP				/* undef to save memory      */
-#define	CFG_PROMPT		"scorpion> "		/* Monitor Command Prompt    */
-#define	CFG_CBSIZE		512		/* Console I/O Buffer Size   */
-#define	CFG_PBSIZE		(CFG_CBSIZE+sizeof(CFG_PROMPT)+16)  /* Print Buffer Size */
-#define	CFG_MAXARGS		16		/* max number of command args*/
+// #define	CFG_LONGHELP				/* undef to save memory      */
+// #define	CFG_PROMPT		"scorpion> "		/* Monitor Command Prompt    */
+// #define	CFG_CBSIZE		512		/* Console I/O Buffer Size   */
+// #define	CFG_PBSIZE		(CFG_CBSIZE+sizeof(CFG_PROMPT)+16)  /* Print Buffer Size */
+// #define	CFG_MAXARGS		16		/* max number of command args*/
 
-#define CFG_MALLOC_LEN		(128*1024)
+// #define CFG_MALLOC_LEN		(128*1024)
 
-#define CFG_BOOTPARAMS_LEN	(128*1024)
+// #define CFG_BOOTPARAMS_LEN	(128*1024)
 
-#define CFG_SDRAM_BASE		0x80000000     /* Cached addr */
-//#define CFG_SDRAM_BASE	0xa0000000     /* Cached addr */
+// #define CFG_SDRAM_BASE		0x80000000     /* Cached addr */
+// //#define CFG_SDRAM_BASE	0xa0000000     /* Cached addr */
 
-#define	CFG_LOAD_ADDR		0x81000000     /* default load address	*/
-//#define CFG_LOAD_ADDR		0xa1000000     /* default load address	*/
+// #define	CFG_LOAD_ADDR		0x81000000     /* default load address	*/
+// //#define CFG_LOAD_ADDR		0xa1000000     /* default load address	*/
 
-#define CFG_MEMTEST_START	0x80100000
-#undef CFG_MEMTEST_START
-#define CFG_MEMTEST_START       0x80200000
-#define CFG_MEMTEST_END		0x83800000
+// #define CFG_MEMTEST_START	0x80100000
+// #undef CFG_MEMTEST_START
+// #define CFG_MEMTEST_START       0x80200000
+// #define CFG_MEMTEST_END		0x83800000
 
 /*------------------------------------------------------------------------
  * *  * JFFS2
  */
-#define CFG_JFFS_CUSTOM_PART            /* board defined part   */
-#define CONFIG_JFFS2_CMDLINE
-#define MTDIDS_DEFAULT		"nor0=ath-nor0"
+// #define CFG_JFFS_CUSTOM_PART            /* board defined part   */
+// #define CONFIG_JFFS2_CMDLINE
+// #define MTDIDS_DEFAULT		"nor0=ath-nor0"
 
-#define CONFIG_MEMSIZE_IN_BYTES
+// #define CONFIG_MEMSIZE_IN_BYTES
 
-#define CFG_RX_ETH_BUFFER	16
+// #define CFG_RX_ETH_BUFFER	16
 
 
 /*-----------------------------------------------------------------------
  * Cache Configuration
  */
-#define CFG_DCACHE_SIZE		32768
-#define CFG_ICACHE_SIZE		65536
-#define CFG_CACHELINE_SIZE	32
+// #define CFG_DCACHE_SIZE		32768
+// #define CFG_ICACHE_SIZE		65536
+// #define CFG_CACHELINE_SIZE	32
 
 /*
  * Address map

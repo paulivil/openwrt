@@ -1,66 +1,88 @@
-// SPDX-License-Identifier: GPL-2.0+
-/*
- * Copyright (C) 2015-2016 Wills Wang <wills.wang@live.com>
- */
-
-
-#include <common.h>
-#include <asm/io.h>
 #include <asm/addrspace.h>
 #include <asm/types.h>
-#include <mach/ar71xx_regs.h>
-#include <mach/ddr.h>
-#include <debug_uart.h>
+#include <config.h>
+#include <atheros.h>
 
-DECLARE_GLOBAL_DATA_PTR;
-
-#ifdef CONFIG_DEBUG_UART_BOARD_INIT
-void board_debug_uart_init(void)
+int serial_init(void)
 {
-	void __iomem *regs;
-	u32 val;
+//#if !defined(CONFIG_ATH_EMULATION)
+	uint32_t div, val;
 
-	regs = map_physmem(AR71XX_GPIO_BASE, AR71XX_GPIO_SIZE,
-			   MAP_NOCACHE);
-
-	/*
-	 * GPIO9 as input, GPIO10 as output
-	 */
-	val = readl(regs + AR71XX_GPIO_REG_OE);
-	val |= QCA955X_GPIO(9);
-	val &= ~QCA955X_GPIO(10);
-	writel(val, regs + AR71XX_GPIO_REG_OE);
-
-	/*
-	 * Enable GPIO10 as UART0_SOUT
-	 */
-	val = readl(regs + QCA955X_GPIO_REG_OUT_FUNC2);
-	val &= ~QCA955X_GPIO_MUX_MASK(16);
-	val |= QCA955X_GPIO_OUT_MUX_UART0_SOUT << 16;
-	writel(val, regs + QCA953X_GPIO_REG_OUT_FUNC2);
-
-	/*
-	 * Enable GPIO9 as UART0_SIN
-	 */
-	val = readl(regs + QCA955X_GPIO_REG_IN_ENABLE0);
-	val &= ~QCA955X_GPIO_MUX_MASK(8);
-	val |= QCA955X_GPIO_IN_MUX_UART0_SIN << 8;
-	writel(val, regs + QCA955X_GPIO_REG_IN_ENABLE0);
-
-	/*
-	 * Enable GPIO10 output
-	 */
-	val = readl(regs + AR71XX_GPIO_REG_OUT);
-	val |= QCA955X_GPIO(10);
-	writel(val, regs + AR71XX_GPIO_REG_OUT);
-}
+	div = ath_uart_freq() / (16 * CONFIG_BAUDRATE);
+#ifdef CONFIG_SCO_SLAVE_CONNECTED 
+	val = ath_reg_rd(GPIO_OE_ADDRESS) & (~0xcbf410u);
+#else
+	val = ath_reg_rd(GPIO_OE_ADDRESS) & (~0xcffc10u);
 #endif
+	ath_reg_wr(GPIO_OE_ADDRESS, val);
 
-int board_early_init_f(void)
-{
-#ifdef CONFIG_DEBUG_UART
-	debug_uart_init();
-#endif
-	ddr_init();
+	ath_reg_rmw_set(GPIO_OUT_FUNCTION2_ADDRESS,
+			GPIO_OUT_FUNCTION2_ENABLE_GPIO_10_SET(0x16));
+
+	ath_reg_rmw_clear(GPIO_IN_ENABLE0_ADDRESS,
+			GPIO_IN_ENABLE0_UART_SIN_SET(0xff));
+
+	ath_reg_rmw_set(GPIO_IN_ENABLE0_ADDRESS,
+			GPIO_IN_ENABLE0_UART_SIN_SET(0x9));
+
+	val = ath_reg_rd(GPIO_OUT_ADDRESS) | 0xcffc10u;
+	ath_reg_wr(GPIO_OUT_ADDRESS, val);
+
+	val = ath_reg_rd(GPIO_SPARE_ADDRESS);
+	ath_reg_wr(GPIO_SPARE_ADDRESS, (val | 0x8402));
+
+	ath_reg_wr(GPIO_OUT_ADDRESS, 0x2f);
+
+	/*
+	 * set DIAB bit
+	 */
+	ath_uart_wr(OFS_LINE_CONTROL, 0x80);
+
+	/* set divisor */
+	ath_uart_wr(OFS_DIVISOR_LSB, (div & 0xff));
+	ath_uart_wr(OFS_DIVISOR_MSB, ((div >> 8) & 0xff));
+
+	/* clear DIAB bit*/
+	ath_uart_wr(OFS_LINE_CONTROL, 0x00);
+
+	/* set data format */
+	ath_uart_wr(OFS_DATA_FORMAT, 0x3);
+
+	ath_uart_wr(OFS_INTR_ENABLE, 0);
+//#endif
 	return 0;
+}
+
+int serial_tstc (void)
+{
+	return(ath_uart_rd(OFS_LINE_STATUS) & 0x1);
+}
+
+u8 serial_getc(void)
+{
+	while(!serial_tstc());
+
+	return ath_uart_rd(OFS_RCV_BUFFER);
+}
+
+
+void serial_putc(u8 byte)
+{
+	if (byte == '\n') serial_putc ('\r');
+
+	while (((ath_uart_rd(OFS_LINE_STATUS)) & 0x20) == 0x0);
+
+	ath_uart_wr(OFS_SEND_BUFFER, byte);
+}
+
+void serial_setbrg (void)
+{
+}
+
+void serial_puts (const char *s)
+{
+	while (*s)
+	{
+		serial_putc (*s++);
+	}
 }
