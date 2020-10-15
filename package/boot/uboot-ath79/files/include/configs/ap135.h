@@ -20,11 +20,14 @@
 
 #define CFG_FLASH_SECTOR_SIZE	(64*1024)
 #if (FLASH_SIZE == 16)
-#define CFG_FLASH_SIZE		0x01000000	/* Total flash size */
+#define CFG_FLASH_SIZE		0x01000000
+//* Total flash size */
 #elif (FLASH_SIZE == 8)
-#define CFG_FLASH_SIZE		0x00800000	/* max number of sectors on one chip */
+#define CFG_FLASH_SIZE		0x00800000
+//* max number of sectors on one chip */
 #else
-#define CFG_FLASH_SIZE		0x00400000	/* Total flash size */
+#define CFG_FLASH_SIZE		0x00400000
+//* Total flash size */
 #endif
 
 /*-----------------------------------------------------------------------
@@ -36,9 +39,9 @@
 /* Cache Configuration */
 #define CONFIG_SYS_DCACHE_SIZE          32768
 #define CONFIG_SYS_ICACHE_SIZE          65536
-#define CONFIG_SYS_CACHELINE_SIZE       32
+//#define CONFIG_SYS_CACHELINE_SIZE       32
 
-#define CONFIG_SYS_MONITOR_BASE         CONFIG_SYS_TEXT_BASE
+//#define CONFIG_SYS_MONITOR_BASE         CONFIG_SYS_TEXT_BASE
 
 
 
@@ -49,44 +52,12 @@
 
 #define CONFIG_SYS_INIT_RAM_ADDR        0xbd000000
 #define CONFIG_SYS_INIT_RAM_SIZE        0x2000
-#define CONFIG_SYS_INIT_SP_ADDR \
-	(CONFIG_SYS_INIT_RAM_ADDR + CONFIG_SYS_INIT_RAM_SIZE - 1)
-
-/*-----------------------------------------------------------------------
- * Miscellaneous configurable options
- */
-
-#define TEXT_BASE            0x9f000000
-#define CONFIG_SYS_MALLOC_LEN           256*1024
-#define CONFIG_SYS_BOOTPARAMS_LEN       128*1024
+#define CONFIG_SYS_INIT_SP_ADDR 	(CONFIG_SYS_INIT_RAM_ADDR + CONFIG_SYS_INIT_RAM_SIZE - 1)
 
 
 
-#define CONFIG_DISPLAY_CPUINFO
-#define CONFIG_DISPLAY_BOARDINFO
-#define CONFIG_BOARD_EARLY_INIT_F
-
-#define CONFIG_SYS_PROMPT           CONFIG_BOARD_NAME "# "              /* Monitor Command Prompt    */
-#define CONFIG_SYS_CBSIZE               512  /* Console I/O Buffer Size   */
-#define CONFIG_SYS_MAXARGS              16 /* max number of command args*/
-#define CONFIG_SYS_PBSIZE               (CONFIG_SYS_CBSIZE+sizeof(CONFIG_SYS_PROMPT)+16)  /* Print Buffer Size */
-
-#define CONFIG_SYS_HZ                   CFG_HZ
-#define CONFIG_SYS_MHZ                  700
-#define CONFIG_SYS_MIPS_TIMER_FREQ      (CONFIG_SYS_MHZ * 1000000)
-					
-#define CONFIG_CMDLINE_EDITING
-#define CONFIG_AUTO_COMPLETE
-#define CONFIG_LZMA						1
-#define CONFIG_SYS_MONITOR_BASE		TEXT_BASE
-#define CONFIG_SYS_MONITOR_LEN		CFG_LOADER_PART_SIZE
-/*
- * For booting Linux, the board info and command line data
- * have to be in the first 8 MB of memory, since this is
- * the maximum mapped by the Linux kernel during initialization ??
- */
-
-#define CONFIG_SYS_SDRAM_SIZE   128       /* SDRAM size in MB */
+#define CONFIG_SYS_SDRAM_SIZE   128
+//* SDRAM size in MB */
 #define CONFIG_SYS_BOOTMAPSZ		(CONFIG_SYS_SDRAM_BASE + (CONFIG_SYS_SDRAM_SIZE << 20))
 #define CONFIG_SYS_BOOTM_LEN		(CONFIG_SYS_SDRAM_SIZE << 20)
 /*-----------------------------------------------------------------------
@@ -94,22 +65,25 @@
  */
 
 #define CONFIG_ENV_IS_IN_SPI_FLASH		1
-/* NOR Flash start address */
-#define CONFIG_SYS_FLASH_BASE			0x9f000000
+//* NOR Flash start address */
+#define CONFIG_SYS_FLASH_BASE 0x9f000000
 #define CONFIG_SF_DEFAULT_BUS		0
 #define CONFIG_SF_DEFAULT_CS		0
 #define CONFIG_SF_DEFAULT_SPEED	25000000
 #define CONFIG_SF_DEFAULT_MODE		SPI_MODE_0
 #ifdef COMPRESSED_UBOOT
-#define BOOTSTRAP_TEXT_BASE		CONFIG_SYS_FLASH_BASE
+#define BOOTSTRAP_TEXT_BASE CONFIG_SYS_FLASH_BASE
 #define BOOTSTRAP_CFG_MONITOR_BASE	BOOTSTRAP_TEXT_BASE
 #endif
 #if (FLASH_SIZE == 16)
-#define CONFIG_SYS_MAX_FLASH_SECT	256	/* max number of sectors on one chip */
+#define CONFIG_SYS_MAX_FLASH_SECT	256
+//* max number of sectors on one chip */
 #elif (FLASH_SIZE == 8)
-#define CONFIG_SYS_MAX_FLASH_SECT	128	/* max number of sectors on one chip */
+#define CONFIG_SYS_MAX_FLASH_SECT	128
+//* max number of sectors on one chip */
 #else
-#define CONFIG_SYS_MAX_FLASH_SECT	64	/* max number of sectors on one chip */
+#define CONFIG_SYS_MAX_FLASH_SECT	64
+//* max number of sectors on one chip */
 #endif
 
 #if (CONFIG_SYS_MAX_FLASH_SECT * CFG_FLASH_SECTOR_SIZE) != CFG_FLASH_SIZE
@@ -120,6 +94,7 @@
 #define CONFIG_ENV_SIZE		CFG_ENV_PART_SIZE
 #define CONFIG_ENV_ADDR		(CONFIG_SYS_FLASH_BASE + CONFIG_SYS_MONITOR_LEN)
 #define CONFIG_ENV_OVERWRITE
+#define CONFIG_ENV_OFFSET 0x3000
 
 #define CFG_ENV_PART_ADDR		0x9f030000
 #define CFG_ENV_PART_SIZE		0x10000
@@ -139,7 +114,7 @@
 #define gen_nand_cmd(cmd, offs, file, partSize)			\
 	__gen_nand_cmd(cmd, offs, file, nand erase, nand write, partSize)
 
-#ifndef CONFIG_ZFLASH_CMD
+#ifndef CONFIG_CMD_SF
 #define __gen_cmd(cmd, offs, file, eraseCmd, writeCmd, eraseSize)	\
 	#cmd "=tftp ${loadaddr} ${dir}" #file ";"						\
 	#eraseCmd " " #offs " +" #eraseSize ";"							\
@@ -154,7 +129,7 @@
 	#writeCmd " ${fileaddr} " #offs " ${filesize}\0"
 
 #define gen_cmd(cmd, offs, file, partSize)							\
-	__gen_cmd(cmd, offs, file, zflash erase, zflash write, partSize)
+	__gen_cmd(cmd, offs, file, sf erase, sf write, partSize)
 #endif
 
 #define __gen_img_env_val(name, addr, size)	\
@@ -251,14 +226,51 @@
 /*-----------------------------------------------------------------------
  * PCI Configuration
  */
-#define CONFIG_PCI
+//#define CONFIG_PCI
 /*
  * Command
  */
-#define CONFIG_CMD_MTDPARTS			
-#define CONFIG_ZFLASH_CMD
+#define CONFIG_CMD_MTDPARTS
 #define CONFIG_CMD_ASKENV
 #define CONFIG_CMD_PING
+
+/*-----------------------------------------------------------------------
+ * Miscellaneous configurable options
+ */
+
+#define TEXT_BASE            0x9f000000
+#define CONFIG_SYS_MALLOC_LEN           256*1024
+#define CONFIG_SYS_BOOTPARAMS_LEN       128*1024
+
+
+
+#define CONFIG_DISPLAY_CPUINFO
+#define CONFIG_DISPLAY_BOARDINFO
+#define CONFIG_BOARD_EARLY_INIT_F
+
+#define CONFIG_SYS_PROMPT           CONFIG_BOARD_NAME "# "
+//* Monitor Command Prompt    */
+#define CONFIG_SYS_CBSIZE               512
+//* Console I/O Buffer Size   */
+#define CONFIG_SYS_MAXARGS              16
+//* max number of command args*/
+// #define CONFIG_SYS_PBSIZE               (CONFIG_SYS_CBSIZE+sizeof(CONFIG_SYS_PROMPT)+16)
+//* Print Buffer Size */
+
+//#define CONFIG_SYS_HZ                   CFG_HZ
+#define CONFIG_SYS_MHZ                  700
+#define CONFIG_SYS_MIPS_TIMER_FREQ      (CONFIG_SYS_MHZ * 1000000)
+					
+//#define CONFIG_CMDLINE_EDITING
+//#define CONFIG_AUTO_COMPLETE
+#define CONFIG_LZMA						1
+//#define CONFIG_SYS_MONITOR_BASE		TEXT_BASE
+#define CONFIG_SYS_MONITOR_LEN		CFG_LOADER_PART_SIZE
+/*
+ * For booting Linux, the board info and command line data
+ * have to be in the first 8 MB of memory, since this is
+ * the maximum mapped by the Linux kernel during initialization ??
+ */
 
 #if TEXT_BASE != 0x9F000000
 #define CONFIG_SKIP_LOWLEVEL_INIT
@@ -269,7 +281,7 @@
  */
 #define CONFIG_DEBUG_UART_BASE 			0x18020000
 #define CONFIG_BAUDRATE                 115200
-#define CONFIG_SYS_BAUDRATE_TABLE	{9600, 19200, 38400, 57600, 115200}
+//#define CONFIG_SYS_BAUDRATE_TABLE	{9600, 19200, 38400, 57600, 115200}
 
 
 /*

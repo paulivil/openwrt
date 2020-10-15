@@ -20,7 +20,7 @@ define U-Boot/Default
   BUILD_TARGET:=ath79
   BUILD_SUBTARGET:=generic
   BUILD_DEVICES:=$(1)
-  UBOOT_IMAGE:=u-boot-dtb.bin
+  UBOOT_IMAGE:=u-boot.bin
 endef
 
 define U-Boot/nbg6616
@@ -34,7 +34,7 @@ define Build/Prepare
 	find $(PKG_BUILD_DIR) -name .svn | $(XARGS) rm -rf
 endef
 
-UBOOT_MAKE_FLAGS :=
+UBOOT_MAKE_FLAGS :=-mno-mips16
 UBOOT_TARGETS:=ap135
 
 

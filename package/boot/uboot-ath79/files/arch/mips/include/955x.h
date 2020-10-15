@@ -2573,34 +2573,34 @@
 
 
 
-#define CONFIG_MIPS32		1	/* MIPS32 CPU core	*/
+// #define CONFIG_MIPS32		1	/* MIPS32 CPU core	*/
 
-#define CONFIG_BOOTDELAY	1	/* autoboot after 4 seconds	*/
+// #define CONFIG_BOOTDELAY	1	/* autoboot after 4 seconds	*/
 
-#define CONFIG_AUTOBOOT_KEYED
-#define CONFIG_AUTOBOOT_PROMPT      "Autobooting in %d seconds\n"
-#define CONFIG_AUTOBOOT_STOP_STR    "tpl"
-#undef  CONFIG_AUTOBOOT_DELAY_STR
-#define DEBUG_BOOTKEYS              0
+// #define CONFIG_AUTOBOOT_KEYED
+// #define CONFIG_AUTOBOOT_PROMPT      "Autobooting in %d seconds\n"
+// #define CONFIG_AUTOBOOT_STOP_STR    "tpl"
+// #undef  CONFIG_AUTOBOOT_DELAY_STR
+// #define DEBUG_BOOTKEYS              0
 
 
-#define CONFIG_BAUDRATE		115200
-#define CFG_BAUDRATE_TABLE	{115200}
+// #define CONFIG_BAUDRATE		115200
+// #define CFG_BAUDRATE_TABLE	{115200}
 
-#define	CONFIG_TIMESTAMP		/* Print image info with timestamp */
+// #define	CONFIG_TIMESTAMP		/* Print image info with timestamp */
 
-#define CONFIG_ROOTFS_RD
+// #define CONFIG_ROOTFS_RD
 
-#define	CONFIG_BOOTARGS_RD     "console=ttyS0,115200 root=01:00 rd_start=0x802d0000 rd_size=5242880 init=/sbin/init mtdparts=ath-nor0:256k(u-boot),64k(u-boot-env),4096k(rootfs),2048k(uImage)"
+// #define	CONFIG_BOOTARGS_RD     "console=ttyS0,115200 root=01:00 rd_start=0x802d0000 rd_size=5242880 init=/sbin/init mtdparts=ath-nor0:256k(u-boot),64k(u-boot-env),4096k(rootfs),2048k(uImage)"
 
-/* XXX - putting rootfs in last partition results in jffs errors */
-#define	CONFIG_BOOTARGS_FL     "console=ttyS0,115200 root=31:02 rootfstype=jffs2 init=/sbin/init mtdparts=ath-nor0:256k(u-boot),64k(u-boot-env),5120k(rootfs),2048k(uImage)"
+// /* XXX - putting rootfs in last partition results in jffs errors */
+// #define	CONFIG_BOOTARGS_FL     "console=ttyS0,115200 root=31:02 rootfstype=jffs2 init=/sbin/init mtdparts=ath-nor0:256k(u-boot),64k(u-boot-env),5120k(rootfs),2048k(uImage)"
 
-#ifdef CONFIG_ROOTFS_FLASH
-#define CONFIG_BOOTARGS CONFIG_BOOTARGS_FL
-#else
-#define CONFIG_BOOTARGS ""
-#endif
+// #ifdef CONFIG_ROOTFS_FLASH
+// #define CONFIG_BOOTARGS CONFIG_BOOTARGS_FL
+// #else
+// #define CONFIG_BOOTARGS ""
+// #endif
 
 /*
  * Miscellaneous configurable options
