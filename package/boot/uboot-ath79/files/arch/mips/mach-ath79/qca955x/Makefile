@@ -5,4 +5,5 @@ obj-y += 955x.o
 obj-y += init-955x.o
 obj-y += board955x.o
 obj-y += qca-eth-955x.o
-obj-y += athrs17_phy.o
+obj­$(CONFIG_PCI) += ath-pci.o
+

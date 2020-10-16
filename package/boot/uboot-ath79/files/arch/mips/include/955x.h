@@ -2642,9 +2642,9 @@
 // #define CONFIG_JFFS2_CMDLINE
 // #define MTDIDS_DEFAULT		"nor0=ath-nor0"
 
-// #define CONFIG_MEMSIZE_IN_BYTES
+#define CONFIG_MEMSIZE_IN_BYTES
 
-// #define CFG_RX_ETH_BUFFER	16
+#define CFG_RX_ETH_BUFFER	16
 
 
 /*-----------------------------------------------------------------------

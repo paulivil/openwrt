@@ -12,23 +12,23 @@
  * Atheros Source Code Configuration
  */
 /* see see lsdk-10.0.91/boot/u-boot/include/configs/board955x.h */
+#define CONFIG_ATHEROS           1
+#define CONFIG_MACH_QCA955x      1
+#define CFG_INIT_STACK_IN_SRAM   1
 #define CFG_PLL_FREQ             CFG_PLL_720_600_200
+#define CONFIG_ATHRS17_PHY       1
+#define CFG_ATH_GMAC_NMACS       2
+#define CFG_ATH_GE1_IS_CONNECTED 1
+#define CONFIG_ATHRS_GMAC_SGMII  1
+#define ATH_S17_MAC0_SGMII       1
+#define CONFIG_ATH_S17_WAN       1
+#define FLASH_SIZE               16
 #undef MTDPARTS_DEFAULT
 #undef CFG_HZ
-#define FLASH_SIZE               16
+
 #include <atheros.h>
 
-#define CFG_FLASH_SECTOR_SIZE	(64*1024)
-#if (FLASH_SIZE == 16)
-#define CFG_FLASH_SIZE		0x01000000
-//* Total flash size */
-#elif (FLASH_SIZE == 8)
-#define CFG_FLASH_SIZE		0x00800000
-//* max number of sectors on one chip */
-#else
-#define CFG_FLASH_SIZE		0x00400000
-//* Total flash size */
-#endif
+
 
 /*-----------------------------------------------------------------------
  * Board Configuration
@@ -100,6 +100,47 @@
 
 #define CFG_ENV_PART_ADDR		0x9f030000
 #define CFG_ENV_PART_SIZE		0x10000
+
+#define CFG_FLASH_SECTOR_SIZE	(64*1024)
+#if (FLASH_SIZE == 16)
+#define CFG_FLASH_SIZE		0x01000000
+//* Total flash size */
+#elif (FLASH_SIZE == 8)
+#define CFG_FLASH_SIZE		0x00800000
+//* max number of sectors on one chip */
+#else
+#define CFG_FLASH_SIZE		0x00400000
+//* Total flash size */
+#endif
+
+/* Don't register PCI functions for u-boot, only init PCI interface.
+ * it means that we no need the 'drivers/pci/libpci.a'. */
+#define CONFIG_ATH_SKIP_REGISTER_PCI_API
+
+#define CONFIG_PCI_CONFIG_DATA_IN_OTP
+#define CFG_DDR_REFRESH_VAL		0x4138
+
+/*
+** Parameters defining the location of the calibration/initialization
+** information for the two Merlin devices.
+** NOTE: **This will change with different flash configurations**
+*/
+
+#define WLANCAL				0x9fff1000
+#define BOARDCAL			0x9fff0000
+#define ATHEROS_PRODUCT_ID		137
+#define CAL_SECTOR			(CONFIG_SYS_MAX_FLASH_SECT - 1)
+
+/* For Merlin, both PCI, PCI-E interfaces are valid */
+#define ATH_ART_PCICFG_OFFSET		12
+
+#undef CFG_ATHRS26_PHY
+#define CFG_MII0_RMII			1
+/* Compilation flag: CFG_ATH_SWAP_ETHACT
+   Due do Atheros ethernet driver will setup WAN port as 'eth0', 
+   LAN port as 'eth1', so using this compilation flag to swap it.
+ */
+#define CFG_ATH_SWAP_ETHACT		1
 
 /*-----------------------------------------------------------------------
  * Partition Configuration
@@ -228,7 +269,7 @@
 /*-----------------------------------------------------------------------
  * PCI Configuration
  */
-//#define CONFIG_PCI
+#define CONFIG_PCI
 /*
  * Command
  */
