@@ -39,11 +39,13 @@
 #define CONFIG_ATHEROS_SOC  1
 
 /* Cache Configuration */
+#define ARCH_DMA_MINALIGN               32
 #define CONFIG_SYS_DCACHE_SIZE          32768
 #define CONFIG_SYS_ICACHE_SIZE          65536
-#define CONFIG_SYS_CACHELINE_SIZE       32
+#define CONFIG_SYS_CACHELINE_SIZE       ARCH_DMA_MINALIGN
 
 #define CONFIG_SYS_MONITOR_BASE         CONFIG_SYS_TEXT_BASE
+
 
 
 
