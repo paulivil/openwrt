@@ -22,7 +22,8 @@ PKG_HASH:=066615314fc90a314823ac975ca2a525a51fdad41802f4088a3a21ce073e8de6
 
 
 PKG_TARGETS:=bin
-#PKG_BUILD_PARALLEL:=1
+PKG_FLAGS:=nonshared
+PKG_BUILD_PARALLEL:=1
 
 
 export GCC_HONOUR_COPTS=s
@@ -60,18 +61,26 @@ ifneq ($(CONFIG_UBOOT_ZYXEL_SUPPORT_ROMD),)
 endif
 
 
-UBOOT_MAKE_OPTS:= \
+ UBOOT_MAKE_OPTS:= \
 	CROSS_COMPILE=$(TARGET_CROSS) \
-	$(EMBEDDED_KERNEL_IN_ROOTFS) \
+ 	$(EMBEDDED_KERNEL_IN_ROOTFS) \
 	$(SUPPORT_ZLOADER) \
 	$(SUPPORT_ROM_D)
+
+#  UBOOT_MAKE_OPTS: = \
+# 	CROSS_COMPILE=$(TARGET_CROSS) \
+#  	HOSTCC="$(HOSTCC)" \
+# 	HOSTCFLAGS="$(HOST_CFLAGS) $(HOST_CPPFLAGS) -std=gnu11" \
+#  	HOSTLDFLAGS="$(HOST_LDFLAGS)" \
+# 	$(EMBEDDED_KERNEL_IN_ROOTFS) \
+#  	$(SUPPORT_ROM_D)	
 
 define Package/uboot-zyxel/config
 	source "$(SOURCE)/Config.in"
 endef
 
 define Build/Configure/Target
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		$(UBOOT_MAKE_OPTS) \
 		O=$(PKG_BUILD_DIR)/$(1) \
 		$(1)_config
@@ -106,12 +115,19 @@ endef
 DTC=$(wildcard $(LINUX_DIR)/scripts/dtc/dtc)
 
 define Build/Compile/Target
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 	$(if $(DTC),DTC="$(DTC)") \
 		$(UBOOT_MAKE_OPTS) \
 		O=$(PKG_BUILD_DIR)/$(1) \
 		all
 endef
+
+# define Build/Compile/U-Boot
+# 	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
+# 		CROSS_COMPILE=$(TARGET_CROSS) \
+# 		$(if $(DTC),DTC="$(DTC)") \
+# 		$(UBOOT_MAKE_FLAGS)
+# endef
 
 define Build/Compile
 	$(call Build/Compile/Target,$(UBOOT_ZYXEL_TARGET))

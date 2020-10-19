@@ -11,8 +11,8 @@ PKG_RELEASE:=1
 
 
 
-PKG_HASH:=bff4fa77e8da17521c030ca4c5b947a056c1b1be4d3e6ee8637020b8d50251d0
 
+PKG_HASH:=bff4fa77e8da17521c030ca4c5b947a056c1b1be4d3e6ee8637020b8d50251d0
 include $(INCLUDE_DIR)/u-boot.mk
 include $(INCLUDE_DIR)/package.mk
 
@@ -25,7 +25,7 @@ endef
 
 define U-Boot/nbg6616
   NAME:=ZyXEL NBG6616
-  UBOOT_CONFIG:=ap135
+  UBOOT_CONFIG:=qca955x
 endef
 
 define Build/Prepare
@@ -34,8 +34,8 @@ define Build/Prepare
 	find $(PKG_BUILD_DIR) -name .svn | $(XARGS) rm -rf
 endef
 
-UBOOT_MAKE_FLAGS :=-mno-mips16
-UBOOT_TARGETS:=ap135
+UBOOT_MAKE_FLAGS:=-mno-mips16
+UBOOT_TARGETS:=qca955x
 
 
 

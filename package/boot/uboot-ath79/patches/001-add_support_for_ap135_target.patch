@@ -3625,7 +3625,7 @@
 +CONFIG_FIT=y
 +CONFIG_FIT_SIGNATURE=y
 +CONFIG_SYS_TEXT_BASE=0x9f000000
-+# CONFIG_SYS_LDSCRIPT="board/qca/mips32/qca955x/u-boot.lds"
++CONFIG_NR_DRAM_BANKS=1
 --- /dev/null
 +++ b/include/955x.h
 @@ -0,0 +1,3477 @@
