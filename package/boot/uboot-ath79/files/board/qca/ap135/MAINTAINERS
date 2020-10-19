@@ -1,6 +1,0 @@
-AP135 BOARD
-M:	Pauli Hartala <paulivil@msn.com>
-S:	Maintained
-F:	board/qca/ap135/
-F:	include/configs/ap135.h
-F:	configs/ap135_defconfig

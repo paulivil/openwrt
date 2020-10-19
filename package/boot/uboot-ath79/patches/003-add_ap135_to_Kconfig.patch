@@ -1,8 +1,8 @@
 --- a/arch/mips/mach-ath79/Kconfig
 +++ b/arch/mips/mach-ath79/Kconfig
-@@ -33,6 +33,15 @@ config SOC_QCA953X
+@@ -42,6 +42,16 @@ config SOC_QCA956X
  	help
- 	  This supports QCA/Atheros qca953x family SOCs.
+ 	  This supports QCA/Atheros qca956x family SOCs.
  
 +config SOC_QCA955X
 +        bool
@@ -13,25 +13,37 @@
 +        help
 +          This supports QCA/Atheros qca955x family SOCs.
 +
- config SOC_QCA956X
- 	bool
- 	select MIPS_TUNE_74KC
-@@ -53,6 +62,10 @@ config TARGET_AP143
- 	bool "AP143 Reference Board"
- 	select SOC_QCA953X
++
+ choice
+ 	prompt "Board select"
  
-+config TARGET_AP135
+@@ -57,6 +67,11 @@ config TARGET_AP152
+ 	bool "AP152 Reference Board"
+ 	select SOC_QCA956X
+ 
++config TARGET_QCA955X
 +        bool "AP135 Reference Board"
 +        select SOC_QCA955X
 +
- config TARGET_AP152
- 	bool "AP152 Reference Board"
- 	select SOC_QCA956X
-@@ -65,6 +78,7 @@ endchoice
- 
++
+ config BOARD_TPLINK_WDR4300
+ 	bool "TP-Link WDR4300 Board"
+ 	select SOC_AR934X
+@@ -66,6 +81,7 @@ endchoice
  source "board/qca/ap121/Kconfig"
  source "board/qca/ap143/Kconfig"
-+source "board/qca/ap135/Kconfig"
  source "board/qca/ap152/Kconfig"
++source "board/qca/mips32/qca955x/Kconfig"
  source "board/tplink/wdr4300/Kconfig"
  
+ endmenu
+--- a/arch/mips/dts/Makefile
++++ b/arch/mips/dts/Makefile
+@@ -4,6 +4,7 @@ dtb-$(CONFIG_ARCH_MTMIPS) += \
+ 	gardena-smart-gateway-mt7688.dtb \
+ 	linkit-smart-7688.dtb
+ dtb-$(CONFIG_TARGET_AP121) += ap121.dtb
++dtb-$(CONFIG_TARGET_QCA955X) += ap135.dtb
+ dtb-$(CONFIG_TARGET_AP143) += ap143.dtb
+ dtb-$(CONFIG_TARGET_AP152) += ap152.dtb
+ dtb-$(CONFIG_TARGET_BOSTON) += img,boston.dtb
