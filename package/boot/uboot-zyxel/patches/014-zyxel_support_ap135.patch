@@ -23,7 +23,7 @@
 +
 +#ifdef CONFIG_MACH_QCA955x
 +/*
-+ * Workaround recommnded by MIPS for the Scorpion Freeze issue
++ * Workaround recommended by MIPS for the Scorpion Freeze issue
 + */
 +#define CONFIG_SCO_JRCD		1
 +#define CONFIG_SCO_IAGN		!CONFIG_SCO_JRCD
@@ -104,6 +104,17 @@
  	li	t0, 0x243
  #else
  	li	t0, 0x43
+@@ -416,8 +471,8 @@ rel_start:
+ 	nop
+ #endif
+ 
+-1:	li	t0, CONF_CM_CACHABLE_NONCOHERENT
+-2:	mtc0	t0, CP0_CONFIG
++	li	t0, CONF_CM_CACHABLE_NONCOHERENT
++	mtc0	t0, CP0_CONFIG
+ #endif /* !CONFIG_SKIP_LOWLEVEL_INIT */
+ 
+ 	/* Set up temporary stack.
 @@ -429,7 +484,7 @@ rel_start:
  	nop
  #endif
@@ -113,6 +124,45 @@
  	li	t0, 0xbd007000	/* Setup stack in SRAM */
  #else
  	li	t0, CONFIG_SYS_SDRAM_BASE + CONFIG_SYS_INIT_SP_OFFSET
+@@ -496,16 +551,14 @@ relocate_code:
+ 	addu	t1, 4		/* delay slot			*/
+ #endif
+ 
+-	/* If caches were enabled, we would have to flush them here.
+-	 */
++	/* If caches were enabled, we would have to flush them here.	 */
+ 
+ 	/* a0 & a1 are already set up for flush_cache(start, size) */
+ 	la	t9, flush_cache
+ 	jalr	t9
+ 	nop
+ 
+-	/* Jump to where we've relocated ourselves.
+-	 */
++	/* Jump to where we've relocated ourselves.	 */
+ 	addi	t0, s2, in_ram - _start
+ 	jr	t0
+ 	nop
+@@ -540,8 +593,7 @@ in_ram:
+ 	blt	t2, t3, 1b
+ 	addi	t4, 4		/* delay slot			*/
+ 
+-	/* Clear BSS.
+-	 */
++	/* Clear BSS.	 */
+ 	lw	t1, -12(t0)	/* t1 <-- uboot_end_data	*/
+ 	lw	t2, -8(t0)	/* t2 <-- uboot_end		*/
+ 	add	t1, s1		/* adjust pointers		*/
+@@ -560,8 +612,7 @@ in_ram:
+ 
+ 	.end	relocate_code
+ 
+-	/* Exception handlers.
+-	 */
++	/* Exception handlers.	 */
+ romReserved:
+ 	b	romReserved
+ 
 --- a/lib_mips/board.c
 +++ b/lib_mips/board.c
 @@ -53,7 +53,7 @@ extern int timer_init(void);
@@ -205,3 +255,14 @@
  
  	if (!eth_devices) {
  		puts ("No ethernet found.\n");
+--- a/cpu/mips/config.mk
++++ b/cpu/mips/config.mk
+@@ -25,7 +25,7 @@ MIPSFLAGS:=$(shell \
+ if [ "$v" -lt "14" ]; then \
+ 	echo "-mcpu=4kc"; \
+ else \
+-	echo "-march=4kc -mtune=4kc"; \
++	echo "-march=74kc -mtune=74kc"; \
+ fi)
+ 
+ ifneq (,$(findstring 4KCle,$(CROSS_COMPILE)))

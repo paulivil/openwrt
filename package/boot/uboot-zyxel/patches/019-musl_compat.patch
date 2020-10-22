@@ -11,3 +11,101 @@
  #elif defined(__MACH__)
  # include <machine/endian.h>
  typedef unsigned long ulong;
+--- a/post/Makefile
++++ b/post/Makefile
+@@ -54,7 +54,7 @@ postdeps:
+ 
+ # generic POST library
+ $(GPLIB): $(obj).depend $(OBJS)
+-	$(AR) $(ARFLAGS) $@ $(OBJS)
++	$(call cmd_link_o_target, $(OBJS))
+ 
+ # specific POST libraries
+ $(SPLIB): $(obj).depend postdeps
+@@ -62,9 +62,7 @@ $(SPLIB): $(obj).depend postdeps
+ 
+ # the POST lib archive
+ $(LIB): $(GPLIB) $(SPLIB)
+-	(echo create $(LIB); for lib in $(GPLIB) $(SPLIB) ; \
+-	 do echo addlib $$lib; done; echo save) \
+-	| $(AR) -M
++	$(call cmd_link_o_target, $^)
+ 
+ #########################################################################
+ 
+--- a/config.mk
++++ b/config.mk
+@@ -170,9 +170,11 @@ endif
+ 
+ AFLAGS := $(AFLAGS_DEBUG) -D__ASSEMBLY__ $(CPPFLAGS)
+ 
+-LDFLAGS += -Bstatic -T $(obj)u-boot.lds $(PLATFORM_LDFLAGS)
++LDFLAGS += $(PLATFORM_LDFLAGS)
++
++LDFLAGS_u-boot += -Bstatic -T $(obj)u-boot.lds $(PLATFORM_LDFLAGS)
+ ifneq ($(TEXT_BASE),)
+-LDFLAGS += -Ttext $(TEXT_BASE)
++LDFLAGS_u-boot += -Ttext $(CONFIG_SYS_TEXT_BASE)
+ endif
+ 
+ # Location of a usable BFD library, where we define "usable" as
+@@ -198,6 +200,11 @@ BFD_ROOT_DIR =		/opt/powerpc
+ endif
+ endif
+ 
++# If the list of objects to link is empty, just create an empty built-in.o
++cmd_link_o_target = $(if $(strip $1),\
++		      $(LD) $(LDFLAGS) -r -o $@ $1,\
++		      rm -f $@; $(AR) rcs $@ )
++
+ #########################################################################
+ 
+ export	HOSTCC HOSTCFLAGS CROSS_COMPILE \
+--- a/cpu/sh2/config.mk
++++ b/cpu/sh2/config.mk
+@@ -21,6 +21,8 @@
+ # MA 02111-1307 USA
+ #
+ #
++ENDIANNESS += -EB
++
+ PLATFORM_CPPFLAGS += -m3e -mb
+ PLATFORM_RELFLAGS += -ffixed-r13
+-PLATFORM_LDFLAGS += -EB
++PLATFORM_LDFLAGS += $(ENDIANNESS)
+--- a/lib_sh/config.mk
++++ b/lib_sh/config.mk
+@@ -31,4 +31,5 @@ endif
+ PLATFORM_CPPFLAGS += -DCONFIG_SH -D__SH__
+ PLATFORM_LDFLAGS += -e $(TEXT_BASE) --defsym reloc_dst=$(TEXT_BASE)
+ 
++LDFLAGS_u-boot = --gc-sections
+ LDSCRIPT := $(SRCTREE)/cpu/$(CPU)/u-boot.lds
+--- a/lib_mips/config.mk
++++ b/lib_mips/config.mk
+@@ -27,6 +27,7 @@ STANDALONE_LOAD_ADDR ?= 0x80200000 -T mi
+ 
+ PLATFORM_CPPFLAGS += -DCONFIG_MIPS -D__MIPS__
+ 
++LDFLAGS_u-boot = --gc-sections
+ #
+ # From Linux arch/mips/Makefile
+ #
+--- a/include/u-boot/u-boot.lds.h
++++ b/include/u-boot/u-boot.lds.h
+@@ -16,10 +16,10 @@
+ /*
+  * Linker versions prior to 2.16 don't understand the builtin
+  * functions SORT_BY_ALIGNMENT() and SORT_BY_NAME(), so disable these
++ *
++ *#if !LD_AT_LEAST(2, 16)
++ *# define SORT_BY_ALIGNMENT(x) x
++ *# define SORT_BY_NAME(x) x
++ *#endif
+  */
+-#if !LD_AT_LEAST(2, 16)
+-# define SORT_BY_ALIGNMENT(x) x
+-# define SORT_BY_NAME(x) x
+-#endif
+-
+ #endif

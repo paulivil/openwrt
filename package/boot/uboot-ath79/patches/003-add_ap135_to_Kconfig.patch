@@ -37,13 +37,3 @@
  source "board/tplink/wdr4300/Kconfig"
  
  endmenu
---- a/arch/mips/dts/Makefile
-+++ b/arch/mips/dts/Makefile
-@@ -4,6 +4,7 @@ dtb-$(CONFIG_ARCH_MTMIPS) += \
- 	gardena-smart-gateway-mt7688.dtb \
- 	linkit-smart-7688.dtb
- dtb-$(CONFIG_TARGET_AP121) += ap121.dtb
-+dtb-$(CONFIG_TARGET_QCA955X) += ap135.dtb
- dtb-$(CONFIG_TARGET_AP143) += ap143.dtb
- dtb-$(CONFIG_TARGET_AP152) += ap152.dtb
- dtb-$(CONFIG_TARGET_BOSTON) += img,boston.dtb
