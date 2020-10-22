@@ -165,8 +165,10 @@ ath_ddr_initial_config(uint32_t refresh)
 	uint32_t	*pll = (unsigned *)PLL_CONFIG_VAL_F;
 	uint32_t	bootstrap;
 
-//	prmsg("\nsri\n");
-//	prmsg("Scorpion 1.%d\n", ath_reg_rd(RST_REVISION_ID_ADDRESS) & 0xf);
+#if !defined(CONFIG_DISPLAY_BOARDINFO)
+	prmsg("\nsri\n");
+	prmsg("Scorpion 1.%d\n", ath_reg_rd(RST_REVISION_ID_ADDRESS) & 0xf);
+#endif
 
 	bootstrap = ath_reg_rd(RST_BOOTSTRAP_ADDRESS);
 

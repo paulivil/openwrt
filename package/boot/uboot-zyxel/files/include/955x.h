@@ -2616,6 +2616,8 @@
 #define CFG_BOOTPARAMS_LEN	(128*1024)
 #endif
 
+#define CONFIG_DISPLAY_BOARDINFO 1
+#define CONFIG_CUSTOM_BOARDINFO 1
 #define CONFIG_SYS_SDRAM_BASE	0x80000000     /* Cached addr */
 //#define CONFIG_SYS_SDRAM_BASE	0xa0000000     /* Cached addr */
 
