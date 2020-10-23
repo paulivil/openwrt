@@ -29,6 +29,7 @@ do { \
 #define SENAO_FACTORY_BTN_GPIO_NO           0 /* USB1_BTN (GPIO 0) */
 #define SENAO_FACTORY_BTN_TRIGGER_LEVEL     ZGPIO_LEVEL_LOW
 #else
+#define CONFIG_ZFLASH_CMD
 #define CONFIG_BOOTDELAY	3	/* autoboot after 3 seconds	*/
 #endif
 
@@ -89,6 +90,12 @@ do { \
  */
 #define CONFIG_BOARD_NBG6716		1
 #define CONFIG_BOARD_NAME		"NBG6716"
+/* Enable devicetree support */
+#define CONFIG_OF_LIBFDT
+
+/* new uImage format support */
+#define CONFIG_FIT
+#define CONFIG_FIT_VERBOSE	/* enable fit_format_{error,warning}() */
 
 
 /*-----------------------------------------------------------------------
@@ -112,7 +119,7 @@ do { \
 #define CONFIG_SYS_CBSIZE           512         /* Console I/O Buffer Size   */
 #define CONFIG_SYS_PBSIZE           (CONFIG_SYS_CBSIZE+sizeof(CONFIG_SYS_PROMPT)+16)  /* Print Buffer Size */
 #define CONFIG_SYS_MAXARGS          16          /* max number of command args*/
-#define CONFIG_SYS_MALLOC_LEN           256*1024
+#define CONFIG_SYS_MALLOC_LEN           512*1024
 #define CONFIG_SYS_BOOTPARAMS_LEN       128*1024
 #define CONFIG_NR_DRAM_BANKS		1
 #define CONFIG_SYS_MEMTEST_START	0x80200000
@@ -122,6 +129,14 @@ do { \
 #define CONFIG_SYS_MONITOR_LEN		CFG_LOADER_PART_SIZE
 
 #define CONFIG_SYS_64BIT_VSPRINTF
+/*
+ * For booting Linux, the board info and command line data
+ * have to be in the first 8 MB of memory, since this is
+ * the maximum mapped by the Linux kernel during initialization ??
+ */
+#define CONFIG_SYS_SDRAM_SIZE   256       /* SDRAM size in MB */
+#define CONFIG_SYS_BOOTMAPSZ		(CONFIG_SYS_SDRAM_BASE + (CONFIG_SYS_SDRAM_SIZE << 20))
+#define CONFIG_SYS_BOOTM_LEN		(CONFIG_SYS_SDRAM_SIZE << 20)
 
 /*-----------------------------------------------------------------------
  * FLASH and environment organization
@@ -190,7 +205,7 @@ do { \
 #define gen_nand_cmd(cmd, offs, file, partSize)			\
 	__gen_nand_cmd(cmd, offs, file, nand erase, nand write, partSize)
 
-#ifndef CONFIG_ZYXEL_ZLOADER
+#ifndef CONFIG_ZFLASH_CMD
 #define __gen_cmd(cmd, offs, file, eraseCmd, writeCmd, eraseSize)	\
 	#cmd "=tftp ${loadaddr} ${dir}" #file ";"						\
 	#eraseCmd " " #offs " +" #eraseSize ";"							\
@@ -217,7 +232,7 @@ do { \
 
 
 #define CFG_LOADER_PART_ADDR		CONFIG_SYS_FLASH_BASE
-#ifdef CONFIG_EMBEDDED
+#ifdef CONFIG_EMBEDDED_KERNEL_IN_ROOTFS
   #define CFG_LOADER_PART_SIZE		0x40000
   #define CFG_ENV_PART_ADDR		0x9f040000
   #define CFG_ENV_PART_SIZE		0x10000
@@ -270,7 +285,7 @@ do { \
   #define BOOT_FLASH_CMD        "boot_flash=run setmtdparts flashargs addtty addmtd;fsload ${loadaddr} /boot/vmlinux.lzma.uImage;bootm ${loadaddr}\0"
   #define BOOTARG_DEFAULT	"board=" CONFIG_BOARD_NAME " root=/dev/" ROOTFS_MTD_NO " rootfstype=jffs2 noinitrd ${bootmode} ${zld_ver}"
 #else
-  #error "This configuration must be enable option 'CONFIG_EMBEDDED'"
+  #error "This configuration must be enable option 'CONFIG_EMBEDDED_KERNEL_IN_ROOTFS'"
 #endif
 
 /* ROOTFS_MTD_NO, MTDPARTS_DEFAULT, BOOT_FLASH_CMD, IMG_ENV_VAL, UPGRADE_IMG_CMD */
@@ -293,7 +308,7 @@ do { \
 
 
 /*-----------------------------------------------------------------------
- * JFFS2 Filesystem Configuration
+ * Filesystem Configuration
  */
 #define CONFIG_CMD_JFFS2
 #define CONFIG_CMD_JFFS2_ULOAD
@@ -301,11 +316,17 @@ do { \
 //#define CONFIG_CMD_JFFS2_LS
 //#define CONFIG_CMD_JFFS2_FSINFO
 #if defined(CFG_RAS_IN_NAND)
-#define CONFIG_JFFS2_NAND
-#define CONFIG_JFFS2_PART_OFFSET	CFG_ROOTFS_PART_ADDR
+#define CONFIG_CMD_UBI
+#define CONFIG_CMD_UBIFS
+#define CONFIG_RBTREE
+#define CONFIG_MTD_DEVICE
+#define CONFIG_MTD_PARTITIONS
+#define CONFIG_CMD_MTDPARTS
+//#define CONFIG_JFFS2_NAND
+//#define CONFIG_JFFS2_PART_OFFSET	CFG_ROOTFS_PART_ADDR
 // Default using remaining flash space if you ignore 'CONFIG_JFFS_PART_SIZE'
-#define CONFIG_JFFS2_PART_SIZE		CFG_ROOTFS_PART_SIZE
-#define CONFIG_JFFS2_DEV		"nand0"
+//#define CONFIG_JFFS2_PART_SIZE		CFG_ROOTFS_PART_SIZE
+//#define CONFIG_JFFS2_DEV		"nand0"
 #else
 #define CONFIG_JFFS2_PART_OFFSET	(CFG_ROOTFS_PART_ADDR-CONFIG_SYS_FLASH_BASE)
 // Default using remaining flash space if you ignore 'CONFIG_JFFS_PART_SIZE'
