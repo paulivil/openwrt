@@ -151,8 +151,8 @@
      lw t8, 0(t7)
 -    li t9, 0x1000000        // bit24, fullchip reset
 -    or t8, t8, t9         // t8:  set bit 18
-+    li t9, 0x1000000	    // bit24, fullchip reset
-+    or t8, t8, t9	  // t8:  set bit 18
++    li t9, 0x1000000	 // bit24, fullchip reset
++    or t8, t8, t9	 // t8:  set bit 18
      sw t8, 0(t7)
  
  normal_path:
