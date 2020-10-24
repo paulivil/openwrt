@@ -25,7 +25,13 @@ endef
 
 define U-Boot/nbg6616
   NAME:=ZyXEL NBG6616
-  UBOOT_CONFIG:=qca955x
+  UBOOT_CONFIG:=nbg6616
+endef
+
+define U-Boot/nbg6716
+  NAME:=ZyXEL NBG6716
+  BUILD_SUBTARGET:=nand
+  UBOOT_CONFIG:=nbg6716
 endef
 
 define Build/Prepare
@@ -34,8 +40,10 @@ define Build/Prepare
 	find $(PKG_BUILD_DIR) -name .svn | $(XARGS) rm -rf
 endef
 
-UBOOT_MAKE_FLAGS:=-mno-mips16
-UBOOT_TARGETS:=qca955x
+UBOOT_MAKE_FLAGS:=UBOOT_MAKE_FLAGS:=-mno-mips16
+UBOOT_TARGETS:=\
+nbg6616 \
+nbg6716
 
 
 

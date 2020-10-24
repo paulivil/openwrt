@@ -346,7 +346,7 @@
 +	nop
 --- /dev/null
 +++ b/board/qca/mips32/qca955x/Kconfig
-@@ -0,0 +1,15 @@
+@@ -0,0 +1,20 @@
 +if TARGET_QCA955X
 +
 +config SYS_CPU
@@ -359,7 +359,12 @@
 +	default "qca"
 +
 +config SYS_CONFIG_NAME
-+	default "qca955x"
++	string "Board configuration name"
++	default "nbg6616"
++	help
++	  This option contains information about board configuration name.
++	  Based on this option include/configs/<CONFIG_SYS_CONFIG_NAME>.h header
++	  will be used for board configuration.
 +
 +endif
 --- /dev/null
@@ -3597,13 +3602,13 @@
 +	nop
 +
 --- /dev/null
-+++ b/configs/qca955x_defconfig
++++ b/configs/nbg6616_defconfig
 @@ -0,0 +1,27 @@
 +CONFIG_MIPS=y
 +CONFIG_ARCH_ATH79=y
 +CONFIG_TARGET_QCA955X=y
-+# CONFIG_SYS_EXTRA_OPTIONS is not set
-+CONFIG_SYS_PROMPT="QCA955X# "
++CONFIG_SYS_CONFIG_NAME="nbg6616"
++CONFIG_SYS_PROMPT="NBG6616# "
 +# CONFIG_CMD_BDI is not set
 +# CONFIG_CMD_ELF is not set
 +CONFIG_CMD_RUN=y
@@ -7107,7 +7112,7 @@
 +
 +#endif /* _QCA955X_H */
 --- /dev/null
-+++ b/include/configs/qca955x.h
++++ b/include/configs/nbg6616.h
 @@ -0,0 +1,184 @@
 +#define CONFIG_MIPS32 1   /* MIPS32 CPU core  */
 +#define CONFIG_BOOTDELAY 2   /* autoboot after 4 seconds */
