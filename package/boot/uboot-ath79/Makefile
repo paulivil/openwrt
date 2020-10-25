@@ -40,7 +40,7 @@ define Build/Prepare
 	find $(PKG_BUILD_DIR) -name .svn | $(XARGS) rm -rf
 endef
 
-UBOOT_MAKE_FLAGS:=UBOOT_MAKE_FLAGS:=-mno-mips16
+UBOOT_MAKE_FLAGS:=-mno-mips16
 UBOOT_TARGETS:=\
 nbg6616 \
 nbg6716
