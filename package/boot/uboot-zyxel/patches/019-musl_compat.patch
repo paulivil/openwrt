@@ -127,6 +127,15 @@
  #elif defined(CONFIG_PURPLE)
  	.word INFINEON_EBU_BOOTCFG /* EBU init code, fetched during booting */
  	.word INFINEON_EBU_BOOTCFG /* EBU init code, fetched during booting */
+@@ -297,7 +297,7 @@ reset:
+ #endif
+ #endif /* CONFIG_MACH_QCA955x */
+ 
+-#define pref_on		0
++#define pref_on	0
+ 
+ #if pref_on
+ #define prefetch_val	3
 @@ -344,7 +344,7 @@ reset:
  	mfc0	k0, CP0_STATUS
  	li	k1, ~ST0_IE
@@ -136,7 +145,7 @@
  	mtc0	k0, CP0_STATUS
  
  	/* CAUSE register */
-@@ -388,15 +388,15 @@ do_reset_normal:
+@@ -388,23 +388,22 @@ do_reset_normal:
      lw  t8, 0(t7)            // t8 : value of 0xb8050024
      li  t9, 0x12345678
      sw  t9, 0(t7)
@@ -151,12 +160,21 @@
      lw t8, 0(t7)
 -    li t9, 0x1000000        // bit24, fullchip reset
 -    or t8, t8, t9         // t8:  set bit 18
-+    li t9, 0x1000000	 // bit24, fullchip reset
-+    or t8, t8, t9	 // t8:  set bit 18
++    li t9, 0x1000000	// bit24, fullchip reset
++    or t8, t8, t9	// t8:  set bit 18
      sw t8, 0(t7)
  
  normal_path:
-@@ -451,14 +451,12 @@ rel_start:
+ #endif /* CONFIG_MACH_HORNET */
+ 
+ #if !defined(CONFIG_SKIP_LOWLEVEL_INIT)
+-	/* Initialize any external memory.
+-	 */
++	/* Initialize any external memory.	 */
+ #if defined(CONFIG_AR7100) || defined(CONFIG_AR7240) || defined(CONFIG_ATHEROS)
+ 	la      t9, lowlevel_init
+ 	jalr    t9
+@@ -451,14 +450,12 @@ rel_start:
  	sw	t8, 0(t7);
  #endif
  
@@ -173,7 +191,7 @@
  #if defined(CONFIG_WASP_SUPPORT) && !defined(CONFIG_ATH_NAND_BR)
  	li	t7,	KSEG1ADDR(AR7240_REV_ID)
  	lw	t7,	0(t7)
-@@ -475,8 +473,7 @@ rel_start:
+@@ -475,8 +472,7 @@ rel_start:
  	mtc0	t0, CP0_CONFIG
  #endif /* !CONFIG_SKIP_LOWLEVEL_INIT */
  
@@ -183,7 +201,7 @@
  #ifdef CONFIG_SYS_INIT_RAM_LOCK_MIPS
  	li	a0, CONFIG_SYS_INIT_SP_OFFSET
  	la	t9, mips_cache_lock
-@@ -508,13 +505,13 @@ rel_start:
+@@ -508,13 +504,13 @@ rel_start:
  	.globl	relocate_code
  	.ent	relocate_code
  relocate_code:
@@ -199,7 +217,7 @@
  
  	/*
  	 * Fix $gp:
-@@ -523,7 +520,7 @@ relocate_code:
+@@ -523,7 +519,7 @@ relocate_code:
  	 */
  	move	t6, gp
  	sub	gp, CONFIG_SYS_MONITOR_BASE
@@ -208,7 +226,7 @@
  	sub	s1, gp, t6	/* s1 <-- relocation offset	*/
  
  	/*
-@@ -532,9 +529,8 @@ relocate_code:
+@@ -532,9 +528,8 @@ relocate_code:
  	 * t2 = source end address
  	 */
  
@@ -220,7 +238,7 @@
  	move	s0, a1		/* save gd in s0		*/
  	move	a0, t1		/* a0 <-- destination addr	*/
  	sub	a1, t2, t0	/* a1 <-- size			*/
-@@ -558,7 +554,7 @@ relocate_code:
+@@ -558,7 +553,7 @@ relocate_code:
  	jalr	t9
  	nop
  
@@ -229,7 +247,7 @@
  	addi	t0, s2, in_ram - _start
  	jr	t0
  	nop
-@@ -591,7 +587,7 @@ in_ram:
+@@ -591,7 +586,7 @@ in_ram:
  2:
  	addi	t2, 1
  	blt	t2, t3, 1b
@@ -238,7 +256,7 @@
  
  	/* Clear BSS.	 */
  	lw	t1, -12(t0)	/* t1 <-- uboot_end_data	*/
-@@ -608,7 +604,7 @@ in_ram:
+@@ -608,7 +603,7 @@ in_ram:
  	move	a0, s0		/* a0 <-- gd			*/
  	la	t9, board_init_r
  	jr	t9

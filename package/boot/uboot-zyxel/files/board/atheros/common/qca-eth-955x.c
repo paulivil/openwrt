@@ -172,7 +172,7 @@ void ath_gmac_mii_setup(ath_gmac_mac_t *mac)
 
 	if ((is_s17()  && mac->mac_unit == 0) || is_drqfn()) {
 #ifdef ATH_GMAC_DEBUG
-		printf("Scorpion  ----> S17 PHY *\n");
+	printf("Scorpion  ----> S17 PHY *\n");
 #endif
 		mgmt_cfg_val = 7;
 #ifndef ATH_RGMII_CAL
@@ -181,11 +181,11 @@ void ath_gmac_mii_setup(ath_gmac_mac_t *mac)
 					ETH_CFG_RGMII_GE0_SET(1));
 
 		ath_reg_wr(ETH_XMII_ADDRESS, ETH_XMII_TX_INVERT_SET(1) |
-                			     ETH_XMII_RX_DELAY_SET(2)  |
-                			     ETH_XMII_TX_DELAY_SET(1)  |
-					     ETH_XMII_GIGE_SET(1));
+        		     ETH_XMII_RX_DELAY_SET(2)  |
+        		     ETH_XMII_TX_DELAY_SET(1)  |
+				     ETH_XMII_GIGE_SET(1));
 #else
-        rgmii_cal_alg()
+       rgmii_cal_alg()
 #endif
 		udelay(1000);
 		ath_gmac_reg_wr(mac, ATH_MAC_MII_MGMT_CFG, mgmt_cfg_val | (1 << 31));
@@ -195,7 +195,7 @@ void ath_gmac_mii_setup(ath_gmac_mac_t *mac)
 #ifdef CONFIG_ATHR_8033_PHY
 	if (is_ar8033 () && mac->mac_unit == 1) {
 #ifdef ATH_GMAC_DEBUG
-        	printf("Scorpion ---->8033 PHY*\n");
+       	printf("Scorpion ---->8033 PHY*\n");
 #endif
 		mgmt_cfg_val = 7;
 		ath_gmac_reg_wr(mac, ATH_MAC_MII_MGMT_CFG, mgmt_cfg_val | (1 << 31));
@@ -203,25 +203,25 @@ void ath_gmac_mii_setup(ath_gmac_mac_t *mac)
 		return;
 
 
-        }
+    }
 #endif
 #ifdef CONFIG_VIR_PHY
         if (is_vir_phy()) {
 #ifdef ATH_GMAC_DEBUG
-        	printf("Scorpion ---->VIR PHY*\n");
+       	printf("Scorpion ---->VIR PHY*\n");
 #endif		
 		ath_reg_wr(ATH_ETH_CFG, ETH_CFG_ETH_RXDV_DELAY_SET(3) |
 					ETH_CFG_ETH_RXD_DELAY_SET(3)|
 					ETH_CFG_RGMII_GE0_SET(1));
 		ath_reg_wr(ETH_XMII_ADDRESS, ETH_XMII_TX_INVERT_SET(1) |
-                			     ETH_XMII_RX_DELAY_SET(2)  |
-                			     ETH_XMII_TX_DELAY_SET(1)  |
-					     ETH_XMII_GIGE_SET(1));
+            	     ETH_XMII_RX_DELAY_SET(2)  |
+            	     ETH_XMII_TX_DELAY_SET(1)  |
+				     ETH_XMII_GIGE_SET(1));
 		udelay(1000);
 		ath_gmac_reg_wr(mac, ATH_MAC_MII_MGMT_CFG, mgmt_cfg_val | (1 << 31));
 		ath_gmac_reg_wr(mac, ATH_MAC_MII_MGMT_CFG, mgmt_cfg_val);
 		
-                return;
+        return;
 	}
 #endif
 }
@@ -343,13 +343,13 @@ static void athr_gmac_sgmii_setup()
 
 #ifdef ATH_SGMII_FORCED_MODE
         ath_reg_wr(MR_AN_CONTROL_ADDRESS, MR_AN_CONTROL_SPEED_SEL1_SET(1) |
-                                           MR_AN_CONTROL_PHY_RESET_SET(1)  |
-                                           MR_AN_CONTROL_DUPLEX_MODE_SET(1));
-        udelay(10);
+                   MR_AN_CONTROL_PHY_RESET_SET(1)  |
+                   MR_AN_CONTROL_DUPLEX_MODE_SET(1));
+  udelay(10);
 
-        ath_reg_wr(SGMII_CONFIG_ADDRESS, SGMII_CONFIG_MODE_CTRL_SET(2)   |
-                                          SGMII_CONFIG_FORCE_SPEED_SET(1) |
-                                          SGMII_CONFIG_SPEED_SET(2));
+  ath_reg_wr(SGMII_CONFIG_ADDRESS, SGMII_CONFIG_MODE_CTRL_SET(2)   |
+                   SGMII_CONFIG_FORCE_SPEED_SET(1) |
+                   SGMII_CONFIG_SPEED_SET(2));
   #ifdef ATH_GMAC_DEBUG
         printf ("SGMII in forced mode\n");
   #endif
@@ -357,38 +357,38 @@ static void athr_gmac_sgmii_setup()
 
 	ath_reg_wr(SGMII_CONFIG_ADDRESS, SGMII_CONFIG_MODE_CTRL_SET(2));
 
-	ath_reg_wr(MR_AN_CONTROL_ADDRESS, MR_AN_CONTROL_AN_ENABLE_SET(1)
-                                      |MR_AN_CONTROL_PHY_RESET_SET(1));
+	ath_reg_wr(MR_AN_CONTROL_ADDRESS, MR_AN_CONTROL_AN_ENABLE_SET(1)   |
+                   MR_AN_CONTROL_PHY_RESET_SET(1));
 
 	ath_reg_wr(MR_AN_CONTROL_ADDRESS, MR_AN_CONTROL_AN_ENABLE_SET(1));
 #endif
-/*
- * SGMII reset sequence suggested by systems team.
- */
+   /*
+    * SGMII reset sequence suggested by systems team.
+    */
 
 	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_RX_CLK_N_RESET);
 
 	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1));
 
-	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1)
-                                    |SGMII_RESET_RX_125M_N_SET(1));
+	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1) | 
+                   SGMII_RESET_RX_125M_N_SET(1));
 
-	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1)
-                                    |SGMII_RESET_TX_125M_N_SET(1)
-                                    |SGMII_RESET_RX_125M_N_SET(1));
+	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1) |
+                   SGMII_RESET_TX_125M_N_SET(1) |
+                   SGMII_RESET_RX_125M_N_SET(1));
 
-	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1)
-                                    |SGMII_RESET_TX_125M_N_SET(1)
-                                    |SGMII_RESET_RX_125M_N_SET(1)
-                                    |SGMII_RESET_RX_CLK_N_SET(1));
+	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1) |
+                   SGMII_RESET_TX_125M_N_SET(1) |
+                   SGMII_RESET_RX_125M_N_SET(1) |
+                   SGMII_RESET_RX_CLK_N_SET(1));
 
-	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1)
-                                    |SGMII_RESET_TX_125M_N_SET(1)
-                                    |SGMII_RESET_RX_125M_N_SET(1)
-                                    |SGMII_RESET_RX_CLK_N_SET(1)
-                                    |SGMII_RESET_TX_CLK_N_SET(1));
+	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1) |
+                   SGMII_RESET_TX_125M_N_SET(1) |
+                   SGMII_RESET_RX_125M_N_SET(1) |
+                   SGMII_RESET_RX_CLK_N_SET(1) |
+                   SGMII_RESET_TX_CLK_N_SET(1));
 
-        ath_reg_rmw_clear(MR_AN_CONTROL_ADDRESS, MR_AN_CONTROL_PHY_RESET_SET(1));
+    ath_reg_rmw_clear(MR_AN_CONTROL_ADDRESS, MR_AN_CONTROL_PHY_RESET_SET(1));
 	/*
 	 * WAR::Across resets SGMII link status goes to weird
 	 * state.
@@ -494,9 +494,9 @@ static int ath_gmac_check_link(ath_gmac_mac_t *mac)
 			ath_gmac_set_mac_if(mac, 1);
 			ath_gmac_reg_rmw_set(mac, ATH_MAC_FIFO_CFG_5, (1 << 19));
 
-			if (is_ar8033() && mac->mac_unit == 1) {
-				ath_reg_wr(ETH_SGMII_ADDRESS, ETH_SGMII_GIGE_SET(1) |
-                                           ETH_SGMII_CLK_SEL_SET(1));
+		if (is_ar8033() && mac->mac_unit == 1) {
+			ath_reg_wr(ETH_SGMII_ADDRESS, ETH_SGMII_GIGE_SET(1) |
+                    ETH_SGMII_CLK_SEL_SET(1));
 			}
 	
 			break;
@@ -508,7 +508,7 @@ static int ath_gmac_check_link(ath_gmac_mac_t *mac)
 
                         if (is_ar8033() && mac->mac_unit == 1) {
                         	ath_reg_wr(ETH_SGMII_ADDRESS, ETH_SGMII_PHASE0_COUNT_SET(1) |
-                                           ETH_SGMII_PHASE1_COUNT_SET(1));
+                                    ETH_SGMII_PHASE1_COUNT_SET(1));
 			}
 
 			break;
@@ -574,8 +574,8 @@ static int ath_gmac_clean_rx(struct eth_device *dev, bd_t * bd)
 
 	mac->next_rx = 0;
 
-        ath_gmac_reg_wr(mac, ATH_MAC_FIFO_CFG_0, 0x1f00); 
-        ath_gmac_reg_wr(mac, ATH_MAC_CFG1, (ATH_MAC_CFG1_RX_EN | ATH_MAC_CFG1_TX_EN));
+    ath_gmac_reg_wr(mac, ATH_MAC_FIFO_CFG_0, 0x1f00); 
+    ath_gmac_reg_wr(mac, ATH_MAC_CFG1, (ATH_MAC_CFG1_RX_EN | ATH_MAC_CFG1_TX_EN));
 
 	for (i = 0; i < NO_OF_RX_FIFOS; i++) {
 		fr = mac->fifo_rx[i];
@@ -644,8 +644,8 @@ static int ath_gmac_setup_fifos(ath_gmac_mac_t *mac)
 static void ath_gmac_halt(struct eth_device *dev)
 {
 	ath_gmac_mac_t *mac = (ath_gmac_mac_t *)dev->priv;
-        ath_gmac_reg_rmw_clear(mac, ATH_MAC_CFG1,(ATH_MAC_CFG1_RX_EN | ATH_MAC_CFG1_TX_EN));
-        ath_gmac_reg_wr(mac,ATH_MAC_FIFO_CFG_0,0x1f1f);
+    ath_gmac_reg_rmw_clear(mac, ATH_MAC_CFG1,(ATH_MAC_CFG1_RX_EN | ATH_MAC_CFG1_TX_EN));
+    ath_gmac_reg_wr(mac,ATH_MAC_FIFO_CFG_0,0x1f1f);
 	ath_gmac_reg_wr(mac,ATH_DMA_RX_CTRL, 0);
 	while (ath_gmac_reg_rd(mac, ATH_DMA_RX_CTRL));
 }
@@ -915,7 +915,7 @@ int ath_gmac_enet_initialize(bd_t * bis)
 		}
 #ifdef CONFIG_ATHRS_GMAC_SGMII
 	/*
-         * MAC unit 1 or drqfn package call sgmii setup.
+     * MAC unit 1 or drqfn package call sgmii setup.
 	 */
 	if (i == 1 || is_drqfn())
 		athr_gmac_sgmii_setup();
@@ -965,12 +965,9 @@ uint16_t
 ath_gmac_miiphy_read(char *devname, uint32_t phy_addr, uint8_t reg)
 {
 	ath_gmac_mac_t *mac   = ath_gmac_name2mac(devname);
-	uint16_t      addr  = (phy_addr << ATH_ADDR_SHIFT) | reg, val;
-	volatile int           rddata;
-	uint16_t      ii = 0xFFFF;
-
-
-
+	uint16_t addr  = (phy_addr << ATH_ADDR_SHIFT) | reg, val;
+	volatile int rddata;
+	uint16_t ii = 0xFFFF;
 
 	/*
 	 * Check for previous transactions are complete. Added to avoid

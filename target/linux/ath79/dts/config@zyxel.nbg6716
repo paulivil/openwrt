@@ -1,0 +1,43 @@
+/dts-v1/;
+
+/ {
+    description: MIPS OpenWrt FIT (Flattened Image Tree)
+    #address-cells = <1>;
+    images {
+
+            kernel@0{
+            description=  "MIPS OpenWrt Linux-4.19.101";
+            type=         "kernel";
+            compression=  "lzma";
+            data= /incbin/("build_dir/target-mips_24kc_musl/linux-ath79_generic/zyxel_nbg6716-kernel.bin");
+            arch= "mips";
+            os=           "linux";
+            load= <0x20000>;
+            entry=  <0x20000>;
+            hash@1 {
+                algo = "sha1";
+  
+                    };
+
+              fdt@0{
+              description=  "MIPS OpenWrt zyxel_nbg6716 device tree blob";
+              type=         "flat_dt";
+              compression=  "none";
+              data= /incbin/("target/linux/ath79/dts/qca9557_zyxel_nbg6716.dtb");
+              hash@1 {
+                algo = "sha1";
+              
+                    };
+                configurations{
+                default= "config@1";
+
+                config@1{
+                description=  "OpenWrt";
+                kernel=       "kernel@0";
+                fdt=          "fdt@0";
+                hash@1 {
+                algo = "sha1";
+                        };
+                              };
+              };
+};

@@ -39,6 +39,7 @@ do { \
 /* see see lsdk-10.0.91/boot/u-boot/include/configs/board955x.h */
 #undef MTDPARTS_DEFAULT
 #undef CFG_HZ
+//#define TEXT_BASE 0x9F000000
 
 #include <atheros.h>
 	
@@ -88,7 +89,7 @@ do { \
 /*-----------------------------------------------------------------------
  * Board Configuration
  */
-#define CONFIG_BOARD_NBG6716		1
+#define __CONFIG_BOARD_NAME NBG6716
 #define CONFIG_BOARD_NAME		"NBG6716"
 /* Enable devicetree support */
 #define CONFIG_OF_LIBFDT
@@ -127,6 +128,7 @@ do { \
 #define CONFIG_LZMA			1
 #define CONFIG_SYS_MONITOR_BASE		TEXT_BASE
 #define CONFIG_SYS_MONITOR_LEN		CFG_LOADER_PART_SIZE
+#define CONFIG_SYS_INIT_SP_OFFSET	0x1000
 
 #define CONFIG_SYS_64BIT_VSPRINTF
 /*
@@ -137,6 +139,8 @@ do { \
 #define CONFIG_SYS_SDRAM_SIZE   256       /* SDRAM size in MB */
 #define CONFIG_SYS_BOOTMAPSZ		(CONFIG_SYS_SDRAM_BASE + (CONFIG_SYS_SDRAM_SIZE << 20))
 #define CONFIG_SYS_BOOTM_LEN		(CONFIG_SYS_SDRAM_SIZE << 20)
+#define CONFIG_DISPLAY_BOARDINFO 1
+#define CONFIG_CUSTOM_BOARDINFO 1
 
 /*-----------------------------------------------------------------------
  * FLASH and environment organization
@@ -203,7 +207,7 @@ do { \
 	#writeCmd " ${fileaddr} " #offs " ${filesize}\0"
 
 #define gen_nand_cmd(cmd, offs, file, partSize)			\
-	__gen_nand_cmd(cmd, offs, file, nand erase, nand write, partSize)
+	__gen_nand_cmd(cmd, offs, file, ubi part, ubi write, partSize)
 
 #ifndef CONFIG_ZFLASH_CMD
 #define __gen_cmd(cmd, offs, file, eraseCmd, writeCmd, eraseSize)	\
@@ -272,8 +276,8 @@ do { \
   #define BU1_IMG_ENV_VAL	gen_img_env_val(bu1, CFG_BU1_PART_ADDR, CFG_BU1_PART_SIZE)
 
   #define UPDATE_LOADER_CMD     gen_cmd(lu, ${ldr_paddr}, u-boot.bin, ${ldr_psize})
-  #define UPDATE_ROOTFS_CMD     gen_nand_cmd(lf, ${rfs_paddr}, ${img_prefix}rootfs.jffs2, ${rootfs_psize})
-
+  /*#define UPDATE_ROOTFS_CMD     gen_nand_cmd(lf, ${rfs_paddr}, ${img_prefix}rootfs.jffs2, ${rootfs_psize})*/
+#define UPDATE_ROOTFS_CMD "lf=tftp ${loadaddr} ${dir}${img_prefix}rootfs.jffs2;ubi part rootfs;ubi write ${loadaddr} testvol ${rootfs_psize}\0"
   #define IMG_ENV_VAL           LOADER_IMG_ENV_VAL ENV_IMG_ENV_VAL RFDATA_IMG_ENV_VAL \
                                 RTFSDATA_IMG_ENV_VAL ROMD_IMG_ENV_VAL HEADER_IMG_ENV_VAL \
 				ROOTFS_IMG_ENV_VAL HEADER1_IMG_ENV_VAL \
@@ -282,7 +286,7 @@ do { \
   #define ROOTFS_MTD_NO		"mtdblock7"
   #define UPGRADE_IMG_CMD	UPDATE_LOADER_CMD UPDATE_ROOTFS_CMD
 
-  #define BOOT_FLASH_CMD        "boot_flash=run setmtdparts flashargs addtty addmtd;fsload ${loadaddr} /boot/vmlinux.lzma.uImage;bootm ${loadaddr}\0"
+  #define BOOT_FLASH_CMD        "boot_flash=ubifsload ${loadaddr} /boot/vmlinux.lzma.itb;bootm ${loadaddr}\0"
   #define BOOTARG_DEFAULT	"board=" CONFIG_BOARD_NAME " root=/dev/" ROOTFS_MTD_NO " rootfstype=jffs2 noinitrd ${bootmode} ${zld_ver}"
 #else
   #error "This configuration must be enable option 'CONFIG_EMBEDDED_KERNEL_IN_ROOTFS'"

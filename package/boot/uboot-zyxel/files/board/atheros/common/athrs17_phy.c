@@ -284,7 +284,7 @@ void athrs17_reg_init()
 		
 	}
 /*
- * Values suggested by the swich team when s17 in sgmii configuration
+ * Values suggested by the switch team when s17 in sgmii configuration
  * operates in forced mode.
  * 0x10(S17_PWS_REG)=0x602613a0
  */

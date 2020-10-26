@@ -183,17 +183,20 @@ define Device/zyxel_nbg6716
   RAS_BOARD := NBG6716
   RAS_ROOTFS_SIZE := 29696k
   RAS_VERSION := "OpenWrt Linux-$(LINUX_VERSION)"
-  KERNEL_SIZE := 4096k
+  KERNEL_SIZE := 2560k
+  DEVICE_DTS_CONFIG := config@zyxel.nbg6716
   BLOCKSIZE := 128k
   PAGESIZE := 2048
-  KERNEL := kernel-bin | append-dtb | uImage none | zyxel-buildkerneljffs | \
+  KERNEL := kernel-bin | lzma |  fit lzma image-qca9558_zyxel_nbg6716.dtb | \
+   jffs2 boot/vmlinux.lzma.itb | pad-to $$(BLOCKSIZE)
+  #KERNEL := kernel-bin | append-dtb | uImage none | zyxel-buildkerneljffs | \
 	check-size 4096k
-  IMAGES := sysupgrade.tar sysupgrade-4M-Kernel.bin factory.bin
-  IMAGE/sysupgrade.tar/squashfs := append-rootfs | pad-to $$$$(BLOCKSIZE) | \
+  IMAGES :=  sysupgrade.bin #sysupgrade.tar factory.bin
+  IMAGE/squashfs-sysupgrade.tar:= append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs  | \
 	sysupgrade-tar rootfs=$$$$@ | append-metadata
-  IMAGE/sysupgrade-4M-Kernel.bin/squashfs := append-kernel | \
-	pad-to $$$$(KERNEL_SIZE) | append-ubi | pad-to 263192576 | gzip
-  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi | \
+  IMAGE/squashfs-sysupgrade.bin := append-kernel | \
+	pad-to $$$$(BLOCKSIZE) | append-ubi | pad-to 263192576 | append-metadata
+  #IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi | \
 	zyxel-factory
   UBINIZE_OPTS := -E 5
 endef
