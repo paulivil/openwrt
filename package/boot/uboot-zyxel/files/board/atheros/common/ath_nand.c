@@ -399,7 +399,7 @@ uint8_t	ath_nand_io_buf[24 << 10] __attribute__((aligned(4096)));
  * [in] small_block_erase: Address conversion for small block
  *	is different. Hence, special case it.
  */
-inline void
+void
 ath_nand_conv_addr(struct mtd_info *mtd, loff_t addr, uint32_t *addr0,
 			uint32_t *addr1, int small_block_erase)
 {
