@@ -35,21 +35,22 @@
  
 --- a/config.mk
 +++ b/config.mk
-@@ -170,9 +170,11 @@ endif
+@@ -170,9 +170,12 @@ endif
  
  AFLAGS := $(AFLAGS_DEBUG) -D__ASSEMBLY__ $(CPPFLAGS)
  
 -LDFLAGS += -Bstatic -T $(obj)u-boot.lds $(PLATFORM_LDFLAGS)
 +LDFLAGS += $(PLATFORM_LDFLAGS)
++LDFLAGS_FINAL += -Bstatic
 +
-+LDFLAGS_u-boot += -Bstatic -T $(obj)u-boot.lds $(PLATFORM_LDFLAGS)
++LDFLAGS_u-boot += -T $(obj)u-boot.lds $(LDFLAGS_FINAL)
  ifneq ($(TEXT_BASE),)
 -LDFLAGS += -Ttext $(TEXT_BASE)
-+LDFLAGS_u-boot += -Ttext $(CONFIG_SYS_TEXT_BASE)
++LDFLAGS_u-boot += -Ttext $(TEXT_BASE)
  endif
  
  # Location of a usable BFD library, where we define "usable" as
-@@ -198,6 +200,11 @@ BFD_ROOT_DIR =		/opt/powerpc
+@@ -198,6 +201,11 @@ BFD_ROOT_DIR =		/opt/powerpc
  endif
  endif
  
@@ -67,7 +68,7 @@
  
  PLATFORM_CPPFLAGS += -DCONFIG_MIPS -D__MIPS__
  
-+LDFLAGS_u-boot = --gc-sections
++LDFLAGS_FINAL += --gc-sections
  #
  # From Linux arch/mips/Makefile
  #
