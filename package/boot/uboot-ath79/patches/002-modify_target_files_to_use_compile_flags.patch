@@ -686,6 +686,10 @@
 +#define FLASH_SIZE 16
 +#endif
 +
++#define CONFIG_SYS_NAND_MAX_CHIPS	1
++#define CONFIG_SYS_MAX_NAND_DEVICE	1
+
+#define CONFIG_ENV_IS_IN_FLASH		1
 +#define CONFIG_SYS_MAX_FLASH_BANKS 1       /* max number of memory banks */
 +#define CFG_MAX_FLASH_BANKS 1 /* max number of memory banks */
 +
@@ -805,7 +809,7 @@
 +#define CONFIG_ATH_SOC 1
 +#define CONFIG_ATHEROS	1
 +#define CONFIG_MACH_QCA955x 1
-+/*#define CFG_INIT_STACK_IN_SRAM 1 -- OBSOLETE.*/
++#define CONFIG_ATH_NAND_SUPPORT  1
 +#define __CONFIG_BOARD_NAME NBG6716
 +#define CONFIG_BOARD_NAME "NBG6716"
 +#define CFG_PLL_FREQ CFG_PLL_720_600_200

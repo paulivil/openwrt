@@ -129,7 +129,7 @@ do { \
 #define CONFIG_LZMA			1
 #define CONFIG_SYS_MONITOR_BASE		TEXT_BASE
 #define CONFIG_SYS_MONITOR_LEN		CFG_LOADER_PART_SIZE
-#define CONFIG_SYS_INIT_SP_OFFSET	0x1000
+#define CONFIG_SYS_INIT_SP_OFFSET	0x400000
 
 #define CONFIG_SYS_64BIT_VSPRINTF
 /*
@@ -140,8 +140,7 @@ do { \
 #define CONFIG_SYS_SDRAM_SIZE   128       /* SDRAM size in MB */
 #define CONFIG_SYS_BOOTMAPSZ		(CONFIG_SYS_SDRAM_BASE + (CONFIG_SYS_SDRAM_SIZE << 20))
 #define CONFIG_SYS_BOOTM_LEN		(CONFIG_SYS_SDRAM_SIZE << 20)
-#define CONFIG_DISPLAY_BOARDINFO 1
-#define CONFIG_CUSTOM_BOARDINFO 1
+
 
 /*-----------------------------------------------------------------------
  * FLASH and environment organization

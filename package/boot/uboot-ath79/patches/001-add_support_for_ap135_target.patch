@@ -6234,6 +6234,9 @@
 +
 +#define CFG_BOOTPARAMS_LEN	(128*1024)
 +
++#define CONFIG_DISPLAY_BOARDINFO 1
++#define CONFIG_CUSTOM_BOARDINFO 1
++
 +//#define CFG_SDRAM_BASE		0x80000000     /* Cached addr */ /*Moved to qca955x board config */
 +//#define CFG_SDRAM_BASE	0xa0000000     /* Cached addr */
 +
@@ -6720,7 +6723,12 @@
 +#define __cpu_hz_25(pll)	(__nint_to_mhz(CPU_PLL_CONFIG_NINT_GET(pll), 25))
 +
 +/* Since the count is incremented every other tick, divide by 2 */
-+#define CFG_HZ			(__cpu_hz_40(CPU_PLL_CONFIG_NINT_VAL) / 2)
++#if 0
++#define CONFIG_SYS_HZ		(__cpu_hz_40(CPU_PLL_CONFIG_NINT_VAL) / 2)
++#else
++#define CONFIG_SYS_MIPS_TIMER_FREQ	(__cpu_hz_40(CPU_PLL_CONFIG_NINT_VAL) / 2)
++#define CONFIG_SYS_HZ			1000
++#endif
 +
 +/* SGMII DEFINES */
 +

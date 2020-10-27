@@ -33,16 +33,16 @@
 	reg_rmw_set(CPU_DDR_CLOCK_CONTROL_ADDRESS, _mask, _val)
 
 
-/******************************************************************************
- * first level initialization:
- *
- * 0) If clock cntrl reset switch is already set, we're recovering from
- *    "divider reset"; goto 3.
- * 1) Setup divide ratios.
- * 2) Reset.
- * 3) Setup pll's, wait for lock.
- *
- *****************************************************************************/
+
+#   first level initialization:
+#  
+#   0) If clock cntrl reset switch is already set, we are recovering from
+#      "divider reset"; goto 3.
+#   1) Setup divide ratios.
+#   2) Reset.
+#   3) Setup pll's, wait for lock.
+ 
+ 
 
 .globl lowlevel_init
 	.type	lowlevel_init, @function

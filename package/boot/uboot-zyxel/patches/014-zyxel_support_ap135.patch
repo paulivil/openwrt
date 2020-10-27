@@ -255,14 +255,3 @@
  
  	if (!eth_devices) {
  		puts ("No ethernet found.\n");
---- a/cpu/mips/config.mk
-+++ b/cpu/mips/config.mk
-@@ -25,7 +25,7 @@ MIPSFLAGS:=$(shell \
- if [ "$v" -lt "14" ]; then \
- 	echo "-mcpu=4kc"; \
- else \
--	echo "-march=4kc -mtune=4kc"; \
-+	echo "-march=74kc -mtune=74kc"; \
- fi)
- 
- ifneq (,$(findstring 4KCle,$(CROSS_COMPILE)))

@@ -148,11 +148,11 @@ typedef unsigned int ath_reg_t;
 #include <config.h>
 
 #if defined(CONFIG_MACH_AR724x)
-#	include <724x.h>
+#	include <7240_soc.h>
 #elif defined(CONFIG_MACH_AR933x)
 #	include <933x.h>
 #elif defined(CONFIG_MACH_AR934x)
-#	include <934x.h>
+#	include <934x_soc.h>
 #elif defined(CONFIG_MACH_QCA955x)
 #	include <955x.h>
 #else
