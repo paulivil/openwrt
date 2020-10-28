@@ -1,0 +1,12 @@
+--- a/arch/mips/config.mk
++++ b/arch/mips/config.mk
+@@ -25,7 +25,8 @@ ifdef CONFIG_32BIT
+ PLATFORM_CPPFLAGS	+= -mabi=32
+ PLATFORM_LDFLAGS	+= -m $(32bit-emul)
+ OBJCOPYFLAGS		+= -O $(32bit-bfd)
+-CONFIG_STANDALONE_LOAD_ADDR	?= 0x80200000
++CONFIG_STANDALONE_LOAD_ADDR	?= 0x80200000	\
++	-T $(srctree)/examples/standalone/mips.lds
+ endif
+ 
+ ifdef CONFIG_64BIT

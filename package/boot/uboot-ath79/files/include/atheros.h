@@ -1,6 +1,17 @@
 /*
- * vim: tabstop=8 : noexpandtab
+ * Copyright (c) 2016 The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
  */
+
 #ifndef _ATHEROS_H
 #define _ATHEROS_H
 
@@ -23,6 +34,11 @@
 
 #define is_qca955x()	(0)
 #define is_sco()	(0)
+
+#define is_qca953x()	(0)
+#define is_hb()		(0)
+
+#define is_qca956x()	(0)
 
 #define ATH_CONSOLE_BAUD	115200
 
@@ -60,14 +76,19 @@
 #define is_ar8033() 1
 #else
 #define is_ar8033() 0
-#endif 
+#endif
 
 #ifdef CONFIG_VIR_PHY
-#define is_vir_phy()	1 
+#define is_vir_phy()	1
 #else
 #define is_vir_phy() 	0
 #endif
 
+#ifdef CFG_ATHRS27_PHY
+#define is_s27()        1
+#else
+#define is_s27()        0
+#endif
 
 #define ath_arch_init_irq() /* nothing */
 
@@ -77,7 +98,7 @@ int ath_uart_freq(void);
 
 typedef unsigned int ath_reg_t;
 
-#ifdef COMPRESSED_UBOOT
+#if COMPRESSED_UBOOT
 #	define prmsg(...)
 #else
 #	define prmsg	printf
@@ -137,9 +158,22 @@ typedef unsigned int ath_reg_t;
 #define CFG_PLL_720_600_300	0x05
 #define CFG_PLL_400_400_200	0x06
 #define CFG_PLL_560_450_220	0x07
+#define CFG_PLL_550_400_200	0x08
+#define CFG_PLL_550_600_200	0x09
+#define CFG_PLL_600_600_200	0x0a
+#define CFG_PLL_750_400_250	0x0b
+#define CFG_PLL_800_400_266	0x0c
+#define CFG_PLL_750_667_250	0x0d
+#define CFG_PLL_800_600_266	0x0e
+#define CFG_PLL_800_667_266	0x0f
+#define CFG_PLL_810_700_270	0x10
+#define CFG_PLL_810_666_270	0x11
+#define CFG_PLL_775_650_258	0x12
+#define CFG_PLL_650_400_200	0x13
+#define CFG_PLL_650_600_200	0x14
 
 #define UBOOT_SIZE                      (256 * 1024)
-#define PLL_FLASH_ADDR                  (CONFIG_SYS_FLASH_BASE + UBOOT_SIZE)
+#define PLL_FLASH_ADDR                  (CFG_FLASH_BASE + UBOOT_SIZE)
 #define PLL_CONFIG_VAL_F                (PLL_FLASH_ADDR + CFG_FLASH_SECTOR_SIZE - 0x20)
 #define PLL_MAGIC                        0xaabbccdd
 #define SRIF_PLL_CONFIG_VAL_F           (PLL_CONFIG_VAL_F - 12)
@@ -148,13 +182,17 @@ typedef unsigned int ath_reg_t;
 #include <config.h>
 
 #if defined(CONFIG_MACH_AR724x)
-#	include <7240_soc.h>
+#	include <724x.h>
 #elif defined(CONFIG_MACH_AR933x)
 #	include <933x.h>
 #elif defined(CONFIG_MACH_AR934x)
-#	include <934x_soc.h>
+#	include <934x.h>
 #elif defined(CONFIG_MACH_QCA955x)
 #	include <955x.h>
+#elif defined(CONFIG_MACH_QCA953x)
+#	include <953x.h>
+#elif defined(CONFIG_MACH_QCA956x)
+#	include <956x.h>
 #else
 #	error "Building U-Boot for unknown device"
 #endif

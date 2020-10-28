@@ -688,8 +688,8 @@
 +
 +#define CONFIG_SYS_NAND_MAX_CHIPS	1
 +#define CONFIG_SYS_MAX_NAND_DEVICE	1
-
-#define CONFIG_ENV_IS_IN_FLASH		1
++
++#define CONFIG_ENV_IS_IN_FLASH		1
 +#define CONFIG_SYS_MAX_FLASH_BANKS 1       /* max number of memory banks */
 +#define CFG_MAX_FLASH_BANKS 1 /* max number of memory banks */
 +
