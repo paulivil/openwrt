@@ -378,7 +378,7 @@ pci_init_board (void)
 	pci_rc2_init_board();
 #endif
 
-#ifndef COMPRESSED_UBOOT
+#if !defined(COMPRESSED_UBOOT) && !defined(CONFIG_ATH_SKIP_REGISTER_PCI_API)
 	/*
 	 * Now, configure for u-boot tools
 	 */
@@ -536,3 +536,8 @@ pci_rc2_init_board (void)
 	}
 }
 #endif
+void pci_init(void)
+{
+	pci_init_board();
+}
+

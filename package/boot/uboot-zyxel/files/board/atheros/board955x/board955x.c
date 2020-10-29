@@ -143,12 +143,12 @@ ath_mem_config(void)
 	type = ath_ddr_initial_config(CFG_DDR_REFRESH_VAL);
 
 	tap = ath_ddr_tap_cal();
-//	prmsg("tap = 0x%p\n", tap);
+	prmsg("tap = 0x%p\n", tap);
 
 	tap = (uint32_t *)0xbd007f10;
-//	prmsg("Tap (low, high) = (0x%x, 0x%x)\n", tap[0], tap[1]);
+	prmsg("Tap (low, high) = (0x%x, 0x%x)\n", tap[0], tap[1]);
 
-	prmsg("Tap values = (0x%x, 0x%x, 0x%x, 0x%x)\n", \
+	prmsg("Tap values = (0x%x, 0x%x, 0x%x, 0x%x)\n",
 		ath_reg_rd(TAP_CONTROL_0_ADDRESS),
 		ath_reg_rd(TAP_CONTROL_1_ADDRESS),
 		ath_reg_rd(TAP_CONTROL_2_ADDRESS),
@@ -175,7 +175,7 @@ phys_size_t initdram(int board_type)
 	return (ath_mem_config());
 }
 
-int	checkboard(args)
+int checkboard(args)
 {
 	board_str(CONFIG_BOARD_NAME);
 	return 0;

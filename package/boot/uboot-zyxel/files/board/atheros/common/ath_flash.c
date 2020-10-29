@@ -38,7 +38,7 @@ ath_spi_read_id(void)
 
 	rd = ath_reg_rd(ATH_SPI_RD_STATUS);
 
-	//printf("Flash Manuf Id 0x%x, DeviceId0 0x%x, DeviceId1 0x%x\n", \
+	printf("Flash Manuf Id 0x%x, DeviceId0 0x%x, DeviceId1 0x%x\n",
 		(rd >> 16) & 0xff, (rd >> 8) & 0xff, (rd >> 0) & 0xff);
 }
 
@@ -153,6 +153,7 @@ write_buff(flash_info_t *info, uchar *source, ulong addr, ulong len)
 	int total = 0, len_this_lp, bytes_this_page;
 	ulong dst;
 	uchar *src;
+	int ext = 0;
 
 	printf("write addr: %x\n", addr);
 	addr = addr - CONFIG_SYS_FLASH_BASE;

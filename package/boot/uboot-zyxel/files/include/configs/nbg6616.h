@@ -323,9 +323,9 @@ do { \
 //#define CONFIG_CMD_DHCP
 #endif
 
-#define CONFIG_SYS_CONSOLE_INFO_QUIET
+//#define CONFIG_SYS_CONSOLE_INFO_QUIET
 //#define CONFIG_SILENT_CONSOLE
-#define CONFIG_DISABLE_CONSOLE
+//#define CONFIG_DISABLE_CONSOLE
 
 
 /*-----------------------------------------------------------------------

@@ -1,9 +1,15 @@
 /*
- * This file is subject to the terms and conditions of the GNU General Public
- * License.  See the file "COPYING" in the main directory of this archive
- * for more details.
+ * Copyright (c) 2016 The Linux Foundation. All rights reserved.
  *
- * Copyright © 2007 Atheros Communications, Inc.,  All Rights Reserved.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
  */
 
 /*
@@ -16,10 +22,21 @@
 #include <linux/types.h>
 #include <common.h>
 #include <miiphy.h>
-#include "phy.h"
+//#include "ath_phy.h"
 #include <asm/addrspace.h>
 #include <atheros.h>
 #include "athrs17_phy.h"
+
+#define ath_gmac_unit2name(_unit) (_unit ?  "eth1" : "eth0")
+
+extern int ath_gmac_miiphy_read(char *devname, uint32_t phaddr, uint8_t reg, uint16_t *data);
+extern int ath_gmac_miiphy_write(char *devname, uint32_t phaddr, uint8_t reg, uint16_t data);
+
+#define phy_reg_read(base, addr, reg)   \
+        ath_gmac_miiphy_read(ath_gmac_unit2name(base), addr, reg, NULL)
+
+#define phy_reg_write(base, addr, reg, data)    \
+        ath_gmac_miiphy_write(ath_gmac_unit2name(base), addr, reg, data)
 
 /* PHY selections and access functions */
 typedef enum {
@@ -70,8 +87,13 @@ typedef struct {
 } athrPhyInfo_t;
 
 #if defined(ATH_S17_MAC0_SGMII)
+#if (CFG_ATH_GMAC_NMACS == 1) /* QCA9563 only have 1 GMAC working */
+#define ENET_UNIT            ENET_UNIT_GE0
+#define ENET_UNIT_WAN        ENET_UNIT_GE0
+#else
 #define ENET_UNIT            ENET_UNIT_GE1
 #define ENET_UNIT_WAN        ENET_UNIT_GE0
+#endif
 #else
 #define ENET_UNIT            ENET_UNIT_GE0
 #define ENET_UNIT_WAN        ENET_UNIT_GE1
@@ -217,6 +239,15 @@ void athrs17_vlan_config()
 
 void athrs17_reg_init_wan(void)
 {
+	uint32_t sgmii_ctrl_value;
+
+	/* SGMII control reg value based on switch id  */
+	if ((athrs17_reg_read(S17_MASK_CTRL_REG) & 0xFFFF) >= S17C_V1_DEVICEID) {
+		sgmii_ctrl_value = 0xc74164de;
+	} else {
+		sgmii_ctrl_value = 0xc74164d0;
+	}
+
 
 #ifdef ATH_S17_MAC0_SGMII
 	athrs17_reg_write(S17_P6PAD_MODE_REG,0x07600000);
@@ -226,65 +257,54 @@ void athrs17_reg_init_wan(void)
            athrs17_reg_read(S17_P6PAD_MODE_REG)|S17_MAC6_SGMII_EN);
 #endif
 	athrs17_reg_write(S17_P6STATUS_REG, S17_PORT_STATUS_AZ_DEFAULT);
-	athrs17_reg_write(S17_SGMII_CTRL_REG , 0xc74164de); /* SGMII control */
-         
+	athrs17_reg_write(S17_SGMII_CTRL_REG , sgmii_ctrl_value); /* SGMII control */
+
         athrs17_vlan_config();
 	printf("%s done\n",__func__);
 
 }
 
-#ifdef CFG_ATHRS17_PHY_DBG_CMD
-void athrs17_port_lookup(unsigned int flags, int mode)
-{
-	int i;
-	if ( mode > 4 ) mode = 4;
-	puts("Set port ");
-	for (i=0; i<7; i++) {
-		if ( flags & (1<<i) ) {
-			unsigned int regAddr = S17_P0LOOKUP_CTRL_REG+12*i;
-			athrs17_reg_write(regAddr, athrs17_reg_read((regAddr))&(~(0x00070000))|mode);
-			printf("%d ", i);
-		}
-	}
-	printf("to mode %d\n", mode);
-}
-#endif
-
 void athrs17_reg_init()
 {
 	int phy_addr = 0;
-
+	uint32_t sgmii_ctrl_value;
 	/* if using header for register configuration, we have to     */
 	/* configure s17 register after frame transmission is enabled */
 
-	if (athr17_init_flag)
+	if ((athrs17_reg_read(S17_MASK_CTRL_REG) & 0xFFFF) >= S17C_V1_DEVICEID) {
+		sgmii_ctrl_value = 0xc74164de;
+	} else {
+		sgmii_ctrl_value = 0xc74164d0;
+	}
+	if (athr17_init_flag) {
 		return;
+	}
+
+#if (CFG_ATH_GMAC_NMACS == 1)
+		athrs17_reg_write(S17_P0PAD_MODE_REG, S17_MAC0_SGMII_EN);
+		athrs17_reg_write(S17_SGMII_CTRL_REG , sgmii_ctrl_value); /* SGMII control  */
+		athrs17_reg_write(S17_GLOFW_CTRL1_REG,	0x7f7f7f7f);
+#else
 	if (is_drqfn()) {
 		athrs17_reg_write(S17_P0PAD_MODE_REG, S17_MAC0_SGMII_EN);
-		athrs17_reg_write(S17_SGMII_CTRL_REG , 0xc74164de); /* SGMII control  */
-        } else {
+		athrs17_reg_write(S17_SGMII_CTRL_REG , sgmii_ctrl_value); /* SGMII control  */
+	} else {
 		athrs17_reg_write(S17_GLOFW_CTRL1_REG,	0x7f7f7f7f);
-		/* 
+		/*
                  * If defined S17 Mac0 sgmii val of 0x4(S17_P0PAD_MODE_REG)
                  * should be configured as 0x80
                  */
 #ifdef ATH_S17_MAC0_SGMII
-  #ifdef CONFIG_BOARD_EMG2926 || defined(CONFIG_BOARD_EMG2926OBM) || defined(CONFIG_BOARD_EMG2926AAVK) || defined(CONFIG_BOARD_EMG3425VT) || defined(CONFIG_BOARD_EMG3425AAYJ) 
-		athrs17_reg_write(S17_P0PAD_MODE_REG,   0xc0080);
-  #elif defined(CONFIG_BOARD_NBG6716) || defined(CONFIG_BOARD_NBG6616) || defined(CONFIG_BOARD_NBG6815)
-		athrs17_reg_write(S17_P0PAD_MODE_REG,	0xc0080);
-  #else
 		athrs17_reg_write(S17_P0PAD_MODE_REG,	0x80080);
-  #endif
 #else
 		athrs17_reg_write(S17_P0PAD_MODE_REG,	0x07680000);
 #endif
 		athrs17_reg_write(S17_P6PAD_MODE_REG,	0x01000000);
-
-		
 	}
+#endif	/* CFG_ATH_GMAC_NMACS == 1 */
+
 /*
- * Values suggested by the switch team when s17 in sgmii configuration
+ * Values suggested by the swich team when s17 in sgmii configuration
  * operates in forced mode.
  * 0x10(S17_PWS_REG)=0x602613a0
  */
@@ -306,25 +326,27 @@ void athrs17_reg_init()
 			phy_reg_write(0, phy_addr, 0x1e, 0x68a0);
 		}
 	}
+
+	/* AR8337/AR8334 v1.0 fixup */
+	if ((athrs17_reg_read(0x0) & 0xffff) == S17C_V1_DEVICEID) {
+		for (phy_addr = 0x0; phy_addr <= ATHR_PHY_MAX; phy_addr++) {
+			/* Turn On Gigabit Clock */
+			phy_reg_write(0, phy_addr, 0x1d, 0x3d);
+			phy_reg_write(0, phy_addr, 0x1e, 0x6820);
+		}
+		printf("Set up QCA8337 V1.0 fixup\n");
+	}
+
 #if CONFIG_S17_SWMAC6_CONNECTED
         printf ("Configuring Mac6 of s17 to slave scorpion\n");
 	athrs17_reg_write(S17_P6PAD_MODE_REG, S17_MAC6_RGMII_EN | S17_MAC6_RGMII_TXCLK_DELAY | \
                               S17_MAC6_RGMII_RXCLK_DELAY | (1 << S17_MAC6_RGMII_TXCLK_SHIFT) | \
                               (2 << S17_MAC6_RGMII_RXCLK_SHIFT));
-	athrs17_reg_write(S17_P6STATUS_REG, 0x7e);	
+	athrs17_reg_write(S17_P6STATUS_REG, 0x7e);
         athrs17_vlan_config();
 #endif
-#ifdef CONFIG_ATHR_S17_LED_CTRL_REG_VALUES
-{
-	uint32_t ledCtrlRegs[]=CONFIG_ATHR_S17_LED_CTRL_REG_VALUES;
-	int i;
-	for (i=0; i<sizeof(ledCtrlRegs)/sizeof(ledCtrlRegs[0]); i++) {
-		athrs17_reg_write(S17_LED_CTRL0_REG+i*4, ledCtrlRegs[i]);
-	}
-}
-#endif
 	athr17_init_flag = 1;
-//	printf("%s: complete\n",__func__);
+	printf("%s: complete\n",__func__);
 }
 
 /******************************************************************************
@@ -378,7 +400,7 @@ athrs17_phy_setup(int ethUnit)
 
 	/* See if there's any configuration data for this enet */
 	/* start auto negogiation on each phy */
-	if (is_drqfn()) 
+	if (is_drqfn())
 		ethUnit=0;
 	for (phyUnit=0; phyUnit < ATHR_PHY_MAX; phyUnit++) {
 		if (!ATHR_IS_ETHUNIT(phyUnit, ethUnit)) {
@@ -550,7 +572,6 @@ athrs17_phy_is_fdx(int ethUnit)
 * RETURNS: _10BASET, _100BASETX, _1000BASET
 */
 
-#if 0
 int
 athrs17_phy_speed(int ethUnit)
 {
@@ -596,7 +617,6 @@ athrs17_phy_speed(int ethUnit)
 
 	return _10BASET;
 }
-#endif
 
 /*****************************************************************************
 *
@@ -622,7 +642,7 @@ athrs17_phy_is_up(int ethUnit)
 	uint32_t      phyBase;
 	uint32_t      phyAddr;
 
-	if (is_drqfn()) 
+	if (is_drqfn())
 		ethUnit = 0;
 	for (phyUnit=0; phyUnit < ATHR_PHY_MAX; phyUnit++) {
 		if (!ATHR_IS_ETHUNIT(phyUnit, ethUnit)) {
@@ -746,59 +766,12 @@ athrs17_reg_write(uint32_t reg_addr, uint32_t reg_val)
 	phy_reg_write(0, phy_addr, phy_reg, phy_val);
 }
 
-#ifdef CFG_ATHRS17_PHY_DBG_CMD
-int do_port_forward(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
+unsigned int s17_rd_phy(unsigned int phy_addr, unsigned int reg_addr)
 {
-	int mode=4;
-	unsigned int flags;
-	if ( argc < 2 ) return -1;
-	if ( argc > 2 ) {
-		mode = simple_strtoul(argv[2], NULL, 0);
-	}
-	flags = simple_strtoul(argv[1], NULL, 0);
-	athrs17_port_lookup(flags, mode);
-	return 0;
+    return ((uint32_t) phy_reg_read(0, phy_addr, reg_addr));
 }
 
-U_BOOT_CMD(
-    port_forward, 3, 0, do_port_forward,
-    "Atheros PHY S17 port forward setting",
-    "<port flags> [mode]"
-);
-
-int do_phyreg(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
+void s17_wr_phy(unsigned int phy_addr, unsigned int reg_addr, unsigned int write_data)
 {
-    uint32_t reg, val;
-    
-    if ( argc < 2 ) {
-        return -1;
-    }
-    if ( argv[1][0] == 'd' ) { /* Dump some PHY registers */
-	printf("\nPad0 cfg(0x%04X)=0x%08X\n"
-                 "Pad5 cfg(0x%04X)=0x%08X\n"
-                 "Pad6 cfg(0x%04X)=0x%08X\n"
-                 "SGMII Ctrl(0x%04X)=0x%08X\n",
-		S17_P0PAD_MODE_REG, athrs17_reg_read(S17_P0PAD_MODE_REG),
-		S17_P5PAD_MODE_REG, athrs17_reg_read(S17_P5PAD_MODE_REG),
-		S17_P6PAD_MODE_REG, athrs17_reg_read(S17_P6PAD_MODE_REG),
-                S17_SGMII_CTRL_REG, athrs17_reg_read(S17_SGMII_CTRL_REG));
-
-        return 0;
-    }
-    reg = simple_strtoul(argv[1], NULL, 0);
-    if ( argc > 2 ) { /* PHY register write */
-        val = simple_strtoul(argv[2], NULL, 0);
-        athrs17_reg_write(reg, val);
-    } else { /* PHY register read */
-        val = athrs17_reg_read(reg);
-        printf("Athrs17 reg#0x%04X=0x%08X\n", reg, val);
-    }
-    return 0;
+    phy_reg_write(0, phy_addr, reg_addr, write_data);
 }
-
-U_BOOT_CMD(
-	phyreg, 3, 0, do_phyreg,
-    "Atheros PHY S17 register access",
-    "<reg> [write value]"
-);
-#endif

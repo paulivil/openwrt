@@ -186,7 +186,7 @@ ath_ddr_initial_config(uint32_t refresh)
 		udelay(10);
 		ath_reg_wr_nf(DDR_CONTROL_ADDRESS, 0x20);
 		udelay(10);
-		//prmsg("%s(%d): (", __func__, __LINE__);
+		prmsg("%s(%d): (", __func__, __LINE__);
 
 		if (RST_BOOTSTRAP_DDR_WIDTH_GET(bootstrap)) {
 			prmsg("32");
@@ -207,7 +207,7 @@ ath_ddr_initial_config(uint32_t refresh)
 
 		ath_reg_wr_nf(DDR_CTL_CONFIG_ADDRESS, ctl_config);
 
-		prmsg("bit ddr2 ");
+		prmsg("bit) ddr2 init\n");
 		udelay(10);
 		break;
 	case ATH_MEM_DDR1:
@@ -219,22 +219,22 @@ ath_ddr_initial_config(uint32_t refresh)
 		mod_val		= CFG_DDR1_MODE_VAL;
 		tap_val		= CFG_DDR1_TAP_VAL;
 
-		//prmsg("%s(%d): (", __func__, __LINE__);
+		prmsg("%s(%d): (", __func__, __LINE__);
 		if (RST_BOOTSTRAP_DDR_WIDTH_GET(bootstrap)) {
 			prmsg("32");
-            ctl_config = CFG_DDR_CTL_CONFIG; 
+                        ctl_config = CFG_DDR_CTL_CONFIG; 
 			cycle_val = CFG_DDR1_RD_DATA_THIS_CYCLE_VAL_32;
 		} else {
 			prmsg("16");
 			cycle_val = CFG_DDR1_RD_DATA_THIS_CYCLE_VAL_16;
-            ctl_config = 0; 
+                        ctl_config = 0; 
 		}
 
 		ctl_config |= CPU_DDR_SYNC_MODE;
 
 		ath_reg_wr_nf(DDR_CTL_CONFIG_ADDRESS, ctl_config);
 		udelay(10);
-		prmsg("bit) ddr1\n");
+		prmsg("bit) ddr1 init\n");
 
 		break;
 	}
@@ -346,7 +346,7 @@ ath_ddr_initial_config(uint32_t refresh)
 	ath_reg_wr_nf(DDR_REFRESH_ADDRESS, refresh);
 	udelay(100);
 
-    ath_reg_wr(TAP_CONTROL_0_ADDRESS, tap_val);
+	ath_reg_wr(TAP_CONTROL_0_ADDRESS, tap_val);
 	ath_reg_wr(TAP_CONTROL_1_ADDRESS, tap_val);
 
 	if (RST_BOOTSTRAP_DDR_WIDTH_GET(bootstrap)) {
@@ -362,9 +362,9 @@ ath_ddr_initial_config(uint32_t refresh)
 	}
 
 	/*
-     * Based on SGMII validation for stucks, packet errors were  observed and it was 
-     * mostly due to noise pickup on SGMII lines. Switching regulator register is to 
-     * be programmed with proper setting to avoid such stucks.
+         * Based on SGMII validation for stucks, packet errors were  observed and it was 
+         * mostly due to noise pickup on SGMII lines. Switching regulator register is to 
+         * be programmed with proper setting to avoid such stucks.
 	 */
 	ath_reg_rmw_clear(PMU1_ADDRESS, (7<<1));
 	ath_reg_rmw_set(PMU1_ADDRESS, (1<<3));

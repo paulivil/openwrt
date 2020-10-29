@@ -10,3 +10,13 @@
  endif
  
  ifdef CONFIG_64BIT
+--- a/include/flash.h
++++ b/include/flash.h
+@@ -467,6 +467,7 @@ extern int jedec_flash_match(flash_info_
+ 
+ #define FLASH_STM32	0x00F2		/* STM32 Embedded Flash */
+ 
++#define FLASH_M25P64    0x00F2
+ #define FLASH_UNKNOWN	0xFFFF		/* unknown flash type			*/
+ 
+ 
