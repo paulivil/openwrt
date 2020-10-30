@@ -374,7 +374,7 @@
 +COMPRESSED_UBOOT=0
 +ETH_CONFIG=_s17
 +
-+obj­$(CONFIG_TARGET_QCA955X)	=			\
++obj-­$(CONFIG_TARGET_QCA955X)	=			\
 +	$(BOARD).o		\
 +	flash.o			\
 +	extra.o			\
@@ -387,31 +387,31 @@
 +	qca-eth-955x.o
 +
 +ifeq ($(ATH_DUAL_FLASH),1)
-+OBJS	+= ../common/ath_flash.o ../../../drivers/mtd/nand/raw/nand_ids.o
++obj-y	+= ../common/ath_nand.o ../../../drivers/mtd/nand/nand_ids.o
 +endif
 +
 +ifndef BOOT_FROM_NAND
-+obj$(CONFIG_TARGET_QCA955X)	+= ../common/ath_flash.o
++obj-$(CONFIG_TARGET_QCA955X)	+= ../common/ath_flash.o
 +endif
 +
 +ifeq ($(ATH_RGMII_CAL),1)
-+obj$(CONFIG_TARGET_QCA955X)	+= rgmii-cal-955x.o
-+obj$(CONFIG_TARGET_QCA955X)	+= ../common/athrs17_lpbk.o
++obj-$(CONFIG_TARGET_QCA955X)	+= rgmii-cal-955x.o
++obj-$(CONFIG_TARGET_QCA955X)	+= ../common/athrs17_lpbk.o
 +endif
 +
 +ifeq ($(ETH_CONFIG2), _s17)
-+OBJS	+= ../common/athrs17_phy.o
++obj-y	+= ../common/athrs17_phy.o
 +endif
 +
 +ifeq ($(ETH_CONFIG), _s17)
-+obj$(CONFIG_TARGET_QCA955X)	+= ../common/athrs17_phy.o
++obj-$(CONFIG_TARGET_QCA955X)	+= ../common/athrs17_phy.o
 +endif
 +
 +ifeq ($(ETH_CONFIG), _s27)
-+OBJS	+= ../common/athr_s27_phy.o
++obj-y	+= ../common/athr_s27_phy.o
 +endif
 +
-+obj$(CONFIG_TARGET_QCA955X)	+= 955x.o tap-955x.o
++obj-$(CONFIG_TARGET_QCA955X)	+= 955x.o tap-955x.o
 --- /dev/null
 +++ b/board/qca/mips32/qca955x/board955x.c
 @@ -0,0 +1,157 @@
