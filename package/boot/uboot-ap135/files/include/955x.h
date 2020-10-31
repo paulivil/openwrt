@@ -2597,6 +2597,9 @@
 
 #define CFG_BOOTPARAMS_LEN	(128*1024)
 
+#define CONFIG_DISPLAY_BOARDINFO 1
+#define CONFIG_CUSTOM_BOARDINFO 1
+
 //#define CFG_SDRAM_BASE		0x80000000     /* Cached addr */ /*Moved to qca955x board config */
 //#define CFG_SDRAM_BASE	0xa0000000     /* Cached addr */
 
