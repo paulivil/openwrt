@@ -109,6 +109,9 @@
 #define ATH_ART_PCICFG_OFFSET           12
 #define CFG_ATH_SWAP_ETHACT		1
 
+/* for support 256M bytes DDR on our board */
+#define CONFIG_TB614
+
 /*
  * The following for ENV settings
  */
@@ -142,9 +145,9 @@
 #define CONFIG_SYS_ICACHE_SIZE 65536
 #define CONFIG_SYS_DCACHE_SIZE 32768
 
-#undef CONFIG_PCI 1
-#undef CONFIG_CMD_PCI
-#undef CONFIG_PCI_SCAN_SHOW
+#define CONFIG_PCI 1
+#define CONFIG_CMD_PCI
+#define CONFIG_PCI_SCAN_SHOW
 
 /*#define CONFIG_USB 1*/
 
@@ -185,12 +188,8 @@
  * ethernet environment
  */
 #define CONFIG_SYS_RX_ETH_BUFFER 8
+#define CONFIG_TFTP_BLOCKSIZE 512
+#define CONFIG_MII 1
+#define CFG_CMD_MII 1
+#define CONFIG_COMMANDS 1
 
-#undef CONFIG_CMD_CONSOLE
-#undef CONFIG_CMD_FPGA
-#undef CONFIG_CMD_ITEST
-#undef CONFIG_CMD_LOADS
-#undef CONFIG_CMD_NFS
-#undef CONFIG_CMD_SETGETDCR
-#undef CONFIG_CMD_SOURCE
-#undef CONFIG_CMD_XIMG

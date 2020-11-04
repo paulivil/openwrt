@@ -16,6 +16,8 @@ PKG_HASH:=e5792fba9399d9804aa2ef667f14ff771e2cdece72367d340250265bf095a5d5
 include $(INCLUDE_DIR)/u-boot.mk
 include $(INCLUDE_DIR)/package.mk
 
+
+
 define U-Boot/Default
   BUILD_TARGET:=ath79
   BUILD_SUBTARGET:=generic
@@ -34,6 +36,8 @@ define U-Boot/nbg6716
   UBOOT_CONFIG:=nbg6716
 endef
 
+
+
 define Build/Prepare
 	$(call Build/Prepare/Default)
 	$(CP) ./files/* $(PKG_BUILD_DIR)
@@ -41,7 +45,7 @@ define Build/Prepare
 endef
 
 UBOOT_MAKE_FLAGS:= VERBOSE=1
-UBOOT_CONFIGURE_VARS:= 
+UBOOT_CONFIGURE_VARS:=
 UBOOT_TARGETS:=\
 nbg6616 \
 nbg6716

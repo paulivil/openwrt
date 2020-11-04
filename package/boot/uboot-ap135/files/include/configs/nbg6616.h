@@ -175,7 +175,7 @@
  * Image type
  */
 #define CONFIG_LZMA 1
-#define CONFIG_IMAGE_FORMAT_LEGACY
+//#define CONFIG_IMAGE_FORMAT_LEGACY
 
 /*
  * ethernet environment

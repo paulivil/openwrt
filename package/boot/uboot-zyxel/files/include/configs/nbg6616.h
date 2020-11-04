@@ -14,7 +14,7 @@
 #define CONFIG_QCA955X_MAX_GPIO_NUM  23
 #define CONFIG_ZGPIO_CMD
 #define CONFIG_ZFLASH_CMD
-#define ZLOADER_ertEC_FAILED_LED_INDICATE \
+#define ZLOADER_EXEC_FAILED_LED_INDICATE \
 do { \
         configure_pio(15, ZGPIO_CONFIG_OUTPUT); /* Power LED, Low active */ \
         configure_pio(21, ZGPIO_CONFIG_OUTPUT); /* WPS LED, Low active */\

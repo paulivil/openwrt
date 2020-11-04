@@ -23,16 +23,21 @@ define U-Boot/Default
   UBOOT_IMAGE:=u-boot.bin
 endef
 
-define U-Boot/nbg6616
-  NAME:=ZyXEL NBG6616
-  UBOOT_CONFIG:=nbg6616
-endef
+define U-Boot/ap135
+#   NAME:=AP135
+#   UBOOT_CONFIG:=ap135
+# endef
 
-define U-Boot/nbg6716
-  NAME:=ZyXEL NBG6716
-  BUILD_SUBTARGET:=nand
-  UBOOT_CONFIG:=nbg6716
-endef
+# define U-Boot/nbg6616
+#   NAME:=ZyXEL NBG6616
+#   UBOOT_CONFIG:=nbg6616
+# endef
+
+# define U-Boot/nbg6716
+#   NAME:=ZyXEL NBG6716
+#   BUILD_SUBTARGET:=nand
+#   UBOOT_CONFIG:=nbg6716
+# endef
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
@@ -40,10 +45,11 @@ define Build/Prepare
 	find $(PKG_BUILD_DIR) -name .svn | $(XARGS) rm -rf
 endef
 
-UBOOT_MAKE_FLAGS:=-mno-mips16
-UBOOT_TARGETS:=\
-nbg6616 \
-nbg6716
+UBOOT_MAKE_FLAGS:= VERBOSE=1
+UBOOT_CONFIGURE_VARS:=USE_PRIVATE_LIBGCC=yes 
+UBOOT_TARGETS:=ap135
+# nbg6616 \
+# nbg6716
 
 
 
