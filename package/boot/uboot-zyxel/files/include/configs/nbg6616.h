@@ -90,7 +90,7 @@ do { \
 /*-----------------------------------------------------------------------
  * Board Configuration
  */
-#define __CONFIG_BOARD_NAME NBG6616
+#define CONFIG_BOARD_NBG6616	1
 #define CONFIG_BOARD_NAME		"NBG6616"
 
 /* Enable devicetree support */
@@ -244,9 +244,6 @@ do { \
   #error "Must be using ROMD partition for this configuration!"
  #endif /* CONFIG_USING_ROMD_PARTITION */
 
-
- 
-
   #define LOADER_IMG_ENV_VAL	gen_img_env_val(ldr, CFG_LOADER_PART_ADDR, CFG_LOADER_PART_SIZE)
   #define ENV_IMG_ENV_VAL	gen_img_env_val(env, CFG_ENV_PART_ADDR, CFG_ENV_PART_SIZE)
   #define RFDATA_IMG_ENV_VAL	gen_img_env_val(rfdat, CFG_RFDATA_PART_ADDR, CFG_RFDATA_PART_SIZE)
@@ -279,8 +276,6 @@ do { \
     "uboot_env_ver=" CONFIG_ENV_VERSION "\0" \
     "img_prefix=nbg6616-\0"	\
     "loadaddr=80400000\0" \
-    "fdtaddr=80400000\0" \
-    "fdt_addr_r=803F8000\0" \
     "readonly=ro\0" \
     "setmtdparts=setenv mtdparts " MTDPARTS_DEFAULT "\0" \
     "flashargs=setenv bootargs " BOOTARG_DEFAULT "\0"  \

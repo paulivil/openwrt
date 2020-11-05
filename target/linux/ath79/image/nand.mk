@@ -194,8 +194,8 @@ define Device/zyxel_nbg6716
   IMAGES :=  sysupgrade.bin #sysupgrade.tar factory.bin
   IMAGE/squashfs-sysupgrade.tar:= append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs  | \
 	sysupgrade-tar rootfs=$$$$@ | append-metadata
-  IMAGE/squashfs-sysupgrade.bin := append-kernel | \
-	pad-to $$$$(BLOCKSIZE) | append-ubi | pad-to 263192576 | append-metadata
+  IMAGE/squashfs-sysupgrade.bin :=  append-kernel | \
+	pad-to $$$$(BLOCKSIZE) | append-ubi | pad-to $$$$(PAGESIZE) | append-metadata
   #IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi | \
 	zyxel-factory
   UBINIZE_OPTS := -E 5

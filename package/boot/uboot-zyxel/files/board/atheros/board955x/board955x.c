@@ -9,7 +9,7 @@
 extern int ath_ddr_initial_config(uint32_t refresh);
 extern int ath_ddr_find_size(void);
 
-#if COMPRESSED_UBOOT
+#ifdef COMPRESSED_UBOOT
 #	define prmsg(...)
 #	define args		char *s
 #	define board_str(a)	do {			\
@@ -148,11 +148,7 @@ ath_mem_config(void)
 	tap = (uint32_t *)0xbd007f10;
 	prmsg("Tap (low, high) = (0x%x, 0x%x)\n", tap[0], tap[1]);
 
-	prmsg("Tap values = (0x%x, 0x%x, 0x%x, 0x%x)\n",
-		ath_reg_rd(TAP_CONTROL_0_ADDRESS),
-		ath_reg_rd(TAP_CONTROL_1_ADDRESS),
-		ath_reg_rd(TAP_CONTROL_2_ADDRESS),
-		ath_reg_rd(TAP_CONTROL_3_ADDRESS));
+	prmsg("Tap values = (0x%x, 0x%x, 0x%x, 0x%x)\n",ath_reg_rd(TAP_CONTROL_0_ADDRESS),ath_reg_rd(TAP_CONTROL_1_ADDRESS),ath_reg_rd(TAP_CONTROL_2_ADDRESS),ath_reg_rd(TAP_CONTROL_3_ADDRESS));
 
 	/* Take WMAC out of reset */
 	reg32 = ath_reg_rd(RST_RESET_ADDRESS);

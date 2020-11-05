@@ -31,13 +31,11 @@ ath_get_nand_cal_data(void)
 	/*
 	 * Get the Offset of Caldata partition
 	 */
-
 	off = ath_nand_get_cal_offset(getenv("bootargs"));
 	if(off == ATH_CAL_OFF_INVAL) {
 		printf("Invalid CAL offset \n");
 		return 1;
 	}
-
 	/*
 	 * Get the values from flash, and program into the MAC address
 	 * registers

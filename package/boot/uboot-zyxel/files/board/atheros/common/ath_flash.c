@@ -153,7 +153,6 @@ write_buff(flash_info_t *info, uchar *source, ulong addr, ulong len)
 	int total = 0, len_this_lp, bytes_this_page;
 	ulong dst;
 	uchar *src;
-	int ext = 0;
 
 	printf("write addr: %x\n", addr);
 	addr = addr - CONFIG_SYS_FLASH_BASE;

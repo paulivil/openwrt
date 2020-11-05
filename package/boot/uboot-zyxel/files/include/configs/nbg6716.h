@@ -89,7 +89,7 @@ do { \
 /*-----------------------------------------------------------------------
  * Board Configuration
  */
-#define __CONFIG_BOARD_NAME NBG6716
+#define CONFIG_BOARD_NBG6716	1
 #define CONFIG_BOARD_NAME		"NBG6716"
 /* Enable devicetree support */
 #define CONFIG_OF_LIBFDT
@@ -205,7 +205,7 @@ do { \
 	#writeCmd " ${fileaddr} " #offs " ${filesize}\0"
 
 #define gen_nand_cmd(cmd, offs, file, partSize)			\
-	__gen_nand_cmd(cmd, offs, file, ubi part, ubi write, partSize)
+	__gen_nand_cmd(cmd, offs, file, nand erase, nand write, partSize)
 
 #ifndef CONFIG_ZFLASH_CMD
 #define __gen_cmd(cmd, offs, file, eraseCmd, writeCmd, eraseSize)	\
@@ -274,8 +274,7 @@ do { \
   #define BU1_IMG_ENV_VAL	gen_img_env_val(bu1, CFG_BU1_PART_ADDR, CFG_BU1_PART_SIZE)
 
   #define UPDATE_LOADER_CMD     gen_cmd(lu, ${ldr_paddr}, u-boot.bin, ${ldr_psize})
-  /*#define UPDATE_ROOTFS_CMD     gen_nand_cmd(lf, ${rfs_paddr}, ${img_prefix}rootfs.jffs2, ${rootfs_psize})*/
-#define UPDATE_ROOTFS_CMD "lf=tftp ${loadaddr} ${dir}${img_prefix}rootfs.jffs2;ubi part rootfs;ubi write ${loadaddr} testvol ${rootfs_psize}\0"
+  #define UPDATE_ROOTFS_CMD     gen_nand_cmd(lf, ${rfs_paddr}, ${img_prefix}rootfs.jffs2, ${rootfs_psize})  
   #define IMG_ENV_VAL           LOADER_IMG_ENV_VAL ENV_IMG_ENV_VAL RFDATA_IMG_ENV_VAL \
                                 RTFSDATA_IMG_ENV_VAL ROMD_IMG_ENV_VAL HEADER_IMG_ENV_VAL \
 				ROOTFS_IMG_ENV_VAL HEADER1_IMG_ENV_VAL \
@@ -304,6 +303,7 @@ do { \
     "bootcmd=run boot_flash\0" \
     IMG_ENV_VAL \
     UPGRADE_IMG_CMD \
+    "lx=tftp ${loadaddr} ${dir}${img_prefix}rootfs.jffs2;ubi part rootfs;ubi write ${loadaddr} testvol ${rootfs_psize}\0" \
     "countrycode=ff\0" \
     "serialnum=S100Z47000001\0" \
     "hostname=NBG6716\0"
@@ -324,11 +324,11 @@ do { \
 #define CONFIG_MTD_DEVICE
 #define CONFIG_MTD_PARTITIONS
 #define CONFIG_CMD_MTDPARTS
-//#define CONFIG_JFFS2_NAND
-//#define CONFIG_JFFS2_PART_OFFSET	CFG_ROOTFS_PART_ADDR
+#define CONFIG_JFFS2_NAND
+#define CONFIG_JFFS2_PART_OFFSET	CFG_ROOTFS_PART_ADDR
 // Default using remaining flash space if you ignore 'CONFIG_JFFS_PART_SIZE'
-//#define CONFIG_JFFS2_PART_SIZE		CFG_ROOTFS_PART_SIZE
-//#define CONFIG_JFFS2_DEV		"nand0"
+#define CONFIG_JFFS2_PART_SIZE		CFG_ROOTFS_PART_SIZE
+#define CONFIG_JFFS2_DEV		"nand0"
 #else
 #define CONFIG_JFFS2_PART_OFFSET	(CFG_ROOTFS_PART_ADDR-CONFIG_SYS_FLASH_BASE)
 // Default using remaining flash space if you ignore 'CONFIG_JFFS_PART_SIZE'
