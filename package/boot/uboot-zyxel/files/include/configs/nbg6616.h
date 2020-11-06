@@ -82,7 +82,7 @@ do { \
  */
 #define CFG_ATH_SWAP_ETHACT		1
 
-//#define CFG_ATHRS17_PHY_DBG_CMD		1
+/* #define CFG_ATHRS17_PHY_DBG_CMD		1 */
 
 /* Setup QCA8337 switch LEDs */
 #define CONFIG_ATHR_S17_LED_CTRL_REG_VALUES { 0xffb7ffb7, 0xffb7ffb7, 0xffb7ffb7, 0x03ffff00 }
@@ -116,7 +116,7 @@ do { \
  * Miscellaneous configurable options
  */
 #define CONFIG_VERSION_VARIABLE	/* keep u-boot version string in environment */
-//#define CONFIG_SYS_LONGHELP		/* undef to save memory      */
+/*#define CONFIG_SYS_LONGHELP		 undef to save memory      */
 #define CONFIG_SYS_PROMPT           CONFIG_BOARD_NAME "# "              /* Monitor Command Prompt    */
 #define CONFIG_SYS_CBSIZE           512         /* Console I/O Buffer Size   */
 #define CONFIG_SYS_PBSIZE           (CONFIG_SYS_CBSIZE+sizeof(CONFIG_SYS_PROMPT)+16)  /* Print Buffer Size */
@@ -296,10 +296,11 @@ do { \
 #define CONFIG_CMD_JFFS2
 #define CONFIG_CMD_JFFS2_ULOAD
 #define CONFIG_JFFS2_SUMMARY
-//#define CONFIG_CMD_JFFS2_LS
-//#define CONFIG_CMD_JFFS2_FSINFO
+/*#define CONFIG_CMD_JFFS2_LS
+ *#define CONFIG_CMD_JFFS2_FSINFO
+ */
 #define CONFIG_JFFS2_PART_OFFSET	(CFG_ROOTFS_PART_ADDR-CONFIG_SYS_FLASH_BASE)
-// Default using remaining flash space if you ignore 'CONFIG_JFFS_PART_SIZE'
+/* Default using remaining flash space if you ignore 'CONFIG_JFFS_PART_SIZE' */
 #define CONFIG_JFFS2_PART_SIZE		CFG_ROOTFS_PART_SIZE
 
 
@@ -315,12 +316,13 @@ do { \
 #define CONFIG_MII
 #define CONFIG_CMD_MII
 #define CONFIG_PHY_GIGE
-//#define CONFIG_CMD_DHCP
+/* #define CONFIG_CMD_DHCP*/
 #endif
 
-//#define CONFIG_SYS_CONSOLE_INFO_QUIET
-//#define CONFIG_SILENT_CONSOLE
-//#define CONFIG_DISABLE_CONSOLE
+/*  #define CONFIG_SYS_CONSOLE_INFO_QUIET
+ *  #define CONFIG_SILENT_CONSOLE
+ * #define CONFIG_DISABLE_CONSOLE
+ */
 
 
 /*-----------------------------------------------------------------------
@@ -345,7 +347,7 @@ do { \
 #undef CONFIG_CMD_BOOTD
 #undef CONFIG_CMD_LOADB
 #undef CONFIG_CMD_IMI
-//#undef CONFIG_TIMESTAMP
+/* #undef CONFIG_TIMESTAMP  */
 #endif
 #undef CONFIG_CMD_CONSOLE
 #undef CONFIG_CMD_FPGA

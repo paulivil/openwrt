@@ -295,7 +295,11 @@ void athrs17_reg_init()
                  * should be configured as 0x80
                  */
 #ifdef ATH_S17_MAC0_SGMII
+#if defined(CONFIG_BOARD_NBG6716) || defined(CONFIG_BOARD_NBG6616) 
+		athrs17_reg_write(S17_P0PAD_MODE_REG,	0xc0080);
+#else		
 		athrs17_reg_write(S17_P0PAD_MODE_REG,	0x80080);
+#endif
 #else
 		athrs17_reg_write(S17_P0PAD_MODE_REG,	0x07680000);
 #endif

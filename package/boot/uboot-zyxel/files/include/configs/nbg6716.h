@@ -81,7 +81,7 @@ do { \
  */
 #define CFG_ATH_SWAP_ETHACT		1
 
-//#define CFG_ATHRS17_PHY_DBG_CMD		1
+/* #define CFG_ATHRS17_PHY_DBG_CMD		1 */
 
 /* for support 256M bytes DDR on our board */
 #define CONFIG_TB614
@@ -115,7 +115,7 @@ do { \
  * Miscellaneous configurable options
  */
 #define CONFIG_VERSION_VARIABLE	/* keep u-boot version string in environment */
-//#define CONFIG_SYS_LONGHELP		/* undef to save memory      */
+/*#define CONFIG_SYS_LONGHELP		 undef to save memory      */
 #define CONFIG_SYS_PROMPT           CONFIG_BOARD_NAME "# "              /* Monitor Command Prompt    */
 #define CONFIG_SYS_CBSIZE           512         /* Console I/O Buffer Size   */
 #define CONFIG_SYS_PBSIZE           (CONFIG_SYS_CBSIZE+sizeof(CONFIG_SYS_PROMPT)+16)  /* Print Buffer Size */
@@ -195,7 +195,7 @@ do { \
  */
 #undef	CONFIG_BOOTARGS
 
-//#define CFG_ZLD_IN_NAND
+/*#define CFG_ZLD_IN_NAND */
 #define CFG_RAS_IN_NAND
 #define CFG_ROMD_IN_NAND
 
@@ -315,8 +315,9 @@ do { \
 #define CONFIG_CMD_JFFS2
 #define CONFIG_CMD_JFFS2_ULOAD
 #define CONFIG_JFFS2_SUMMARY
-//#define CONFIG_CMD_JFFS2_LS
-//#define CONFIG_CMD_JFFS2_FSINFO
+/*#define CONFIG_CMD_JFFS2_LS
+ *#define CONFIG_CMD_JFFS2_FSINFO
+ */
 #if defined(CFG_RAS_IN_NAND)
 #define CONFIG_CMD_UBI
 #define CONFIG_CMD_UBIFS
@@ -326,12 +327,12 @@ do { \
 #define CONFIG_CMD_MTDPARTS
 #define CONFIG_JFFS2_NAND
 #define CONFIG_JFFS2_PART_OFFSET	CFG_ROOTFS_PART_ADDR
-// Default using remaining flash space if you ignore 'CONFIG_JFFS_PART_SIZE'
+/* Default using remaining flash space if you ignore 'CONFIG_JFFS_PART_SIZE' */
 #define CONFIG_JFFS2_PART_SIZE		CFG_ROOTFS_PART_SIZE
 #define CONFIG_JFFS2_DEV		"nand0"
 #else
 #define CONFIG_JFFS2_PART_OFFSET	(CFG_ROOTFS_PART_ADDR-CONFIG_SYS_FLASH_BASE)
-// Default using remaining flash space if you ignore 'CONFIG_JFFS_PART_SIZE'
+/* Default using remaining flash space if you ignore 'CONFIG_JFFS_PART_SIZE' */
 #define CONFIG_JFFS2_PART_SIZE		CFG_ROOTFS_PART_SIZE
 #endif
 
@@ -351,9 +352,10 @@ do { \
 #define CONFIG_PHY_GIGE
 #endif
 
-//#define CONFIG_SYS_CONSOLE_INFO_QUIET
-//#define CONFIG_SILENT_CONSOLE
-//#define CONFIG_DISABLE_CONSOLE
+/*  #define CONFIG_SYS_CONSOLE_INFO_QUIET
+ *  #define CONFIG_SILENT_CONSOLE
+ * #define CONFIG_DISABLE_CONSOLE
+ */
 
 
 /*-----------------------------------------------------------------------
@@ -380,7 +382,7 @@ do { \
 #undef CONFIG_CMD_BOOTD
 #undef CONFIG_CMD_LOADB
 #undef CONFIG_CMD_IMI
-//#undef CONFIG_TIMESTAMP
+/* #undef CONFIG_TIMESTAMP  */
 #endif
 #undef CONFIG_CMD_CONSOLE
 #undef CONFIG_CMD_FPGA

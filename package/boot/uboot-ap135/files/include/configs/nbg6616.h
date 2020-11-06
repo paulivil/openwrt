@@ -148,7 +148,7 @@
 #define CONFIG_ATHEROS	1
 #define CONFIG_MACH_QCA955x 1
 /*#define CFG_INIT_STACK_IN_SRAM 1 -- OBSOLETE.*/
-#define CONFIG_BOARD_NBG6616
+#define CONFIG_BOARD_NBG6616    1
 #define __CONFIG_BOARD_NAME NBG6616
 #define CONFIG_BOARD_NAME "NBG6616"
 #define CFG_PLL_FREQ CFG_PLL_720_600_200
@@ -175,7 +175,7 @@
  * Image type
  */
 #define CONFIG_LZMA 1
-//#define CONFIG_IMAGE_FORMAT_LEGACY
+/*#define CONFIG_IMAGE_FORMAT_LEGACY */
 
 /*
  * ethernet environment
