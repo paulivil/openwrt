@@ -222,12 +222,12 @@ ath_ddr_initial_config(uint32_t refresh)
 		prmsg("%s(%d): (", __func__, __LINE__);
 		if (RST_BOOTSTRAP_DDR_WIDTH_GET(bootstrap)) {
 			prmsg("32");
-                        ctl_config = CFG_DDR_CTL_CONFIG; 
+            ctl_config = CFG_DDR_CTL_CONFIG; 
 			cycle_val = CFG_DDR1_RD_DATA_THIS_CYCLE_VAL_32;
 		} else {
 			prmsg("16");
 			cycle_val = CFG_DDR1_RD_DATA_THIS_CYCLE_VAL_16;
-                        ctl_config = 0; 
+            ctl_config = 0; 
 		}
 
 		ctl_config |= CPU_DDR_SYNC_MODE;
@@ -385,7 +385,7 @@ ath_uart_freq(void)
 	}
 }
 
-#if 0
+
 void
 ath_sys_frequency(uint32_t *cpu, uint32_t *ddr, uint32_t *ahb)
 {
@@ -480,4 +480,4 @@ done:
 	*ahb = ath_ahb_freq;
 
 }
-#endif
+

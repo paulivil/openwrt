@@ -26,8 +26,8 @@
 #define ath_gmac_name2mac(name)	   is_drqfn() ? ath_gmac_unit2mac(1):strcmp(name,"eth0") ? ath_gmac_unit2mac(1) : ath_gmac_unit2mac(0)
 #endif
 
-uint16_t ath_gmac_miiphy_read(char *devname, uint32_t phaddr, uint8_t reg);
-void  ath_gmac_miiphy_write(char *devname, uint32_t phaddr, uint8_t reg, uint16_t data);
+int ath_gmac_miiphy_read(char *devname, uint32_t phaddr, uint8_t reg, uint16_t *data);
+int  ath_gmac_miiphy_write(char *devname, uint32_t phaddr, uint8_t reg, uint16_t data);
 extern void ath_sys_frequency(uint32_t *, uint32_t *, uint32_t *);
 
 #ifndef CFG_ATH_GMAC_NMACS
@@ -92,10 +92,9 @@ ath_gmac_send(struct eth_device *dev, volatile void *packet, int length)
 		if (!ath_gmac_tx_owned_by_dma(f))
 			break;
 	}
-#if 0
 	if (i == MAX_WAIT)
 		printf("Tx Timed out\n");
-#endif
+
 	f->pkt_start_addr = 0;
 	f->pkt_size = 0;
 
@@ -110,7 +109,7 @@ static int ath_gmac_recv(struct eth_device *dev)
 	int length;
 	ath_gmac_desc_t *f;
 	ath_gmac_mac_t *mac;
-    	volatile int dmaed_pkt=0;
+	volatile int dmaed_pkt=0;
 	int count = 0;
 
 	mac = (ath_gmac_mac_t *)dev->priv;
@@ -181,11 +180,11 @@ void ath_gmac_mii_setup(ath_gmac_mac_t *mac)
 					ETH_CFG_RGMII_GE0_SET(1));
 
 		ath_reg_wr(ETH_XMII_ADDRESS, ETH_XMII_TX_INVERT_SET(1) |
-                			     ETH_XMII_RX_DELAY_SET(2)  |
-                			     ETH_XMII_TX_DELAY_SET(1)  |
-					     ETH_XMII_GIGE_SET(1));
+					ETH_XMII_RX_DELAY_SET(2) |
+					ETH_XMII_TX_DELAY_SET(1) |
+					ETH_XMII_GIGE_SET(1));
 #else
-        rgmii_cal_alg()
+		rgmii_cal_alg()
 #endif
 		udelay(1000);
 		ath_gmac_reg_wr(mac, ATH_MAC_MII_MGMT_CFG, mgmt_cfg_val | (1 << 31));
@@ -214,14 +213,14 @@ void ath_gmac_mii_setup(ath_gmac_mac_t *mac)
 					ETH_CFG_ETH_RXD_DELAY_SET(3)|
 					ETH_CFG_RGMII_GE0_SET(1));
 		ath_reg_wr(ETH_XMII_ADDRESS, ETH_XMII_TX_INVERT_SET(1) |
-                			     ETH_XMII_RX_DELAY_SET(2)  |
-                			     ETH_XMII_TX_DELAY_SET(1)  |
-					     ETH_XMII_GIGE_SET(1));
+				ETH_XMII_RX_DELAY_SET(2)  |
+				ETH_XMII_TX_DELAY_SET(1)  |
+				ETH_XMII_GIGE_SET(1));
 		udelay(1000);
 		ath_gmac_reg_wr(mac, ATH_MAC_MII_MGMT_CFG, mgmt_cfg_val | (1 << 31));
 		ath_gmac_reg_wr(mac, ATH_MAC_MII_MGMT_CFG, mgmt_cfg_val);
-		
-                return;
+
+		return;
 	}
 #endif
 }
@@ -343,9 +342,9 @@ static void athr_gmac_sgmii_setup()
 
 #ifdef ATH_SGMII_FORCED_MODE
         ath_reg_wr(MR_AN_CONTROL_ADDRESS, MR_AN_CONTROL_SPEED_SEL1_SET(1) |
-                                           MR_AN_CONTROL_PHY_RESET_SET(1)  |
-                                           MR_AN_CONTROL_DUPLEX_MODE_SET(1));
-        udelay(10);
+					MR_AN_CONTROL_PHY_RESET_SET(1)  |
+					MR_AN_CONTROL_DUPLEX_MODE_SET(1));
+	udelay(10);
 
         ath_reg_wr(SGMII_CONFIG_ADDRESS, SGMII_CONFIG_MODE_CTRL_SET(2)   |
                                           SGMII_CONFIG_FORCE_SPEED_SET(1) |
@@ -357,8 +356,8 @@ static void athr_gmac_sgmii_setup()
 
 	ath_reg_wr(SGMII_CONFIG_ADDRESS, SGMII_CONFIG_MODE_CTRL_SET(2));
 
-	ath_reg_wr(MR_AN_CONTROL_ADDRESS, MR_AN_CONTROL_AN_ENABLE_SET(1)
-                                      |MR_AN_CONTROL_PHY_RESET_SET(1));
+	ath_reg_wr(MR_AN_CONTROL_ADDRESS, MR_AN_CONTROL_AN_ENABLE_SET(1) |
+					MR_AN_CONTROL_PHY_RESET_SET(1));
 
 	ath_reg_wr(MR_AN_CONTROL_ADDRESS, MR_AN_CONTROL_AN_ENABLE_SET(1));
 #endif
@@ -370,23 +369,23 @@ static void athr_gmac_sgmii_setup()
 
 	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1));
 
-	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1)
-                                    |SGMII_RESET_RX_125M_N_SET(1));
+	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1) |
+					SGMII_RESET_RX_125M_N_SET(1));
 
-	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1)
-                                    |SGMII_RESET_TX_125M_N_SET(1)
-                                    |SGMII_RESET_RX_125M_N_SET(1));
+	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1) |
+					SGMII_RESET_TX_125M_N_SET(1)	|
+					SGMII_RESET_RX_125M_N_SET(1));
 
-	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1)
-                                    |SGMII_RESET_TX_125M_N_SET(1)
-                                    |SGMII_RESET_RX_125M_N_SET(1)
-                                    |SGMII_RESET_RX_CLK_N_SET(1));
+	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1) |
+					SGMII_RESET_TX_125M_N_SET(1)	|
+					SGMII_RESET_RX_125M_N_SET(1)	|
+					SGMII_RESET_RX_CLK_N_SET(1));
 
-	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1)
-                                    |SGMII_RESET_TX_125M_N_SET(1)
-                                    |SGMII_RESET_RX_125M_N_SET(1)
-                                    |SGMII_RESET_RX_CLK_N_SET(1)
-                                    |SGMII_RESET_TX_CLK_N_SET(1));
+	ath_reg_wr(SGMII_RESET_ADDRESS, SGMII_RESET_HW_RX_125M_N_SET(1) |
+					SGMII_RESET_TX_125M_N_SET(1)	|
+					SGMII_RESET_RX_125M_N_SET(1)	|
+					SGMII_RESET_RX_CLK_N_SET(1)	|
+					SGMII_RESET_TX_CLK_N_SET(1));
 
         ath_reg_rmw_clear(MR_AN_CONTROL_ADDRESS, MR_AN_CONTROL_PHY_RESET_SET(1));
 	/*
@@ -498,7 +497,7 @@ static int ath_gmac_check_link(ath_gmac_mac_t *mac)
 				ath_reg_wr(ETH_SGMII_ADDRESS, ETH_SGMII_GIGE_SET(1) |
                                            ETH_SGMII_CLK_SEL_SET(1));
 			}
-	
+
 			break;
 
 		case _100BASET:
@@ -506,9 +505,9 @@ static int ath_gmac_check_link(ath_gmac_mac_t *mac)
 			ath_gmac_set_mac_speed(mac, 1);
 			ath_gmac_reg_rmw_clear(mac, ATH_MAC_FIFO_CFG_5, (1 << 19));
 
-                        if (is_ar8033() && mac->mac_unit == 1) {
-                        	ath_reg_wr(ETH_SGMII_ADDRESS, ETH_SGMII_PHASE0_COUNT_SET(1) |
-                                           ETH_SGMII_PHASE1_COUNT_SET(1));
+			if (is_ar8033() && mac->mac_unit == 1) {
+				ath_reg_wr(ETH_SGMII_ADDRESS, ETH_SGMII_PHASE0_COUNT_SET(1) |
+						ETH_SGMII_PHASE1_COUNT_SET(1));
 			}
 
 			break;
@@ -520,7 +519,7 @@ static int ath_gmac_check_link(ath_gmac_mac_t *mac)
 
 			if (is_ar8033() && mac->mac_unit == 1) {
 				ath_reg_wr(ETH_SGMII_ADDRESS, ETH_SGMII_PHASE0_COUNT_SET(19) |
-                                           ETH_SGMII_PHASE1_COUNT_SET(19));
+						ETH_SGMII_PHASE1_COUNT_SET(19));
 			}
 
 			break;
@@ -530,8 +529,9 @@ static int ath_gmac_check_link(ath_gmac_mac_t *mac)
 			return 0;
 	}
 
-	if (mac->link && (duplex == mac->duplex) && (speed == mac->speed))
+	if (mac->link && (duplex == mac->duplex) && (speed == mac->speed)) {
 		return 1;
+	}
 
 	mac->duplex = duplex;
 	mac->speed = speed;
@@ -569,13 +569,13 @@ static int ath_gmac_clean_rx(struct eth_device *dev, bd_t * bd)
 	}
 #else
 	if (!ath_gmac_check_link(mac))
-		return 0;
+		return -1;
 #endif
 
 	mac->next_rx = 0;
 
-        ath_gmac_reg_wr(mac, ATH_MAC_FIFO_CFG_0, 0x1f00); 
-        ath_gmac_reg_wr(mac, ATH_MAC_CFG1, (ATH_MAC_CFG1_RX_EN | ATH_MAC_CFG1_TX_EN));
+	ath_gmac_reg_wr(mac, ATH_MAC_FIFO_CFG_0, 0x1f00);
+	ath_gmac_reg_wr(mac, ATH_MAC_CFG1, (ATH_MAC_CFG1_RX_EN | ATH_MAC_CFG1_TX_EN));
 
 	for (i = 0; i < NO_OF_RX_FIFOS; i++) {
 		fr = mac->fifo_rx[i];
@@ -644,13 +644,12 @@ static int ath_gmac_setup_fifos(ath_gmac_mac_t *mac)
 static void ath_gmac_halt(struct eth_device *dev)
 {
 	ath_gmac_mac_t *mac = (ath_gmac_mac_t *)dev->priv;
-        ath_gmac_reg_rmw_clear(mac, ATH_MAC_CFG1,(ATH_MAC_CFG1_RX_EN | ATH_MAC_CFG1_TX_EN));
-        ath_gmac_reg_wr(mac,ATH_MAC_FIFO_CFG_0,0x1f1f);
+	ath_gmac_reg_rmw_clear(mac, ATH_MAC_CFG1,(ATH_MAC_CFG1_RX_EN | ATH_MAC_CFG1_TX_EN));
+	ath_gmac_reg_wr(mac,ATH_MAC_FIFO_CFG_0,0x1f1f);
 	ath_gmac_reg_wr(mac,ATH_DMA_RX_CTRL, 0);
 	while (ath_gmac_reg_rd(mac, ATH_DMA_RX_CTRL));
 }
 
-#if 0
 #ifdef CONFIG_ATH_NAND_BR
 
 unsigned char *
@@ -760,7 +759,6 @@ static void ath_gmac_get_ethaddr(struct eth_device *dev)
 			printf("Fetching MAC Address from 0x%p\n", __func__, eeprom);
 		}
 }
-#endif
 
 #if defined(CONFIG_MGMT_INIT) && defined (CONFIG_ATHR_SWITCH_ONLY_MODE) || defined ATH_MDC_GPIO
 void
@@ -815,19 +813,19 @@ int ath_gmac_enet_initialize(bd_t * bis)
 			return 0;
 		}
 
-		memset(ath_gmac_macs[i], 0, sizeof(ath_gmac_macs[i]));
-		memset(dev[i], 0, sizeof(dev[i]));
+		memset(ath_gmac_macs[i], 0, sizeof(ath_gmac_mac_t));
+		memset(dev[i], 0, sizeof(struct eth_device));
 
 		sprintf(dev[i]->name, "eth%d", i);
 #if 0 /* for zyxel, we get MAC address from u-boot environment */
 		ath_gmac_get_ethaddr(dev[i]);
-#else
+#endif
 	#ifdef CFG_ATH_SWAP_ETHACT
 		eth_getenv_enetaddr_by_index(CFG_ATH_GMAC_NMACS-1-i, dev[i]->enetaddr);
 	#else
 		eth_getenv_enetaddr_by_index(i, dev[i]->enetaddr);
 	#endif
-#endif
+
 		ath_gmac_macs[i]->mac_unit = i;
 		ath_gmac_macs[i]->mac_base = i ? ATH_GE1_BASE : ATH_GE0_BASE ;
 		ath_gmac_macs[i]->dev = dev[i];
@@ -915,7 +913,7 @@ int ath_gmac_enet_initialize(bd_t * bis)
 		}
 #ifdef CONFIG_ATHRS_GMAC_SGMII
 	/*
-         * MAC unit 1 or drqfn package call sgmii setup.
+	* MAC unit 1 or drqfn package call sgmii setup.
 	 */
 	if (i == 1 || is_drqfn())
 		athr_gmac_sgmii_setup();
@@ -961,8 +959,8 @@ int ath_gmac_enet_initialize(bd_t * bis)
 }
 
 #if defined(CONFIG_CMD_MII) || defined(CONFIG_ZYXEL_ZLOADER)
-uint16_t
-ath_gmac_miiphy_read(char *devname, uint32_t phy_addr, uint8_t reg)
+int
+ath_gmac_miiphy_read(char *devname, uint32_t phy_addr, uint8_t reg, uint16_t *data)
 {
 	ath_gmac_mac_t *mac   = ath_gmac_name2mac(devname);
 	uint16_t      addr  = (phy_addr << ATH_ADDR_SHIFT) | reg, val;
@@ -1002,16 +1000,18 @@ ath_gmac_miiphy_read(char *devname, uint32_t phy_addr, uint8_t reg)
 	val = ath_gmac_reg_rd(mac, ATH_MII_MGMT_STATUS);
 	ath_gmac_reg_wr(mac, ATH_MII_MGMT_CMD, 0x0);
 
+	if (data != NULL)
+		*data = val;
 	return val;
 }
 
-void
+int
 ath_gmac_miiphy_write(char *devname, uint32_t phy_addr, uint8_t reg, uint16_t data)
 {
 	ath_gmac_mac_t *mac   = ath_gmac_name2mac(devname);
-	uint16_t      addr  = (phy_addr << ATH_ADDR_SHIFT) | reg;
+	uint16_t addr  = (phy_addr << ATH_ADDR_SHIFT) | reg;
 	volatile int rddata;
-	uint16_t      ii = 0xFFFF;
+	uint16_t ii = 0xFFFF;
 
 
 	/*
@@ -1035,5 +1035,7 @@ ath_gmac_miiphy_write(char *devname, uint32_t phy_addr, uint8_t reg, uint16_t da
 
 	if (ii == 0)
 		printf("Error!!! Leave ath_gmac_miiphy_write without polling correct status!\n");
+
+	return 0;
 }
 #endif		/* defined(CONFIG_CMD_MII) || defined(CONFIG_ZYXEL_ZLOADER) */

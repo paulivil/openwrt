@@ -550,7 +550,6 @@ athrs17_phy_is_fdx(int ethUnit)
 * RETURNS: _10BASET, _100BASETX, _1000BASET
 */
 
-#if 0
 int
 athrs17_phy_speed(int ethUnit)
 {
@@ -596,7 +595,6 @@ athrs17_phy_speed(int ethUnit)
 
 	return _10BASET;
 }
-#endif
 
 /*****************************************************************************
 *
@@ -622,7 +620,7 @@ athrs17_phy_is_up(int ethUnit)
 	uint32_t      phyBase;
 	uint32_t      phyAddr;
 
-	if (is_drqfn()) 
+	if (is_drqfn())
 		ethUnit = 0;
 	for (phyUnit=0; phyUnit < ATHR_PHY_MAX; phyUnit++) {
 		if (!ATHR_IS_ETHUNIT(phyUnit, ethUnit)) {

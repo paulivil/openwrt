@@ -50,9 +50,9 @@
 #define ATHR_ADVERTISE_ASYM_PAUSE             0x0800
 #define ATHR_ADVERTISE_PAUSE                  0x0400
 #define ATHR_ADVERTISE_100FULL                0x0100
-#define ATHR_ADVERTISE_100HALF                0x0080  
-#define ATHR_ADVERTISE_10FULL                 0x0040  
-#define ATHR_ADVERTISE_10HALF                 0x0020  
+#define ATHR_ADVERTISE_100HALF                0x0080
+#define ATHR_ADVERTISE_10FULL                 0x0040
+#define ATHR_ADVERTISE_10HALF                 0x0020
 
 #define ATHR_ADVERTISE_ALL (ATHR_ADVERTISE_ASYM_PAUSE | ATHR_ADVERTISE_PAUSE | \
                             ATHR_ADVERTISE_10HALF | ATHR_ADVERTISE_10FULL | \
@@ -65,7 +65,7 @@
 #define ATHER_STATUS_LINK_MASK                0xC000
 #define ATHER_STATUS_LINK_SHIFT               14
 #define ATHER_STATUS_FULL_DEPLEX              0x2000
-#define ATHR_STATUS_LINK_PASS                 0x0400 
+#define ATHR_STATUS_LINK_PASS                 0x0400
 #define ATHR_STATUS_RESOVLED                  0x0800
 
 /*phy debug port  register */
@@ -485,9 +485,9 @@
 #define S17_ADVERTISE_ASYM_PAUSE             0x0800
 #define S17_ADVERTISE_PAUSE                  0x0400
 #define S17_ADVERTISE_100FULL                0x0100
-#define S17_ADVERTISE_100HALF                0x0080  
-#define S17_ADVERTISE_10FULL                 0x0040  
-#define S17_ADVERTISE_10HALF                 0x0020  
+#define S17_ADVERTISE_100HALF                0x0080
+#define S17_ADVERTISE_10FULL                 0x0040
+#define S17_ADVERTISE_10HALF                 0x0020
 
 #define S17_ADVERTISE_ALL (S17_ADVERTISE_ASYM_PAUSE | S17_ADVERTISE_PAUSE | \
                             S17_ADVERTISE_10HALF | S17_ADVERTISE_10FULL | \
@@ -500,7 +500,7 @@
 #define S17_STATUS_LINK_MASK                0xC000
 #define S17_STATUS_LINK_SHIFT               14
 #define S17_STATUS_FULL_DEPLEX              0x2000
-#define S17_STATUS_LINK_PASS                 0x0400 
+#define S17_STATUS_LINK_PASS                 0x0400
 #define S17_STATUS_RESOLVED                  0x0800
 #define S17_STATUS_LINK_10M			 0
 #define S17_STATUS_LINK_100M			 1

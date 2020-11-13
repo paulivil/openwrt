@@ -8,3 +8,4 @@ endif
 # RAM version
 #TEXT_BASE = 0xA0200000
 
+PLATFORM_CPPFLAGS := $(filter-out -march=% -mtune=%,$(PLATFORM_CPPFLAGS)) -funit-at-a-time -march=74kc -mtune=74kc

@@ -15,7 +15,11 @@
 #ifndef _ATH_PHY_H
 #define _ATH_PHY_H
 
+#if defined(CFG_ATH_SWAP_ETHACT)
+#define ath_gmac_unit2name(_unit) (_unit ?  "eth0" : "eth1")
+#else
 #define ath_gmac_unit2name(_unit) (_unit ?  "eth1" : "eth0")
+#endif
 
 extern int ath_gmac_miiphy_read(char *devname, uint32_t phaddr, uint8_t reg, uint16_t *data);
 extern int ath_gmac_miiphy_write(char *devname, uint32_t phaddr, uint8_t reg, uint16_t data);
