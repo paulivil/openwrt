@@ -290,7 +290,7 @@ define Device/tplink_archer-c50-v4
   TPLINK_HWID := 0x001D589B
   TPLINK_HWREV := 0x93
   TPLINK_HWREVADD := 0x2
-  DEVICE_PACKAGES := kmod-mt7603
+  DEVICE_PACKAGES := kmod-mt76x2
   IMAGES := sysupgrade.bin
   SUPPORTED_DEVICES += tplink,c50-v4
 endef
