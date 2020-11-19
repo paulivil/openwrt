@@ -1,3 +1,11 @@
+define Device/glinet_gl-mv1000
+  $(call Device/Default-arm64)
+  DEVICE_VENDOR := GL.iNet
+  DEVICE_MODEL := GL-MV1000
+  SOC := armada-3720
+endef
+TARGET_DEVICES += glinet_gl-mv1000
+
 define Device/globalscale_espressobin
   $(call Device/Default-arm64)
   DEVICE_VENDOR := Marvell
@@ -7,6 +15,7 @@ define Device/globalscale_espressobin
   DEVICE_ALT0_MODEL := Armada 3700 Community Board
   DEVICE_ALT0_VARIANT := Non-eMMC
   SOC := armada-3720
+  BOOT_SCRIPT := espressobin
 endef
 TARGET_DEVICES += globalscale_espressobin
 
@@ -19,6 +28,7 @@ define Device/globalscale_espressobin-emmc
   DEVICE_ALT0_MODEL := Armada 3700 Community Board
   DEVICE_ALT0_VARIANT := eMMC
   SOC := armada-3720
+  BOOT_SCRIPT := espressobin
 endef
 TARGET_DEVICES += globalscale_espressobin-emmc
 
@@ -31,6 +41,7 @@ define Device/globalscale_espressobin-v7
   DEVICE_ALT0_MODEL := Armada 3700 Community Board
   DEVICE_ALT0_VARIANT := V7 Non-eMMC
   SOC := armada-3720
+  BOOT_SCRIPT := espressobin
 endef
 TARGET_DEVICES += globalscale_espressobin-v7
 
@@ -43,6 +54,7 @@ define Device/globalscale_espressobin-v7-emmc
   DEVICE_ALT0_MODEL := Armada 3700 Community Board
   DEVICE_ALT0_VARIANT := V7 eMMC
   SOC := armada-3720
+  BOOT_SCRIPT := espressobin
 endef
 TARGET_DEVICES += globalscale_espressobin-v7-emmc
 
@@ -60,11 +72,9 @@ define Device/methode_udpu
   DEVICE_MODEL := micro-DPU (uDPU)
   DEVICE_DTS := armada-3720-uDPU
   KERNEL_LOADADDR := 0x00080000
-  KERNEL_INITRAMFS := kernel-bin | gzip | fit gzip $$(DTS_DIR)/$$(DEVICE_DTS).dtb
+  KERNEL_INITRAMFS := kernel-bin | gzip | fit gzip $$(KDIR)/image-$$(DEVICE_DTS).dtb
   KERNEL_INITRAMFS_SUFFIX := .itb
-  DEVICE_PACKAGES := f2fs-tools e2fsprogs fdisk ethtool kmod-usb2 kmod-usb3 \
-			kmod-e100 kmod-e1000 kmod-e1000e kmod-igb kmod-ixgbevf \
-			kmod-mdio-gpio kmod-switch-mvsw61xx kmod-i2c-pxa
+  DEVICE_PACKAGES += f2fs-tools fdisk kmod-i2c-pxa
   IMAGE_NAME = $$(IMAGE_PREFIX)-$$(2)
   IMAGES := firmware.tgz
   IMAGE/firmware.tgz := boot-scr | boot-img-ext4 | uDPU-firmware | append-metadata

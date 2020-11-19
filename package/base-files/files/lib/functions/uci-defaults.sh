@@ -68,6 +68,12 @@ ucidef_set_model_name() {
 	json_select ..
 }
 
+ucidef_set_compat_version() {
+	json_select_object system
+	json_add_string compat_version "${1:-1.0}"
+	json_select ..
+}
+
 ucidef_set_interface_lan() {
 	ucidef_set_interface "lan" ifname "$1" protocol "${2:-static}"
 }
@@ -82,6 +88,10 @@ ucidef_set_interfaces_lan_wan() {
 
 	ucidef_set_interface_lan "$lan_if"
 	ucidef_set_interface_wan "$wan_if"
+}
+
+ucidef_set_bridge_device() {
+	json_add_string bridge "${1:switch0}"
 }
 
 _ucidef_add_switch_port() {
@@ -404,7 +414,7 @@ ucidef_set_led_gpio() {
 }
 
 ucidef_set_led_ide() {
-	_ucidef_set_led_trigger "$1" "$2" "$3" ide-disk
+	_ucidef_set_led_trigger "$1" "$2" "$3" disk-activity
 }
 
 ucidef_set_led_netdev() {
@@ -573,7 +583,7 @@ ucidef_add_gpio_switch() {
 	json_select_object gpioswitch
 		json_select_object "$cfg"
 			json_add_string name "$name"
-			json_add_int pin "$pin"
+			json_add_string pin "$pin"
 			json_add_int default "$default"
 		json_select ..
 	json_select ..

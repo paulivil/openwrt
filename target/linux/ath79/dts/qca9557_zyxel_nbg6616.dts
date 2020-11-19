@@ -1,31 +1,43 @@
 // SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+<<<<<<< HEAD
 /dts-v1/;
 
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
 
 #include "qca9557.dtsi"
+=======
+
+#include "qca955x_zyxel_nbg6x16.dtsi"
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 
 / {
 	compatible = "zyxel,nbg6616", "qca,qca9557";
 	model = "ZyXEL NBG6616";
 
+<<<<<<< HEAD
 	chosen {
 		
 	};
 
+=======
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 	aliases {
 		led-boot = &led_power;
 		led-failsafe = &led_power;
 		led-running = &led_power;
 		led-upgrade = &led_power;
+<<<<<<< HEAD
 		//label-mac-device = &wmac;
+=======
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 	};
 
 	leds {
 		compatible = "gpio-leds";
 
 		led_power: power {
+<<<<<<< HEAD
 			label = "nbg6616:green:power";
 			gpios = <&gpio 15 GPIO_ACTIVE_LOW>;
 		};
@@ -38,30 +50,55 @@
 		usb1 {
 			label = "nbg6616:green:usb1";
 			gpios = <&gpio 14 GPIO_ACTIVE_LOW>;
+=======
+			label = "green:power";
+			gpios = <&gpio 15 GPIO_ACTIVE_LOW>;
+		};
+
+		usb1 {
+			label = "green:usb1";
+			gpios = <&gpio 21 GPIO_ACTIVE_LOW>;
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 			linux,default-trigger = "usbport";
 			trigger-sources = <&hub_port0>;
 		};
 
 		usb2 {
+<<<<<<< HEAD
 			label = "nbg6616:green:usb2";
 			gpios = <&gpio 21 GPIO_ACTIVE_LOW>;
+=======
+			label = "green:usb2";
+			gpios = <&gpio 14 GPIO_ACTIVE_LOW>;
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 			linux,default-trigger = "usbport";
 			trigger-sources = <&hub_port1>;
 		};
 
+<<<<<<< HEAD
 		wifi2 {
 			label = "nbg6616:green:wifi2";
+=======
+		wifi2g {
+			label = "green:wifi2g";
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 			gpios = <&gpio 19 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "phy1tpt";
 		};
 
+<<<<<<< HEAD
 		wifi5 {
 			label = "nbg6616:green:wifi5";
+=======
+		wifi5g {
+			label = "green:wifi5g";
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 			gpios = <&gpio 17 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "phy0tpt";
 		};
 
 		wps {
+<<<<<<< HEAD
 			label = "nbg6616:green:wps";
 			gpios = <&gpio 0 GPIO_ACTIVE_LOW>;
 			};
@@ -90,14 +127,23 @@
 			linux,code = <KEY_WPS_BUTTON>;
 			gpios = <&gpio 22 GPIO_ACTIVE_LOW>;
 			debounce-interval = <60>;
+=======
+			label = "green:wps";
+			gpios = <&gpio 0 GPIO_ACTIVE_LOW>;
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 		};
 	};
 };
 
+<<<<<<< HEAD
 
 
 &uart {
 	status = "okay";
+=======
+&gpio_usb_power {
+	line-name = "nbg6616:power:usb";
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 };
 
 &spi {
@@ -117,6 +163,7 @@
 
 			partition@0 {
 				label = "u-boot";
+<<<<<<< HEAD
 				reg = <0x0000000 0x0030000>;
 				read-only;
 			};
@@ -135,16 +182,41 @@
 			partition@50000 {
 				label = "zyxel_rfsd";
 				reg = <0x0050000 0x0060000>;
+=======
+				reg = <0x000000 0x030000>;
+				read-only;
+			};
+
+			partition@30000 {
+				label = "u-boot-env";
+				reg = <0x030000 0x010000>;
+			};
+
+			art: partition@40000 {
+				label = "art";
+				reg = <0x040000 0x010000>;
+				read-only;
+			};
+
+			partition@50000 {
+				label = "zyxel_rfsd";
+				reg = <0x050000 0x060000>;
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 			};
 
 			partition@b0000 {
 				label = "romd";
+<<<<<<< HEAD
 				reg = <0x00b0000 0x0060000>;
 						
+=======
+				reg = <0x0b0000 0x060000>;
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 			};
 
 			partition@110000 {
 				label = "header";
+<<<<<<< HEAD
 				reg = <0x0110000 0x0010000>;
 			
 			};
@@ -239,12 +311,27 @@
 	
 };
 
+=======
+				reg = <0x110000 0x010000>;
+			};
+
+			partition@120000 {
+				label = "firmware";
+				reg = <0x120000 0xee0000>;
+				compatible = "denx,uimage";
+			};
+		};
+	};
+};
+
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 &pcie1 {
 	status = "okay";
 
 	wifi@0,0 {
 		compatible = "qcom,ath10k";
 		reg = <0 0 0 0 0>;
+<<<<<<< HEAD
 		qcom,ath10k-calibration-variant = "ZyXEL-NBG6616";
 		//mtd-mac-address = <&rfsdata 0xb2d0>;
 	};
@@ -279,5 +366,8 @@
 		reg = <1>;
 		#trigger-source-cells = <0>;
 		
+=======
+		qca,no-eeprom;
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 	};
 };

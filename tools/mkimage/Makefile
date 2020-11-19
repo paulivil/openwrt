@@ -7,12 +7,23 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mkimage
+<<<<<<< HEAD
 PKG_VERSION:=2012.04.01
 
 PKG_SOURCE:=u-boot-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://
 PKG_MD5SUM:=192bb231082d9159fb6e16de3039b6b2
 PKG_CAT:=bzcat
+=======
+PKG_VERSION:=2020.04
+
+PKG_SOURCE:=u-boot-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:= \
+	https://mirror.cyberbits.eu/u-boot \
+	https://ftp.denx.de/pub/u-boot \
+	ftp://ftp.denx.de/pub/u-boot
+PKG_HASH:=fe732aaf037d9cc3c0909bad8362af366ae964bbdac6913a34081ff4ad565372
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 
 HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/u-boot-$(PKG_VERSION)
 

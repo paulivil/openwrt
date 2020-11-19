@@ -169,7 +169,9 @@ $(eval $(call KernelPackage,crypto-deflate))
 define KernelPackage/crypto-des
   TITLE:=DES/3DES cipher CryptoAPI module
   KCONFIG:=CONFIG_CRYPTO_DES
-  FILES:=$(LINUX_DIR)/crypto/des_generic.ko
+  FILES:= \
+	$(LINUX_DIR)/crypto/des_generic.ko \
+	$(LINUX_DIR)/lib/crypto/libdes.ko
   AUTOLOAD:=$(call AutoLoad,09,des_generic)
   $(call AddDepends/crypto)
 endef
@@ -194,7 +196,8 @@ define KernelPackage/crypto-ecdh
   DEPENDS:=+kmod-crypto-kpp
   KCONFIG:= CONFIG_CRYPTO_ECDH
   FILES:= \
-	$(LINUX_DIR)/crypto/ecdh_generic.ko
+	$(LINUX_DIR)/crypto/ecdh_generic.ko \
+	$(LINUX_DIR)/crypto/ecc.ko
   AUTOLOAD:=$(call AutoLoad,10,ecdh_generic)
   $(call AddDepends/crypto)
 endef
@@ -263,11 +266,22 @@ $(eval $(call KernelPackage,crypto-gf128))
 define KernelPackage/crypto-ghash
   TITLE:=GHASH digest CryptoAPI module
   DEPENDS:=+kmod-crypto-gf128 +kmod-crypto-hash
-  KCONFIG:=CONFIG_CRYPTO_GHASH
+  KCONFIG:= \
+	CONFIG_CRYPTO_GHASH \
+	CONFIG_CRYPTO_GHASH_ARM_CE
   FILES:=$(LINUX_DIR)/crypto/ghash-generic.ko
   AUTOLOAD:=$(call AutoLoad,09,ghash-generic)
   $(call AddDepends/crypto)
 endef
+
+define KernelPackage/crypto-ghash/arm-ce
+  FILES+= $(LINUX_DIR)/arch/arm/crypto/ghash-arm-ce.ko
+  AUTOLOAD+=$(call AutoLoad,09,ghash-arm-ce)
+endef
+
+KernelPackage/crypto-ghash/imx6=$(KernelPackage/crypto-ghash/arm-ce)
+KernelPackage/crypto-ghash/ipq40xx=$(KernelPackage/crypto-ghash/arm-ce)
+KernelPackage/crypto-ghash/mvebu/cortexa9=$(KernelPackage/crypto-ghash/arm-ce)
 
 $(eval $(call KernelPackage,crypto-ghash))
 
@@ -363,7 +377,7 @@ $(eval $(call KernelPackage,crypto-hw-padlock))
 
 define KernelPackage/crypto-hw-safexcel
   TITLE:= MVEBU SafeXcel Crypto Engine module
-  DEPENDS:=@!LINUX_4_14 @(TARGET_mvebu_cortexa53||TARGET_mvebu_cortexa72) \
+  DEPENDS:=@(TARGET_mvebu_cortexa53||TARGET_mvebu_cortexa72) +eip197-mini-firmware \
 	+kmod-crypto-authenc +kmod-crypto-md5 +kmod-crypto-hmac +kmod-crypto-sha256 +kmod-crypto-sha512
   KCONFIG:= \
 	CONFIG_CRYPTO_HW=y \
@@ -378,9 +392,11 @@ MVEBU's EIP97 and EIP197 Cryptographic Engine driver designed by
 Inside Secure. This is found on Marvell Armada 37xx/7k/8k SoCs.
 
 Particular version of these IP (EIP197B and EIP197D) require firmware.
-Unfortunately it's not freely available and needs signed Non-Disclosure
-Agreement (NDA) with Marvell. For those who have signed NDA the firmware can be
-obtained at https://extranet.marvell.com.
+The mini firmware package provides limited functionality, for most operations
+a full-featured firmware is required. Unfortunately the "full" firmware is not
+freely available and needs signed Non-Disclosure Agreement (NDA) with Marvell.
+For those who have signed NDA the firmware can be obtained at
+https://extranet.marvell.com.
 endef
 
 $(eval $(call KernelPackage,crypto-hw-safexcel))
@@ -533,10 +549,8 @@ ifndef CONFIG_TARGET_x86_64
 	$(LINUX_DIR)/arch/x86/crypto/twofish-i586.ko \
 	$(LINUX_DIR)/arch/x86/crypto/serpent-sse2-i586.ko \
 	$(LINUX_DIR)/arch/x86/crypto/glue_helper.ko \
-	$(LINUX_DIR)/crypto/ablk_helper.ko@lt4.17 \
 	$(LINUX_DIR)/crypto/cryptd.ko \
-	$(LINUX_DIR)/crypto/lrw.ko@lt4.17 \
-	$(LINUX_DIR)/crypto/crypto_simd.ko@ge4.17
+	$(LINUX_DIR)/crypto/crypto_simd.ko
     AUTOLOAD+= $(call AutoLoad,10,cryptd glue_helper \
 	serpent-sse2-i586 twofish-i586 blowfish_generic)
   endef
@@ -555,8 +569,7 @@ define KernelPackage/crypto-misc/x86/64
 	$(LINUX_DIR)/arch/x86/crypto/twofish-avx-x86_64.ko \
 	$(LINUX_DIR)/arch/x86/crypto/serpent-avx-x86_64.ko \
 	$(LINUX_DIR)/arch/x86/crypto/camellia-aesni-avx2.ko \
-	$(LINUX_DIR)/arch/x86/crypto/serpent-avx2.ko \
-	$(LINUX_DIR)/crypto/ablk_helper.ko@lt4.17
+	$(LINUX_DIR)/arch/x86/crypto/serpent-avx2.ko
   AUTOLOAD+= $(call AutoLoad,10,camellia-x86_64 \
 	camellia-aesni-avx-x86_64 camellia-aesni-avx2 cast5-avx-x86_64 \
 	cast6-avx-x86_64 twofish-x86_64 twofish-x86_64-3way \
@@ -668,6 +681,8 @@ define KernelPackage/crypto-sha1
   DEPENDS:=+kmod-crypto-hash
   KCONFIG:= \
 	CONFIG_CRYPTO_SHA1 \
+	CONFIG_CRYPTO_SHA1_ARM \
+	CONFIG_CRYPTO_SHA1_ARM_NEON \
 	CONFIG_CRYPTO_SHA1_OCTEON \
 	CONFIG_CRYPTO_SHA1_SSSE3
   FILES:=$(LINUX_DIR)/crypto/sha1_generic.ko
@@ -675,10 +690,27 @@ define KernelPackage/crypto-sha1
   $(call AddDepends/crypto)
 endef
 
+define KernelPackage/crypto-sha1/arm
+  FILES+=$(LINUX_DIR)/arch/arm/crypto/sha1-arm.ko
+  AUTOLOAD+=$(call AutoLoad,09,sha1-arm)
+endef
+
+define KernelPackage/crypto-sha1/arm-neon
+  $(call KernelPackage/crypto-sha1/arm)
+  FILES+=$(LINUX_DIR)/arch/arm/crypto/sha1-arm-neon.ko
+  AUTOLOAD+=$(call AutoLoad,09,sha1-arm-neon)
+endef
+
+KernelPackage/crypto-sha1/imx6=$(KernelPackage/crypto-sha1/arm-neon)
+KernelPackage/crypto-sha1/ipq40xx=$(KernelPackage/crypto-sha1/arm-neon)
+KernelPackage/crypto-sha1/mvebu/cortexa9=$(KernelPackage/crypto-sha1/arm-neon)
+
 define KernelPackage/crypto-sha1/octeon
   FILES+=$(LINUX_DIR)/arch/mips/cavium-octeon/crypto/octeon-sha1.ko
   AUTOLOAD+=$(call AutoLoad,09,octeon-sha1)
 endef
+
+KernelPackage/crypto-sha1/tegra=$(KernelPakcage/crypto-sha1/arm)
 
 define KernelPackage/crypto-sha1/x86/64
   FILES+=$(LINUX_DIR)/arch/x86/crypto/sha1-ssse3.ko
@@ -695,7 +727,9 @@ define KernelPackage/crypto-sha256
 	CONFIG_CRYPTO_SHA256 \
 	CONFIG_CRYPTO_SHA256_OCTEON \
 	CONFIG_CRYPTO_SHA256_SSSE3
-  FILES:=$(LINUX_DIR)/crypto/sha256_generic.ko
+  FILES:= \
+	$(LINUX_DIR)/crypto/sha256_generic.ko \
+	$(LINUX_DIR)/lib/crypto/libsha256.ko
   AUTOLOAD:=$(call AutoLoad,09,sha256_generic)
   $(call AddDepends/crypto)
 endef
@@ -718,6 +752,7 @@ define KernelPackage/crypto-sha512
   DEPENDS:=+kmod-crypto-hash
   KCONFIG:= \
 	CONFIG_CRYPTO_SHA512 \
+	CONFIG_CRYPTO_SHA512_ARM \
 	CONFIG_CRYPTO_SHA512_OCTEON \
 	CONFIG_CRYPTO_SHA512_SSSE3
   FILES:=$(LINUX_DIR)/crypto/sha512_generic.ko
@@ -725,10 +760,21 @@ define KernelPackage/crypto-sha512
   $(call AddDepends/crypto)
 endef
 
+define KernelPackage/crypto-sha512/arm
+  FILES+=$(LINUX_DIR)/arch/arm/crypto/sha512-arm.ko
+  AUTOLOAD+=$(call AutoLoad,09,sha512-arm)
+endef
+
+KernelPackage/crypto-sha512/imx6=$(KernelPackage/crypto-sha512/arm)
+KernelPackage/crypto-sha512/ipq40xx=$(KernelPackage/crypto-sha512/arm)
+KernelPackage/crypto-sha512/mvebu/cortexa9=$(KernelPackage/crypto-sha512/arm)
+
 define KernelPackage/crypto-sha512/octeon
   FILES+=$(LINUX_DIR)/arch/mips/cavium-octeon/crypto/octeon-sha512.ko
   AUTOLOAD+=$(call AutoLoad,09,octeon-sha512)
 endef
+
+KernelPackage/crypto-sha512/tegra=$(KernelPackage/crypto-sha512/arm)
 
 define KernelPackage/crypto-sha512/x86/64
   FILES+=$(LINUX_DIR)/arch/x86/crypto/sha512-ssse3.ko

@@ -7,12 +7,13 @@
 
 menu "Global build settings"
 
-	config JSON_ADD_IMAGE_INFO
-		bool "Create JSON info files per build image"
+	config JSON_OVERVIEW_IMAGE_INFO
+		bool "Create JSON info file overview per target"
 		default BUILDBOT
 		help
-		  The JSON info files contain information about the device and
-		  build images, stored next to the firmware images.
+		  Create a JSON info file called profiles.json in the target
+		  directory containing machine readable list of built profiles
+		  and resulting images.
 
 	config ALL_NONSHARED
 		bool "Select all target specific packages by default"
@@ -100,7 +101,16 @@ menu "Global build settings"
 		bool "Include build configuration in firmware" if DEVEL
 		default n
 		help
-		  If enabled, config.buildinfo will be stored in /etc/build.config of firmware.
+		  If enabled, buildinfo files will be stored in /etc/build.* of firmware.
+
+	config REPRODUCIBLE_DEBUG_INFO
+		bool "Make debug information reproducible"
+		default BUILDBOT
+		help
+		  This strips the local build path out of debug information. This has the
+		  advantage of making it reproducible, but the disadvantage of making local
+		  debugging using ./scripts/remote-gdb harder, since the debug data will
+		  no longer point to the full path on the build host.
 
 	config COLLECT_KERNEL_DEBUG
 		bool
@@ -248,7 +258,6 @@ menu "Global build settings"
 
 	choice
 		prompt "User space Stack-Smashing Protection"
-		depends on USE_MUSL
 		default PKG_CC_STACKPROTECTOR_REGULAR
 		help
 		  Enable GCC Stack Smashing Protection (SSP) for userspace applications
@@ -256,18 +265,13 @@ menu "Global build settings"
 			bool "None"
 		config PKG_CC_STACKPROTECTOR_REGULAR
 			bool "Regular"
-			select GCC_LIBSSP if !USE_MUSL
-			depends on KERNEL_CC_STACKPROTECTOR_REGULAR
 		config PKG_CC_STACKPROTECTOR_STRONG
 			bool "Strong"
-			select GCC_LIBSSP if !USE_MUSL
-			depends on KERNEL_CC_STACKPROTECTOR_STRONG
 	endchoice
 
 	choice
 		prompt "Kernel space Stack-Smashing Protection"
 		default KERNEL_CC_STACKPROTECTOR_REGULAR
-		depends on USE_MUSL || !(x86_64 || i386)
 		help
 		  Enable GCC Stack-Smashing Protection (SSP) for the kernel
 		config KERNEL_CC_STACKPROTECTOR_NONE
@@ -322,6 +326,54 @@ menu "Global build settings"
 			bool "Partial"
 		config PKG_RELRO_FULL
 			bool "Full"
+	endchoice
+
+	config TARGET_ROOTFS_SECURITY_LABELS
+		bool
+		select KERNEL_SQUASHFS_XATTR
+		select KERNEL_EXT4_FS_SECURITY
+		select KERNEL_F2FS_FS_SECURITY
+		select KERNEL_UBIFS_FS_SECURITY
+		select KERNEL_JFFS2_FS_SECURITY
+
+	config SELINUX
+		bool "Enable SELinux"
+		select KERNEL_SECURITY_SELINUX
+		select TARGET_ROOTFS_SECURITY_LABELS
+		select PACKAGE_procd-selinux
+		select PACKAGE_busybox-selinux
+		help
+		  This option enables SELinux kernel features, applies security labels
+		  in squashfs rootfs and selects the selinux-variants of busybox and procd.
+
+		  Selecting this option results in about 0.5MiB of additional flash space
+		  usage accounting for increased kernel and rootfs size.
+
+	choice
+		prompt "default SELinux type"
+		depends on TARGET_ROOTFS_SECURITY_LABELS
+		default SELINUXTYPE_dssp
+		help
+		  Select SELinux policy to be installed and used for applying rootfs labels.
+
+		config SELINUXTYPE_targeted
+			bool "targeted"
+			select PACKAGE_refpolicy
+			help
+			  SELinux Reference Policy (refpolicy)
+
+		config SELINUXTYPE_targeted-modular
+			bool "targeted-modular"
+			select PACKAGE_refpolicy-modular
+			help
+			  Modular SELinux Reference Policy (refpolicy-modular)
+
+		config SELINUXTYPE_dssp
+			bool "dssp"
+			select PACKAGE_selinux-policy
+			help
+			  Defensec SELinux Security Policy -- OpenWrt edition
+
 	endchoice
 
 endmenu

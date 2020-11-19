@@ -31,8 +31,6 @@
  *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/dts-v1/;
-
 #include "mt7620a.dtsi"
 
 #include <dt-bindings/gpio/gpio.h>
@@ -68,27 +66,27 @@
 		compatible = "gpio-leds";
 
 		sdcard {
-			label = "c108:green:sdcard";
+			label = "green:sdcard";
 			gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
 		};
 
 		modem_green {
-			label = "c108:green:modem";
+			label = "green:modem";
 			gpios = <&gpio1 14 GPIO_ACTIVE_LOW>;
 		};
 
 		modem_red {
-			label = "c108:red:modem";
+			label = "red:modem";
 			gpios = <&gpio1 15 GPIO_ACTIVE_LOW>;
 		};
 
 		lan_red {
-			label = "c108:red:lan";
+			label = "red:lan";
 			gpios = <&gpio2 3 GPIO_ACTIVE_HIGH>;
 		};
 
 		led_lan_green: lan_green {
-			label = "c108:green:lan";
+			label = "green:lan";
 			gpios = <&gpio2 4 GPIO_ACTIVE_HIGH>;
 		};
 	};
@@ -115,7 +113,7 @@
 &spi0 {
 	status = "okay";
 
-	en25q128@0 {
+	flash@0 {
 		compatible = "jedec,spi-nor";
 		reg = <0>;
 		spi-max-frequency = <10000000>;
@@ -169,13 +167,13 @@
 };
 
 &wmac {
-	ralink,mtd-eeprom = <&factory 0>;
+	ralink,mtd-eeprom = <&factory 0x0>;
 };
 
 &state_default {
 	default {
-		ralink,group = "i2c", "uartf", "spi refclk", "ephy";
-		ralink,function = "gpio";
+		groups = "i2c", "uartf", "spi refclk", "ephy";
+		function = "gpio";
 	};
 };
 

@@ -3,7 +3,7 @@ include $(INCLUDE_DIR)/image.mk
 
 KERNEL_LOADADDR = 0x80060000
 
-DEVICE_VARS += IMAGE_SIZE LOADER_FLASH_OFFS LOADER_TYPE
+DEVICE_VARS += LOADER_FLASH_OFFS LOADER_TYPE
 
 
 define Build/loader-common
@@ -20,11 +20,6 @@ endef
 define Build/loader-kernel
 	$(call Build/loader-common,LOADER_DATA="$@")
 endef
-
-define Build/loader-kernel-cmdline
-	$(call Build/loader-common,LOADER_DATA="$@")
-endef
-
 
 define Build/loader-okli-compile
 	$(call Build/loader-common,FLASH_OFFS=$(LOADER_FLASH_OFFS) FLASH_MAX=0)
@@ -67,23 +62,23 @@ define Device/Default
   SUPPORTED_DEVICES := $(subst _,$(comma),$(1))
   IMAGES := sysupgrade.bin
   IMAGE/sysupgrade.bin = append-kernel | pad-to $$$$(BLOCKSIZE) | \
-	append-rootfs | pad-rootfs | append-metadata | check-size $$$$(IMAGE_SIZE)
+	append-rootfs | pad-rootfs | append-metadata | check-size
 endef
 
+<<<<<<< HEAD
 
+=======
+include $(SUBTARGET).mk
+>>>>>>> 418362b1cc106b9aca3905150199f60548906fff
 
 ifeq ($(SUBTARGET),generic)
-include ./generic.mk
-include ./generic-tp-link.mk
-include ./generic-ubnt.mk
+include generic-tp-link.mk
+include generic-ubnt.mk
 endif
-ifeq ($(SUBTARGET),nand)
-include ./nand.mk
-endif
+
 ifeq ($(SUBTARGET),tiny)
-include ./tiny.mk
-include ./tiny-netgear.mk
-include ./tiny-tp-link.mk
+include tiny-netgear.mk
+include tiny-tp-link.mk
 endif
 
 $(eval $(call BuildImage))
